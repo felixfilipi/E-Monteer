@@ -1,70 +1,38 @@
-import { Image, View, KeyboardAvoidingView,
+import { View, KeyboardAvoidingView,
   Text, ScrollView, TouchableOpacity} from "react-native";
 import React from 'react';
-import { Avatar, Searchbar, Card, Title, Paragraph, BottomNavigation } from 'react-native-paper';
+import { Searchbar, Card, Title, Paragraph } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from 'react-native-vector-icons/Entypo';
 import { Rating } from 'react-native-ratings';
-import { useComponentDidMount } from '../Component/customHooks'
 import Style from "../Styles/homeStyle";
+import {TopBar, BottomNav} from '../Component/navBar'
 import { RootStackParamList } from './RootStackParamList';
 
 type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
-
-const HomeRoute = () => <Text>Home</Text>
-const SearchRoute = () => <Text>Search</Text>
-const HistoryRoute = () => <Text>History</Text>
-const ExploreRoute = () => <Text>Explore</Text>
 
 export default function Home(){
 
   const navigation = useNavigation<HomeType>();
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [rating, setRating] = React.useState<number>();
+  const [rating, setRating] = React.useState<number>(0);
   const [rateState, setRateState] = React.useState<boolean>(false);
-  const [index, setIndex] = React.useState<number>(0);
-  const [routes] = React.useState([
-    { key: 'home', title: 'Home', icon: 'home-circle' },
-    { key: 'search', title: 'Search', icon: 'map-search-outline' },
-    { key: 'history', title: 'History', icon: 'history' },
-    { key: 'explore', title: 'Explore', icon: 'book' },
-  ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    search: SearchRoute,
-    history: HistoryRoute,
-    explore: ExploreRoute,
-  });
-
-  const onChangeSearch = query => setSearchQuery(query);
-  const isComponentMount : boolean = useComponentDidMount();
+  const onChangeSearch = (query : string) => setSearchQuery(query);
 
   React.useEffect(()=>{
-    if(isComponentMount){
+    if(rating !== 0){
       setRateState(true);
     }
   },[rating])
 
   return(
+  <View style={{flex:1}}>
+    <TopBar/>
     <ScrollView contentContainerStyle={{flexGrow:1}}>
       <View style={{ alignItems: 'center', flex:1 }}>
         <KeyboardAvoidingView>
-          <View style={Style.topBar}>
-            <View style={Style.topItem}>
-            <Image 
-                  source={require("../../assets/images/blogo.png")}
-                  style={Style.logo}/>
-            </View>
-            <View style={Style.topItem}>
-            <Avatar.Image 
-              size={60}
-              style={Style.avatar}
-              source={require('../../assets/images/newUser.png')}/>
-            </View>
-          </View>
-
           <View style={Style.searchSection}>
             <Searchbar
               placeholder="Cari Bengkel"
@@ -114,10 +82,19 @@ export default function Home(){
           </View>
 
             <View>
+            <Text style={Style.historyLabel}>History</Text>
               <Card style={Style.CardStyle}>
                 <Card.Content>
-                  <Title> Bengkel Cepi Jaya </Title>
+                  <Title style={{marginLeft: -5}}> Bengkel Cepi Jaya </Title>
                   <Paragraph>Jalan MH Thamrin 1, Jakarta Pusat</Paragraph>
+                  <View style={{flexDirection:'row', marginTop:10}}>
+                    <Icon 
+                      name={"stopwatch"} 
+                      size={18} 
+                      color="#8d909a"
+                      />
+                    <Text style={Style.dateLabel}>05/11/2022 20:20</Text>
+                  </View>
                 </Card.Content>
                 <Card.Actions>
                   <Rating
@@ -127,7 +104,7 @@ export default function Home(){
                     imageSize={30}
                     tintColor='#fffde6'
                     readonly={rateState}
-                    onFinishRating={(rating) => {setRating(rating)}}
+                    onFinishRating={(rating : number) => {setRating(rating)}}
                     style={Style.ratingStyle}/>
                   <TouchableOpacity style={Style.MyButton} activeOpacity={0.7}>
                     <Icon 
@@ -140,20 +117,11 @@ export default function Home(){
                 </Card.Actions>
               </Card>
             </View>
-        </KeyboardAvoidingView>
-      </View>
-
-      <BottomNavigation
-        labeled={true}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        barStyle={{ backgroundColor: '#b99504' }}
-        activeColor='#fff'
-        style={{position: 'absolute', bottom:0, left:0, right:0}}
-        shifting={false}
-      />
-    </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
+      <BottomNav/>
+    </View>
   )
 };
 

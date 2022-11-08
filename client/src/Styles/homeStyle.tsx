@@ -3,29 +3,6 @@
 import React from "react-native"
 
 export default React.StyleSheet.create({
-  topBar: {
-    backgroundColor: '#242A2F',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 3
-  },
-
-  topItem: {
-    width: '50%',
-    alignItems: 'flex-end'
-  },
-
-  avatar: {
-    marginRight: 25,
-  },
-
-  logo: {
-    height: 75,
-    width: 150,
-    marginRight: 'auto',
-    alignItems: 'flex-start',
-    marginLeft: 10
-  },
 
   searchSection: {
     paddingVertical: 30,
@@ -58,10 +35,26 @@ export default React.StyleSheet.create({
   CardStyle: {
     padding: 5,
     margin: 15,
-    backgroundColor: '#fffde6'
+    backgroundColor: '#fffde6',
+    marginBottom: 100
   },
 
   ratingStyle: {
     paddingRight: 20
-  }
+  },
+
+  historyLabel: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    paddingHorizontal: 15,
+    paddingTop: 20
+  },
+
+  dateLabel: {
+    marginLeft: 5, 
+    color:'#8d909a', 
+    fontWeight:'bold'
+  },
+
 })
