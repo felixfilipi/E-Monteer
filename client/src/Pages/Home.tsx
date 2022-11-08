@@ -40,7 +40,7 @@ export default function Home(){
               style={{backgroundColor:'#fff'}}
               value={searchQuery}/>
               <View style={{justifyContent:'center', flexDirection: 'row'}}>
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.7}>
+                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
                   <Icon 
                     name={"location-pin"} 
                     size={20} 
@@ -49,7 +49,7 @@ export default function Home(){
                   <Text style={Style.ButtonText}>Terdekat</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.7}>
+                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
                   <Icon 
                     name={"heart"} 
                     size={20} 
@@ -58,7 +58,7 @@ export default function Home(){
                   <Text style={Style.ButtonText}>Terfavorit</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.7}>
+                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
                   <Icon 
                     name={"hour-glass"} 
                     size={20} 
@@ -71,7 +71,8 @@ export default function Home(){
           
           <View style={{backgroundColor:'white', height:300, width: 390, justifyContent:'center'}}>
             <Text style={{textAlign:'center'}}> Map </Text>
-            <TouchableOpacity style={[Style.MyButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
+            <TouchableOpacity onPress={() => {navigation.navigate('Order')}} 
+                style={[Style.MyButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
              <Icon 
                name={"tools"} 
                size={20} 
@@ -82,7 +83,7 @@ export default function Home(){
           </View>
 
             <View>
-            <Text style={Style.historyLabel}>History</Text>
+            <Text style={Style.historyLabel}>Riwayat</Text>
               <Card style={Style.CardStyle}>
                 <Card.Content>
                   <Title style={{marginLeft: -5}}> Bengkel Cepi Jaya </Title>

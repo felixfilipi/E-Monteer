@@ -5,12 +5,19 @@ import Icon from "react-native-vector-icons/Entypo";
 import Style from "../Styles/profileStyle"
 import React from "react";
 import { useComponentDidMount } from '../Component/customHooks';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./RootStackParamList";
 
-export function EditProfile(){
+type EditType = StackNavigationProp<RootStackParamList, 'Edit'>
+
+export default function EditProfile(){
+
+  const navigation = useNavigation<EditType>();
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
-  Content:any[] = [], fields:any[], title: string[];
+  Content:any[] = [], fields:any[], title: string[], key: string[];
   
   placeholder_list = ['Input your Name here','Input your Email here',
     'Input your Phone number here', 'Input your Address here']
@@ -19,13 +26,14 @@ export function EditProfile(){
   inputType = ['default', 'default', 'phone-pad', 'default']
   maxLength = [30,40,13,100]
   title = ['Name', 'Email', 'Phone','Address']
+  key = ['key1', 'key2', 'key3','key4']
 
-  const [SName, setName] = React.useState<string>();
-  const [SEmail, setEmail] = React.useState<string>();
+  const [SName, setName] = React.useState<string>('');
+  const [SEmail, setEmail] = React.useState<string>('');
   const [SPhone, setPhone] = React.useState<number>(0);
-  const [SAddress, setAddress] = React.useState<string>();
-  const [SPassword, setPassword] = React.useState<string>();
-  const [SPasswordValid, setPasswordValid] = React.useState<string>();
+  const [SAddress, setAddress] = React.useState<string>('');
+  const [SPassword, setPassword] = React.useState<string>('');
+  const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
 
   const isComponentMounted = useComponentDidMount();
@@ -58,7 +66,7 @@ export function EditProfile(){
           keyboardType={inputType[i]}
           onChangeText={(value) => fields[i](value)}
           style={Style.textInp}
-          key={"Input" + i+7}/>
+          key={key[i]}/>
       </>
     )
   };
@@ -68,6 +76,7 @@ export function EditProfile(){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Profile Updated Successfully!!', ToastAndroid.SHORT) : Alert.alert("Profile Updated Successfully!!")
+      navigation.navigate('Home');
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
     }else{

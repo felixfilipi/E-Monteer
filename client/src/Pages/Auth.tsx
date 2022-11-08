@@ -26,12 +26,12 @@ export function Register(){
   inputType = ['default', 'default', 'phone-pad', 'default']
   maxLength = [30,40,13,100]
 
-  const [SName, setName] = React.useState<string>();
-  const [SEmail, setEmail] = React.useState<string>();
+  const [SName, setName] = React.useState<string>('');
+  const [SEmail, setEmail] = React.useState<string>('');
   const [SPhone, setPhone] = React.useState<number>(0);
-  const [SAddress, setAddress] = React.useState<string>();
-  const [SPassword, setPassword] = React.useState<string>();
-  const [SPasswordValid, setPasswordValid] = React.useState<string>();
+  const [SAddress, setAddress] = React.useState<string>('');
+  const [SPassword, setPassword] = React.useState<string>('');
+  const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
 
 

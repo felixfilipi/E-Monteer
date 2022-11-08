@@ -1,15 +1,16 @@
 // @ts-nocheck
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Platform } from 'react-native';
-import { Register, Login} from './src/Pages/Auth';
-import { RootStackParamList } from './src/Pages/RootStackParamList';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './src/Pages/Home'
-import { DefaultTheme } from 'react-native-paper';
-import {EditProfile} from './src/Pages/Profile';
 import { Provider } from 'react-redux';
 import store from './redux';
+import { RootStackParamList } from './src/Pages/RootStackParamList';
+import { DefaultTheme } from 'react-native-paper';
+import { Register, Login} from './src/Pages/Auth';
+import EditProfile from './src/Pages/Profile';
+import Home from './src/Pages/Home';
+import Order from './src/Pages/Order';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -37,6 +38,9 @@ export default function App() {
               <Stack.Screen
                 name="Edit" component={EditProfile} 
                 options={{title:'Edit Profile', headerTintColor:'white'}}/>
+              <Stack.Screen
+                name="Order" component={Order} 
+                options={{title:'Order Mechanic', headerTintColor:'white'}}/>
             </Stack.Navigator>
           </NavigationContainer>
       </View>

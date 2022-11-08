@@ -1,5 +1,5 @@
 import { BottomNavigation, Avatar, Drawer } from 'react-native-paper';
-import {Text, View, Image, TouchableWithoutFeedback} from 'react-native';
+import {Text, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import React from 'react';
 import Style from '../Styles/componentStyle';
 import { RootStackParamList } from '../Pages/RootStackParamList';
@@ -16,10 +16,10 @@ const ExploreRoute = () => <Text>Explore</Text>
 export const BottomNav = () => {
     const [index, setIndex] = React.useState<number>(0);
     const [routes] = React.useState([
-    { key: 'home', title: 'Home', icon: 'home-circle' },
-    { key: 'search', title: 'Search', icon: 'map-search-outline' },
-    { key: 'history', title: 'History', icon: 'history' },
-    { key: 'explore', title: 'Explore', icon: 'book' },
+    { key: 'home', title: 'Utama', icon: 'home-circle' },
+    { key: 'search', title: 'Cari', icon: 'map-search-outline' },
+    { key: 'history', title: 'Riwayat', icon: 'history' },
+    { key: 'explore', title: 'Telusuri', icon: 'book' },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
@@ -57,6 +57,10 @@ const DrawerComponent = () => {
     if(drawerState == true && drawerActive == 'edit'){
       navigation.navigate('Edit');
       dispatch(setDrawer(false));
+    }else if(drawerState == true && drawerActive == 'out'){
+      Alert.alert("Keluar", "Apakah anda yakin ingin keluar?", 
+        [{text : "Batal", style: "cancel"}, {text: "Ya"}])
+      dispatch(setDrawer(false));
     }
   },[drawerActive])
   
@@ -64,7 +68,7 @@ const DrawerComponent = () => {
     <>
       <Drawer.Section style={Style.drawerContainer}>
       <Drawer.Item
-        label="Edit Profile"
+        label="Ganti Profil"
         active={drawerActive === 'edit'}
         onPress={() => setDrawerActive('edit')}
       />
