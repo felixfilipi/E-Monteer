@@ -1,64 +1,71 @@
-import { View, KeyboardAvoidingView,
-  Text, ScrollView, TouchableOpacity} from "react-native";
+import { View } from "react-native";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Style from "../Styles/waitingStyle";
 import { RootStackParamList } from './RootStackParamList';
-import { SliderBox } from 'react-native-image-slider-box';
+import { AbsoluteButton } from '../Component/CustomButton';
+import { CustomText } from '../Component/CustomText'
+import { ImageSlider } from 'react-native-image-slider-banner';
+import { useAppDispatch } from '../../redux';
+import { setOrderFail } from '../../redux/component/order';
 
-type OrderType = StackNavigationProp<RootStackParamList, 'Order'>
+type WaitingType = StackNavigationProp<RootStackParamList, 'Waiting'>
 
 export default function Waiting(){
 
-  const navigation = useNavigation<OrderType>();
-  
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
-  const [vehicle, setVechicle] = React.useState<string>('');
-  const [carColor, setCarColor] = React.useState<string>('#b1b5c1');
-  const [motorColor, setMotorColor] = React.useState<string>('#b1b5c1');
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation<WaitingType>();
+
+  const [time, setTime] = React.useState(5);
+  const timerRef = React.useRef(time);
+
+  React.useEffect(() => {
+    const timerId = setInterval(() => {
+      timerRef.current -= 1;
+      if(timerRef.current < 0){
+        clearInterval(timerId);
+        dispatch(setOrderFail(true));
+        navigation.navigate('Home');
+      }else{
+        setTime(timerRef.current);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <ScrollView contentContainerStyle={{flexGrow:1}}>
       <View style={{ alignItems: 'center'}}>
-        <KeyboardAvoidingView>
-          <View style={Style.searchSection}>
-          </View>
-
-          <View style={{flex:4}}>
-            <Image 
-                style={{width:350, height:250}}
-                source={require("../../assets/images/relaxMechanic.png")}/>
-            <Text style={Style.descText}>Pilih Jenis Kendaraan Anda</Text>
-              <View style={Style.vehicle}>
-                <TouchableOpacity style={[Style.vehicleBtn, {backgroundColor: carColor}]}
-                  onPress={()=>setVechicle('mobil')} activeOpacity={0.7}>
-                  <Icon name="car" size={125} color='black'/>
-                  <Text style={Style.ButtonText}> Mobil </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[Style.vehicleBtn, {backgroundColor: motorColor}]} activeOpacity={0.7}
-                  onPress={()=>setVechicle('motor')}>
-                  <Icon name="motorcycle" size={125} color='black'/>
-                  <Text style={Style.ButtonText}> Motor </Text>
-                </TouchableOpacity>
-              </View>
-          </View>
-
-          <View style={Style.orderSection}>
-              <View style={{flexDirection:'row', marginLeft:10}}>
-                <Icon name="warning" size={20} color='#c70003'/>
-                <Text style={Style.importantText}> Pastikan Lokasi Dan Kendaraan Anda Tepat!! </Text>
-              </View>
-              <TouchableOpacity style={Style.orderBtn} activeOpacity={0.7}
-                onPress={() => validateOrder()}>
-                <Text style={Style.orderText}>Pesan Sekarang</Text>
-              </TouchableOpacity>
-          </View>
-          </KeyboardAvoidingView>
+        <View style={{maxHeight: 300, marginVertical: 20}}> 
+          <ImageSlider
+              data={[
+                {img: require('../../assets/images/waiting1.png')},
+                {img: require('../../assets/images/towing.png')},
+                {img: require('../../assets/images/mehanic.png')},
+              ]}
+              localImg
+              preview={false}
+              showIndicator={false}
+              timer={20000}
+              autoPlay={true}
+          />
         </View>
-      </ScrollView>
-    </View>
+          <CustomText title="Sedang Mencarikan
+          Bengkel Terdekat Ke Lokasi Anda. Mohon Tunggu Sebentar"
+          style={{paddingHorizontal:10}}
+          size={20}/>
+      </View>
+    <AbsoluteButton 
+      title={'Batalkan Pesanan ( '+ time + 's )'} 
+      color='white' 
+      icon='remove'
+      style={{borderRadius:20, 
+          backgroundColor: '#BE0003', 
+          marginHorizontal:10}}
+      textStyle={{marginLeft: 8}}
+      onPress={() => {navigation.navigate('Home')}}/>
+  </View>
   )
 };

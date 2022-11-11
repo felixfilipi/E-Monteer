@@ -4,9 +4,11 @@ import React from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Style from "../Styles/orderStyle";
 import { RootStackParamList } from './RootStackParamList';
+import { CustomText, ImportantText } from "../Component/CustomText";
+import { CustomButton, LogoButton } from "../Component/CustomButton";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type OrderType = StackNavigationProp<RootStackParamList, 'Order'>
 
@@ -34,6 +36,8 @@ export default function Order(){
     if(vehicle == '' || searchQuery == ''){
       Platform.OS === 'android' ? 
         ToastAndroid.show('Tolong Pilih Jenis Kendaraan dan Pastikan Lokasi Anda Tepat', ToastAndroid.LONG) : Alert.alert('Tolong Pilih Jenis Kendaraan dan Pastikan Lokasi Anda Tepat')
+    }else{
+      navigation.navigate('Waiting');
     }
   }
 
@@ -54,30 +58,23 @@ export default function Order(){
             <Image 
                 style={{width:350, height:250}}
                 source={require("../../assets/images/relaxMechanic.png")}/>
-            <Text style={Style.descText}>Pilih Jenis Kendaraan Anda</Text>
+            <CustomText title='Pilih Jenis Kendaraan Anda' size={20}/>
               <View style={Style.vehicle}>
-                <TouchableOpacity style={[Style.vehicleBtn, {backgroundColor: carColor}]}
-                  onPress={()=>setVechicle('mobil')} activeOpacity={0.7}>
-                  <Icon name="car" size={125} color='black'/>
-                  <Text style={Style.ButtonText}> Mobil </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[Style.vehicleBtn, {backgroundColor: motorColor}]} activeOpacity={0.7}
-                  onPress={()=>setVechicle('motor')}>
-                  <Icon name="motorcycle" size={125} color='black'/>
-                  <Text style={Style.ButtonText}> Motor </Text>
-                </TouchableOpacity>
+                <LogoButton 
+                  style={{backgroundColor: carColor}} 
+                  onPress={()=>setVechicle('mobil')} 
+                  iconName='car'
+                  btnTitle="Mobil"/>
+                <LogoButton 
+                  style={{backgroundColor: motorColor}} 
+                  onPress={()=>setVechicle('motor')} 
+                  iconName='motorcycle'
+                  btnTitle="Motor"/>
               </View>
           </View>
-
           <View style={Style.orderSection}>
-              <View style={{flexDirection:'row', marginLeft:10}}>
-                <Icon name="warning" size={20} color='#c70003'/>
-                <Text style={Style.importantText}> Pastikan Lokasi Dan Kendaraan Anda Tepat!! </Text>
-              </View>
-              <TouchableOpacity style={Style.orderBtn} activeOpacity={0.7}
-                onPress={() => validateOrder()}>
-                <Text style={Style.orderText}>Pesan Sekarang</Text>
-              </TouchableOpacity>
+              <ImportantText title="Pastikan Lokasi Dan Kendaraan Anda Tepat!!"/>
+              <CustomButton title="Pesan Sekarang" onPress={() => validateOrder()}/>
           </View>
           </KeyboardAvoidingView>
         </View>

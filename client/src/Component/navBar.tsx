@@ -1,5 +1,5 @@
-import { BottomNavigation, Avatar, Drawer } from 'react-native-paper';
-import {Text, View, Image, TouchableWithoutFeedback, Alert } from 'react-native';
+import { Avatar, Drawer } from 'react-native-paper';
+import {Text, View, Image, TouchableWithoutFeedback, Alert, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React from 'react';
 import Style from '../Styles/componentStyle';
 import { RootStackParamList } from '../Pages/RootStackParamList';
@@ -7,39 +7,60 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { setDrawer } from '../../redux/component/drawer';
 import { useAppDispatch, useAppSelector } from '../../redux';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { setNavbar } from '../../redux/component/navbar';
 
-const HomeRoute = () => <Text>Home</Text>
-const SearchRoute = () => <Text>Search</Text>
-const HistoryRoute = () => <Text>History</Text>
-const ExploreRoute = () => <Text>Explore</Text>
+type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
 export const BottomNav = () => {
-    const [index, setIndex] = React.useState<number>(0);
-    const [routes] = React.useState([
-    { key: 'home', title: 'Utama', icon: 'home-circle' },
-    { key: 'search', title: 'Cari', icon: 'map-search-outline' },
-    { key: 'history', title: 'Riwayat', icon: 'history' },
-    { key: 'explore', title: 'Telusuri', icon: 'book' },
-  ]);
 
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    search: SearchRoute,
-    history: HistoryRoute,
-    explore: ExploreRoute,
-  });
+  const dispatch = useAppDispatch();
+  const navbarState = useAppSelector(state => state.navbar);
+
+  const navigation = useNavigation<NavigationType>();
+  
+  let color:string, fontColor: string,
+  title:string[], icon:string[], navigate:any[], 
+  Content:any[] = [];
+  
+  title = ['Utama','Cari','Riwayat','Telusuri'];
+  icon = ['home-circle','map-search-outline','history','book'];
+  navigate = ['Home','Find','Find','Find'];
+
+  const navbarPressed = (i : number) => {
+    navigation.navigate(navigate[i]);
+    dispatch(setNavbar(i));
+  }
+   
+  for(let i=0; i<=title.length - 1; i++){
+
+    if(i == navbarState){
+      color = '#cca405';
+      fontColor = 'white';
+    }else{
+      color = '#b99504';
+      fontColor = '#675302';
+    };
+
+    Content.push(
+      <TouchableHighlight key={i}
+        underlayColor={'#cca405'}
+        style={[Style.bottomNavBtn, {backgroundColor: color}]}
+        onPress={() => navbarPressed(i)}>
+        <>
+          <Icon name={icon[i]} size={25} color={fontColor}/>
+          <Text style={[Style.bottomNavText,{color: fontColor}]}>{title[i]}</Text>
+        </>
+      </TouchableHighlight>
+    )
+  }
 
   return(
-        <BottomNavigation
-        labeled={true}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        barStyle={{ backgroundColor: '#b99504' }}
-        activeColor='#fff'
-        style={{position: 'absolute', bottom:0, left:0, right:0}}
-        shifting={false}
-      />
+    <View style={Style.bottomNavLayout}>
+      <View style={{flexDirection:'row'}}>
+        {Content}
+      </View>
+    </View>
   )
 }
 

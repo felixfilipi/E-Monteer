@@ -4,4 +4,7 @@ export type RootStackParamList = {
     Home: undefined;
     Edit: undefined;
     Order: undefined;
+    Waiting: undefined;
+    Find: undefined;
+    BottomNav: undefined;
 };

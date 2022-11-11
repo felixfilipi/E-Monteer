@@ -9,13 +9,6 @@ export default React.StyleSheet.create({
     paddingHorizontal: 40
   },
 
-  categoryBtn: {
-    flex:1, 
-    margin: 3,
-    marginVertical: 8,
-    backgroundColor: '#b99504',
-  },
-
   MyButton: {
     backgroundColor: '#b99504',
     alignItems: 'center',
@@ -57,4 +50,15 @@ export default React.StyleSheet.create({
     fontWeight:'bold'
   },
 
+  drawerContainer: {
+    backgroundColor:'white',
+    width:243,
+    position:'absolute',
+    zIndex: 5,
+    display:'flex',
+    right:0,
+    borderRadius:10,
+    borderColor:'#b99504',
+    borderWidth:2
+  }
 })

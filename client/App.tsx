@@ -11,6 +11,9 @@ import { Register, Login} from './src/Pages/Auth';
 import EditProfile from './src/Pages/Profile';
 import Home from './src/Pages/Home';
 import Order from './src/Pages/Order';
+import Waiting from './src/Pages/Waiting';
+import Find from './src/Pages/Find';
+import {BottomNav} from './src/Component/navBar';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -40,7 +43,16 @@ export default function App() {
                 options={{title:'Edit Profile', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="Order" component={Order} 
-                options={{title:'Order Mechanic', headerTintColor:'white'}}/>
+                options={{title:'Cari Terdekat', headerTintColor:'white'}}/>
+              <Stack.Screen
+                name="Waiting" component={Waiting} 
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="Find" component={Find}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="BottomNav" component={BottomNav} 
+                options={{headerShown: false}}/>
             </Stack.Navigator>
           </NavigationContainer>
       </View>

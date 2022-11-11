@@ -19,12 +19,14 @@ export function Register(){
   autocomplete_list:any[], inputType:any[], maxLength:number[],
   Content:any[] = [], fields:any[];
   
-  placeholder_list = ['Input your Name here','Input your Email here',
-    'Input your Phone number here', 'Input your Address here']
-  icon_list = ['user','mail','phone','location']
-  autocomplete_list = ['name','email','tel','postal-address']
-  inputType = ['default', 'default', 'phone-pad', 'default']
-  maxLength = [30,40,13,100]
+  placeholder_list = ['Input Your Name Here','Input Your Email Here',
+    'Input Your Phone Number Here', 'Input Your Address Here', 
+    'Input Your Password Here', 'Input Your Password Again']
+  icon_list = ['user','mail','phone','location', 'key', 'shield']
+  autocomplete_list = ['name','email','tel','postal-address', 
+    'password', 'password-new']
+  inputType = ['default', 'default', 'phone-pad', 'default', 'default', 'default']
+  maxLength = [30, 40, 13, 100, 20, 20]
 
   const [SName, setName] = React.useState<string>('');
   const [SEmail, setEmail] = React.useState<string>('');
@@ -43,28 +45,53 @@ export function Register(){
     }
   },[SName, SEmail, SPhone, SAddress, SPassword, SPasswordValid])
 
-  fields = [setName, setEmail, setPhone, setAddress]
+  fields = [setName, setEmail, setPhone, setAddress, 
+    setPassword, setPasswordValid]
 
   for(let i = 0; i <= icon_list.length - 1; i++){
-    Content.push(
-      <View style={Style.flexHorizontal} key={"View" + i}>
-        <Icon 
-          name={icon_list[i]} 
-          size={30} 
-          style={Style.icon}
-          color="#fff"
-          key={"Icon" + i}/>
-        <TextInput 
-          autoComplete={autocomplete_list[i]}
-          maxLength={maxLength[i]}
-          placeholder={placeholder_list[i]}
-          placeholderTextColor="#fff"
-          keyboardType={inputType[i]}
-          onChangeText={(value) => fields[i](value)}
-          style={Style.textInp}
-          key={"Input" + i}/>
-        </View>
-    )
+    if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
+      Content.push(
+        <View style={Style.flexHorizontal} key={"View" + i}>
+          <Icon 
+            name={icon_list[i]} 
+            size={30} 
+            style={Style.icon}
+            color="#fff"
+            key={"Icon" + i}/>
+          <TextInput 
+            autoComplete={autocomplete_list[i]}
+            maxLength={maxLength[i]}
+            placeholder={placeholder_list[i]}
+            placeholderTextColor="#fff"
+            autoCapitalize='none'
+            secureTextEntry={true}
+            keyboardType={inputType[i]}
+            onChangeText={(value) => fields[i](value)}
+            style={Style.textInp}
+            key={"Input" + i}/>
+          </View>
+      )
+    }else{
+      Content.push(
+        <View style={Style.flexHorizontal} key={"View" + i}>
+          <Icon 
+            name={icon_list[i]} 
+            size={30} 
+            style={Style.icon}
+            color="#fff"
+            key={"Icon" + i}/>
+          <TextInput 
+            autoComplete={autocomplete_list[i]}
+            maxLength={maxLength[i]}
+            placeholder={placeholder_list[i]}
+            placeholderTextColor="#fff"
+            keyboardType={inputType[i]}
+            onChangeText={(value) => fields[i](value)}
+            style={Style.textInp}
+            key={"Input" + i}/>
+          </View>
+      )
+    }
   };
 
   const checkInput = () => {
@@ -88,41 +115,6 @@ export function Register(){
                   style={Style.logo}/>
               <View style={Style.flexVertical}>
                   {Content}
-                  <View style={Style.flexHorizontal}>
-                      <Icon 
-                          name={"key"} 
-                          size={30} 
-                          style={Style.icon}
-                          color="#fff"/>
-                      <TextInput 
-                          autoComplete={"password"}
-                          maxLength={20}
-                          autoCapitalize={'none'}
-                          placeholder={"Input your Password here"}
-                          placeholderTextColor="#fff"
-                          secureTextEntry={true}
-                          onChangeText={(value) => setPassword(value)}
-                          style={Style.textInp}
-                          key={"Input4"}/>
-                      </View>
-                  
-                  <View style={Style.flexHorizontal}>
-                      <Icon 
-                          name={"shield"} 
-                          size={20} 
-                          style={Style.icon}
-                          color="#fff"/>
-                      <TextInput 
-                          autoComplete={"password-new"}
-                          maxLength={50}
-                          placeholder={"Input your password again"}
-                          placeholderTextColor="#fff"
-                          onChangeText={(value) => setPasswordValid(value)}
-                          autoCapitalize={"none"}
-                          secureTextEntry={true}
-                          style={Style.textInp}
-                          key={"input5"}/>
-                      </View>
               </View>
               <View
                   style={Style.button}>

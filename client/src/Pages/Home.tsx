@@ -1,4 +1,4 @@
-import { View, KeyboardAvoidingView,
+import { View, KeyboardAvoidingView, Alert,
   Text, ScrollView, TouchableOpacity} from "react-native";
 import React from 'react';
 import { Searchbar, Card, Title, Paragraph } from 'react-native-paper';
@@ -7,8 +7,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from 'react-native-vector-icons/Entypo';
 import { Rating } from 'react-native-ratings';
 import Style from "../Styles/homeStyle";
-import {TopBar, BottomNav} from '../Component/navBar'
+import { TopBar, BottomNav } from '../Component/navBar';
+import { MultipleButton } from '../Component/CustomButton';
 import { RootStackParamList } from './RootStackParamList';
+import { setNavbar } from "../../redux/component/navbar";
+import { useAppDispatch, useAppSelector } from '../../redux';
+import { setOrderFail } from "../../redux/component/order";
+import { setSearch } from "../../redux/component/search";
 
 type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
 
@@ -21,11 +26,31 @@ export default function Home(){
 
   const onChangeSearch = (query : string) => setSearchQuery(query);
 
-  React.useEffect(()=>{
-    if(rating !== 0){
-      setRateState(true);
+  const orderFailState = useAppSelector(state => state.orderFail);
+  const searchState = useAppSelector(state => state.search);
+  const dispatch = useAppDispatch();
+
+  React.useEffect(() => {
+    if(orderFailState == true){
+      Alert.alert("Bengkel Tidak Ditemukan", 
+        "Maaf Tidak Ada Bengkel Yang Tersedia di Daerah Sekitar Kamu",
+      );
+      dispatch(setOrderFail(false));
     }
-  },[rating])
+  }, [orderFailState])
+
+  const processRate = (rating : number) => {
+    if(rateState == false){
+      setRating(rating);     
+      setRateState(true);
+    };
+  };
+
+  const submitSearch = (query: string) => {
+    dispatch(setSearch(query));
+    navigation.navigate('Find');
+    dispatch(setNavbar(1));
+  }
 
   return(
   <View style={{flex:1}}>
@@ -38,35 +63,14 @@ export default function Home(){
               placeholder="Cari Bengkel"
               onChangeText={onChangeSearch}
               style={{backgroundColor:'#fff'}}
-              value={searchQuery}/>
-              <View style={{justifyContent:'center', flexDirection: 'row'}}>
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
-                  <Icon 
-                    name={"location-pin"} 
-                    size={20} 
-                    color="#fff"
-                    />
-                  <Text style={Style.ButtonText}>Terdekat</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
-                  <Icon 
-                    name={"heart"} 
-                    size={20} 
-                    color="#fff"
-                    />
-                  <Text style={Style.ButtonText}>Terfavorit</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={Style.MyButton} activeOpacity={0.8}>
-                  <Icon 
-                    name={"hour-glass"} 
-                    size={20} 
-                    color="#fff"
-                    />
-                  <Text style={Style.ButtonText}>24 Jam</Text>
-                </TouchableOpacity>
-              </View>
+              value={searchQuery}
+              onSubmitEditing={() => submitSearch(searchQuery)}
+            />
+              <MultipleButton 
+                size={3} 
+                title={['Terdekat', 'Terfavorit','24 Jam']}
+                direction='row'
+                iconName={['map-marker','heart','clock-o']}/>
           </View>
           
           <View style={{backgroundColor:'white', height:300, width: 390, justifyContent:'center'}}>
@@ -105,7 +109,7 @@ export default function Home(){
                     imageSize={30}
                     tintColor='#fffde6'
                     readonly={rateState}
-                    onFinishRating={(rating : number) => {setRating(rating)}}
+                    onFinishRating={(rating : number) => processRate(rating)}
                     style={Style.ratingStyle}/>
                   <TouchableOpacity style={Style.MyButton} activeOpacity={0.7}>
                     <Icon 

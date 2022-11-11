@@ -27,45 +27,6 @@ export default React.StyleSheet.create({
     marginLeft: 5
   },
   
-  vehicleBtn: {
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 7,
-    flexDirection: 'column',
-    margin: 3,
-    marginTop: 8
-  },
-
-  orderBtn: {
-    backgroundColor: '#b99504',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 7,
-    flexDirection: 'row',
-    margin: 3,
-    marginTop: 8,
-    justifyContent:'center'
-  },
-  
-  orderText: {
-    color: 'white',
-    fontFamily: 'normal',
-    fontWeight: '600',
-    fontSize: 15,
-    textAlign: 'center',
-    paddingVertical:5
-  },
-
-  ButtonText: {
-    color: 'black',
-    fontFamily: 'normal',
-    fontWeight: '600',
-    fontSize: 20,
-    marginTop: 10
-  },
-
   vehicle: {
     flexDirection:'row',
     alignContent: 'center',
