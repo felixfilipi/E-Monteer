@@ -4,6 +4,12 @@ import React from "react-native"
 
 export default React.StyleSheet.create({
 
+  titleText : {
+    fontSize:30,
+    marginTop: 20,
+    fontWeight: '600',
+  },
+
   topSearch: {
     backgroundColor:'white', 
     opacity:0.4, 

@@ -13,6 +13,8 @@ import Home from './src/Pages/Home';
 import Order from './src/Pages/Order';
 import Waiting from './src/Pages/Waiting';
 import Find from './src/Pages/Find';
+import History from './src/Pages/History';
+import Garage from './src/Pages/Garage';
 import {BottomNav} from './src/Component/navBar';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +51,12 @@ export default function App() {
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name="Find" component={Find}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="History" component={History}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="Garage" component={Garage}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name="BottomNav" component={BottomNav} 

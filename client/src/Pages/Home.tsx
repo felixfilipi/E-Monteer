@@ -19,16 +19,15 @@ type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
 
 export default function Home(){
 
-  const navigation = useNavigation<HomeType>();
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [rating, setRating] = React.useState<number>(0);
-  const [rateState, setRateState] = React.useState<boolean>(false);
-
-  const onChangeSearch = (query : string) => setSearchQuery(query);
-
   const orderFailState = useAppSelector(state => state.orderFail);
   const searchState = useAppSelector(state => state.search);
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<HomeType>();
+  
+  const [rating, setRating] = React.useState<number>(0);
+  const [rateState, setRateState] = React.useState<boolean>(false);
+
+  const onChangeSearch = (query : string) => dispatch(setSearch(query));
 
   React.useEffect(() => {
     if(orderFailState == true){
@@ -48,7 +47,7 @@ export default function Home(){
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
-    navigation.navigate('Find');
+    navigation.navigate('Find', {prevScreen:true});
     dispatch(setNavbar(1));
   }
 
@@ -63,13 +62,14 @@ export default function Home(){
               placeholder="Cari Bengkel"
               onChangeText={onChangeSearch}
               style={{backgroundColor:'#fff'}}
-              value={searchQuery}
-              onSubmitEditing={() => submitSearch(searchQuery)}
+              value={searchState}
+              onSubmitEditing={() => submitSearch(searchState)}
             />
               <MultipleButton 
                 size={3} 
                 title={['Terdekat', 'Terfavorit','24 Jam']}
                 direction='row'
+                keyValue={'Home'}
                 iconName={['map-marker','heart','clock-o']}/>
           </View>
           

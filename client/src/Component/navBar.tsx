@@ -25,10 +25,10 @@ export const BottomNav = () => {
   
   title = ['Utama','Cari','Riwayat','Telusuri'];
   icon = ['home-circle','map-search-outline','history','book'];
-  navigate = ['Home','Find','Find','Find'];
+  navigate = ['Home','Find','History','Find'];
 
   const navbarPressed = (i : number) => {
-    navigation.navigate(navigate[i]);
+    navigation.navigate(navigate[i], {prevPage : false});
     dispatch(setNavbar(i));
   }
    
