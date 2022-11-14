@@ -9,4 +9,5 @@ export type RootStackParamList = {
     Garage: {id: number} | undefined;
     BottomNav: undefined;
     History: undefined;
+    HistoryDetail: {id: number} | undefined;
 };

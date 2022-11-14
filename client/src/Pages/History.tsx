@@ -10,7 +10,7 @@ import { MultipleButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
 import { useAppSelector } from "../../redux";
 
-type FindType = StackNavigationProp<RootStackParamList, 'Find'>
+type HistoryDetailType = StackNavigationProp<RootStackParamList, 'HistoryDetail'>
 
 const DATA = [
   {
@@ -79,29 +79,33 @@ const DATA = [
 
 ];
 
-const Item = ({ title, location, handleType, date }) => (
-  <TouchableHighlight 
-    underlayColor='white' 
-    onPress={() => Alert.alert('a')}
-    style={{borderRadius:10}}
-  >
-  <View style={Style.FlatListStyle}>
-    <View style={{flexDirection:'row'}}>
-      <View style={{flex:1, justifyContent:'center'}}>
-        <View style={Style.handleContainer}>
-          {handleType == 'motorcycle' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
-          {handleType == 'car' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
+const Item = ({ title, location, handleType, date, id }) => {
+
+  const navigation = useNavigation<HistoryDetailType>();
+  return(
+    <TouchableHighlight 
+      underlayColor='white' 
+      onPress={() => navigation.navigate('HistoryDetail',{id:id})}
+      style={{borderRadius:10}}
+    >
+    <View style={Style.FlatListStyle}>
+      <View style={{flexDirection:'row'}}>
+        <View style={{flex:1, justifyContent:'center'}}>
+          <View style={Style.handleContainer}>
+            {handleType == 'motorcycle' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
+            {handleType == 'car' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
+          </View>
+        </View>
+        <View style={{flex:5, paddingHorizontal:10}}>
+          <Text style={Style.titleStyle}>{title}</Text>
+          <Text style={Style.descriptionStyle}>{location}</Text>
+          <Text style={Style.descriptionStyle}>{date}</Text>
         </View>
       </View>
-      <View style={{flex:5, paddingHorizontal:10}}>
-        <Text style={Style.titleStyle}>{title}</Text>
-        <Text style={Style.descriptionStyle}>{location}</Text>
-        <Text style={Style.descriptionStyle}>{date}</Text>
-      </View>
     </View>
-  </View>
-  </TouchableHighlight>
-);
+    </TouchableHighlight>
+    );
+};
 
 export default function History(){
 
@@ -113,12 +117,11 @@ export default function History(){
         location={item.location} 
         handleType={item.handleType}
         date={item.date}
+        id={item.id}
         />
     )
   };
-
-  const navigation = useNavigation<FindType>();
-  
+ 
   let CAR_DATA = [], MOTOR_DATA = [];
   for(let i = 0; i <= DATA.length; i++){
     if(DATA[i]?.handleType == 'car'){

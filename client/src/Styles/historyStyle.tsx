@@ -5,6 +5,7 @@ import React from "react-native"
 export default React.StyleSheet.create({
 
   titleText : {
+    color: 'white',
     fontSize:30,
     marginTop: 20,
     fontWeight: '600',

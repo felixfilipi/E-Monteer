@@ -1,41 +1,34 @@
 import { Button, View, Text, FlatList, Image, SafeAreaView, TouchableHighlight, Alert, ScrollView} from "react-native";
+import { Avatar } from 'react-native-paper'; 
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/garageStyle";
+import Style from "../Styles/historyDetailStyle";
 import { RootStackParamList } from './RootStackParamList';
-import { BottomNav } from '../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AbsoluteButton, MultipleButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
-import { useAppSelector } from "../../redux";
 import { Rating } from "react-native-ratings";
 
 type FindType = StackNavigationProp<RootStackParamList, 'Garage'>
 
-const DATA = [
+const GARAGE = [
   {
     id:1,
     title: 'Bengkel Cepi Jaya',
+    mechanicName:'Jamaludin',
     location: 'Jalan MH Thamrin 1, Jakarta Pusat.',
-    rating: 5,
     handleType: 'car',
-    openHour: '08.00 AM - 17.00 PM',
-    openDay: 'Senin - Minggu',
-    website: 'www.cepi.com',
+    date: '01/01/2001',
     phone: '087892314322',
-    image: 'https://imgx.gridoto.com/crop/0x0:0x0/700x500/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/2020/12/19/3411804514.png',
+    image: 'https://carro.id/blog/wp-content/uploads/2020/12/Foto-3-Bosch-Module.png'
   },
   {
     id:2,
     title: 'Bengkel bos jaya',
     location: 'bangalore, singapore.',
-    rating: 1.5,
-    openHour: '08.30 AM - 17.20 PM',
-    openDay: 'Senin - Jumat',
     handleType: 'motorcycle',
     date: '01/01/2001',
-    website: 'www.bos.com',
     phone: '0878123123123',
     image: 'https://assets.kompasiana.com/items/album/2020/09/12/motor2-5f5c4f64d541df5c327a59d2.jpg?t=o&v=770'
   },
@@ -43,12 +36,8 @@ const DATA = [
     id:3,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    rating: 4,
-    openHour: '07.00 AM - 17.50 PM',
-    openDay: 'Rabu - Minggu',
     handleType: 'car',
     date: '01/01/2001',
-    website: 'www.kuli.com',
     phone: '0878932131232',
     image: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/gridoto/2017/10/13/2370856391.jpg',
   },
@@ -56,12 +45,8 @@ const DATA = [
     id:4,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    rating: 3,
-    openHour: '06.00 AM - 17.00 PM',
-    openDay: 'Senin - Minggu',
     handleType: 'motorcycle',
     date: '01/01/2001',
-    website: 'www.cepi.com',
     phone: '087892314322',
     image: 'https://www.asuransiastra.com/wp-content/uploads/2022/06/Pilih-Bengkel-Motor-Resmi-atau-Non-Resmi-Ini-Perbedaannya.jpg',
   },
@@ -69,12 +54,8 @@ const DATA = [
     id:5,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    rating: 2,
-    openHour: '08.00 AM - 17.00 PM',
-    openDay: 'Senin - Minggu',
     handleType: 'car',
     date: '01/01/2001',
-    website: 'www.cepi.com',
     phone: '087892314322',
     image: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/gridoto/2017/10/13/2370856391.jpg',
   },
@@ -82,12 +63,8 @@ const DATA = [
     id:6,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    rating: 3,
-    openHour: '08.00 AM - 17.00 PM',
-    openDay: 'Senin - Minggu',
     handleType: 'motorcycle',
     date: '01/01/2001',
-    website: 'www.cepi.com',
     phone: '087892314322',
     image: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/gridoto/2017/10/13/2370856391.jpg',
   },
@@ -95,69 +72,89 @@ const DATA = [
     id:7,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    rating: 3.3,
-    openHour: '08.00 AM - 17.00 PM',
-    openDay: 'Senin - Minggu',
     handleType: 'car',
     date: '01/01/2001',
-    website: 'www.cepi.com',
     phone: '087892314322',
     image: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/gridoto/2017/10/13/2370856391.jpg',
   }
-
 ];
 
-
-export default function Garage(props){
+export default function HistoryDetail(props){
 
   const navigation = useNavigation<FindType>();
   const [DataID, setDataID] = React.useState<number>(props.route.params.id);
 
-  let icon_list : string[] = [], desc_list : any[] = [], Content : any[] = []; 
-  icon_list = ['map-marker','clock-o','globe', 'phone', 'calendar']
-  desc_list = [DATA[DataID - 1].location, DATA[DataID - 1].openHour, 
-    DATA[DataID - 1].website, DATA[DataID - 1].phone, DATA[DataID - 1].openDay]
-  
-  for(let i = 0; i <= icon_list.length;i++){
-    Content.push(
-      <View style={Style.descriptionLayout} key={"Garage" + i}>
-        <View style={{flex:1, alignItems:'center'}}>
-          <Icon 
-            name={icon_list[i]} 
-            size={30}
-            color="#b99504"
-            style={{flex:1}}
-            />
-        </View>
-        <View style={{flex:7}}>
-        <CustomText
-          selectable={true}
-          title={desc_list[i]}
-          style={Style.descriptionStyle}/> 
-        </View>
-      </View>
-    )
-  }
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
     <ScrollView>
-      <Image 
-        source={{uri: DATA[DataID - 1]?.image}} 
-        style={{height:200, left:0, right:0}}
-        resizeMode="cover"/>
-      
       <View style={Style.descriptionContainer}>
-        <CustomText title={DATA[DataID - 1]?.title} style={Style.titleText}/> 
+        <CustomText 
+          title={'Beri Rating untuk Bengkel ini?'} 
+          style={Style.titleText}
+          size={20}/> 
         <Rating
           type='custom'
-          startingValue={DATA[DataID - 1].rating}
+          startingValue={0}
           ratingBackgroundColor="#B1B5C1"
           imageSize={30}
           tintColor='white'
           readonly={true} 
           />
-        <View style={{marginTop:20}}>
-          {Content}
+        <View style={Style.avatarContainer}>
+          <View style={{flex:1}}>
+            <Avatar.Image 
+              size={60}
+              source={{uri:GARAGE[DataID - 1].image}}
+              />
+          </View>
+          <View style={{flexDirection:'column', flex:4}}>
+            <CustomText 
+              title={GARAGE[DataID - 1].mechanicName}
+              style={{textAlign:'left', fontWeight:'700'}}/>
+            <CustomText 
+              title={GARAGE[DataID - 1].phone}
+              style={{textAlign:'left'}}/>
+          </View>
+        </View>
+        <View style={Style.pickupContainer}>
+          <CustomText 
+            title="Detail Penjemputan" 
+            color="#c5c2c0"
+            style={{textAlign:'left', fontWeight:'600'}}/>
+          
+          <View style={Style.horizontalContainer}>
+            <View style={Style.iconContainer}>
+              <Icon name="wrench" size={30} color={'#b99504'}/>
+            </View>
+            <View style={{flex:5}}>
+              <CustomText 
+                title="Alamat Bengkel"
+                color="#c5c2c0"
+                style={{textAlign:'left', fontWeight:'700'}}/>
+              <CustomText 
+                title={GARAGE[DataID - 1].location}
+                color="black"
+                size={15}
+                style={{textAlign:'left', fontWeight:'600'}}/>
+            </View>
+          </View>
+          
+          <View style={Style.horizontalContainer}>
+            <View style={Style.iconContainer}>
+              <Icon name="map-pin" size={30} color={'#b99504'}/>
+            </View>
+            <View style={{flex:5}}>
+              <CustomText 
+                title="Lokasi Penjemputan"
+                color="#c5c2c0"
+                style={{textAlign:'left', fontWeight:'700'}}/>
+              <CustomText 
+                title={GARAGE[DataID - 1].location}
+                color="black"
+                size={15}
+                style={{textAlign:'left', fontWeight:'600'}}/>
+            </View>
+          </View>
         </View>
       </View>
     </ScrollView>

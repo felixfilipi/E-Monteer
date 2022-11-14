@@ -15,6 +15,7 @@ import Waiting from './src/Pages/Waiting';
 import Find from './src/Pages/Find';
 import History from './src/Pages/History';
 import Garage from './src/Pages/Garage';
+import HistoryDetail from './src/Pages/HistoryDetail';
 import {BottomNav} from './src/Component/navBar';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -57,7 +58,10 @@ export default function App() {
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name="Garage" component={Garage}
-                options={{headerShown: false}}/>
+                options={{title:'Detail Bengkel', headerTintColor:'white'}}/>
+              <Stack.Screen
+                name="HistoryDetail" component={HistoryDetail}
+                options={{title:'Detail Riwayat', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="BottomNav" component={BottomNav} 
                 options={{headerShown: false}}/>

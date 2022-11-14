@@ -4,7 +4,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const CustomText = (props: any) => {
   return(
-    <Text style={[Style.descText, {fontSize: props.size}, props.style]}>{props.title}</Text>
+    <Text selectable={props.selectable}
+      style={[Style.descText, 
+        {fontSize: props.size},
+        {color: props.color},
+        props.style]}>{props.title}</Text>
   )
 }
 
