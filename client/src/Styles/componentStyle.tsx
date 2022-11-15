@@ -11,12 +11,14 @@ export default React.StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
+    zIndex:5
   },
 
   topItem: {
     width: '50%',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    zIndex:5
   },
 
   avatar: {
@@ -29,6 +31,16 @@ export default React.StyleSheet.create({
     marginRight: 'auto',
     alignItems: 'flex-start',
     marginLeft: 10
+  },
+
+  drawerMask: {
+    zIndex:3,
+    position:'absolute',
+    bottom:0, 
+    top:0, 
+    left:0, 
+    right:0, 
+    backgroundColor:'rgba(46, 44, 45, 0.8)',
   },
 
   drawerContainer: {

@@ -1,5 +1,6 @@
 import { View, TextInput, Button, KeyboardAvoidingView, 
-  ToastAndroid, Platform, Alert, Text, ScrollView} from "react-native"
+  ToastAndroid, Platform, Alert, Text, 
+  ScrollView, LogBox} from "react-native"
 import { Avatar } from 'react-native-paper';
 import Icon from "react-native-vector-icons/Entypo";
 import Style from "../Styles/profileStyle"
@@ -8,6 +9,9 @@ import { useComponentDidMount } from '../Component/customHooks';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./RootStackParamList";
+
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 
 type EditType = StackNavigationProp<RootStackParamList, 'Edit'>
 
@@ -58,7 +62,8 @@ export default function EditProfile(){
               size={30} 
               style={Style.icon}
               color="#fff"
-              key={"Icon" + i}/>
+              key={"icon" + i}
+              />
             <Text style={Style.title}>{title[i]}</Text>
           </View>
             <TextInput 
@@ -70,8 +75,9 @@ export default function EditProfile(){
               secureTextEntry={true}
               keyboardType={inputType[i]}
               onChangeText={(value) => fields[i](value)}
+              key={"input" + i}
               style={Style.textInp}
-              key={"Input" + i+7}/>
+              />
           </>
       )
     }else{
@@ -94,7 +100,7 @@ export default function EditProfile(){
               keyboardType={inputType[i]}
               onChangeText={(value) => fields[i](value)}
               style={Style.textInp}
-              key={"Input" + i+7}/>
+              key={"Input" + i}/>
         </>
       )
     }

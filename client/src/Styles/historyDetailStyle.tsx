@@ -22,7 +22,6 @@ export default React.StyleSheet.create({
   descriptionLayout: {
     flexDirection:'row', 
     flex:8, 
-    padding:10,
   },
 
   avatarContainer:{

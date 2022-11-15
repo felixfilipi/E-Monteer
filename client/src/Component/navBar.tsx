@@ -99,6 +99,10 @@ const DrawerComponent = () => {
         onPress={() => setDrawerActive('out')}
       />
     </Drawer.Section>
+    <View 
+      onStartShouldSetResponder={() => true}
+      onResponderGrant={() => {dispatch(setDrawer(false))}}
+      style={Style.drawerMask}/>
     </>
   )
 }
@@ -125,8 +129,8 @@ export const TopBar = () => {
       </TouchableWithoutFeedback>
       </View>
     </View>
-    <View style={{marginBottom:82}}/>
-      {drawerState == true ? <DrawerComponent/> : null }
+      <View style={{marginBottom:82}}/>
+        {drawerState == true ? <DrawerComponent/> : null }
     </>
   )
 }

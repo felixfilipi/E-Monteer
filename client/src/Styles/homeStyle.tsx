@@ -32,6 +32,13 @@ export default React.StyleSheet.create({
     marginBottom: 100
   },
 
+  CardAction:{
+    flexDirection:'row', 
+    alignItems:'center', 
+    justifyContent:'center',
+    paddingTop:20
+  },
+
   ratingStyle: {
     paddingRight: 20
   },
