@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from 'react-native-vector-icons/Entypo';
 import MapView, { Marker } from 'react-native-maps';
+import MapViewDirections from "react-native-maps-directions";
 import { Rating } from 'react-native-ratings';
 import Style from "../Styles/homeStyle";
 import { TopBar, BottomNav } from '../Component/navBar';
@@ -91,7 +92,7 @@ export default function Home(){
   if(location){
     latitude = location['coords']['latitude'];
     longitude = location['coords']['longitude'];
-  }
+  };
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
@@ -187,6 +188,11 @@ export default function Home(){
                   coordinate={{ latitude: latitude, longitude: longitude }}
                   title={'Lokasi Anda'}
                 >
+                <MapViewDirections
+                  origin={origin}
+                  destination={destination}
+                  apikey={null}
+                />
                 <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
                 </Marker>
               </MapView>

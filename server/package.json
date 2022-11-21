@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "distance-matrix-api": "^1.0.0",
+    "express": "^4.18.2",
+    "google-distance": "^1.0.1",
+    "react-native-google-matrix": "^0.0.3"
   },
-  "devDependencies": {},
   "description": ""
 }
