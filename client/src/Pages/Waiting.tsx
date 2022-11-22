@@ -55,6 +55,7 @@ export default function Waiting(){
           <CustomText title="Sedang Mencarikan
           Bengkel Terdekat Ke Lokasi Anda. Mohon Tunggu Sebentar"
           style={{paddingHorizontal:10}}
+          color={'white'}
           size={20}/>
       </View>
     <AbsoluteButton 

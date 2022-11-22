@@ -43,10 +43,10 @@ export default function App() {
                 name="Home" component={Home} options={{headerShown: false }}/>
               <Stack.Screen
                 name="Edit" component={EditProfile} 
-                options={{title:'Edit Profile', headerTintColor:'white'}}/>
+                options={{title:'Ganti Profile', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="Order" component={Order} 
-                options={{title:'Cari Terdekat', headerTintColor:'white'}}/>
+                options={{title:'Pesan Mechanic', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="Waiting" component={Waiting} 
                 options={{headerShown: false}}/>

@@ -1,5 +1,5 @@
 import { View, KeyboardAvoidingView, Alert,
-  Image, Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+  Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
 import call from 'react-native-phone-call';
 import React from 'react';
 import { Searchbar, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
@@ -7,7 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from 'react-native-vector-icons/Entypo';
 import MapView, { Marker } from 'react-native-maps';
-import MapViewDirections from "react-native-maps-directions";
 import { Rating } from 'react-native-ratings';
 import Style from "../Styles/homeStyle";
 import { TopBar, BottomNav } from '../Component/navBar';
@@ -19,6 +18,8 @@ import { setOrderFail } from "../../redux/component/order";
 import { setSearch } from "../../redux/component/search";
 import * as Location from 'expo-location';
 import { CustomText } from "../Component/CustomText";
+import { setLatitude } from "../../redux/component/latitude";
+import { setLongitude } from "../../redux/component/longitude";
 
 type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
 
@@ -56,13 +57,13 @@ export default function Home(){
 
   const orderFailState = useAppSelector(state => state.orderFail);
   const searchState = useAppSelector(state => state.search);
+  const latitude = useAppSelector(state => state.latitude);
+  const longitude = useAppSelector(state => state.longitude);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeType>();
   
-  const [location, setLocation] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState(null);
-  const [,updateState] = React.useState<number>();
-  const forceUpdate = React.useCallback(() => updateState(0),[]);
+  const [ratingList, setRatingList] = React.useState<number[]>([GARAGE[0].rating, GARAGE[1].rating, GARAGE[2].rating]);
 
   const onChangeSearch = (query : string) => dispatch(setSearch(query));
 
@@ -77,22 +78,31 @@ export default function Home(){
 
   React.useEffect(() =>{
     (async () => {
+
+      let tryAgain : boolean = false;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if(status !== 'granted'){
         setErrorMsg('Permission to access location was denied');
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      do{
+        try{
+          let location = await Location.getCurrentPositionAsync({});
+          if(location){
+            dispatch(setLatitude(location['coords']['latitude']));
+            dispatch(setLongitude(location['coords']['longitude']));
+          };
+          tryAgain = false;
+        }catch{
+          tryAgain = true;
+        }
+      }while(tryAgain);
+ 
+
     })();
   },[]);
 
-  let latitude: number = 0, longitude: number = 0;
-  if(location){
-    latitude = location['coords']['latitude'];
-    longitude = location['coords']['longitude'];
-  };
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
@@ -108,6 +118,8 @@ export default function Home(){
       prompt: false,
       skipCanOpen: true
     }
+
+    let stateList = [...ratingList];
 
     Cards.push(
       <Card style={Style.CardStyle} key={"Card" + i}>
@@ -129,8 +141,11 @@ export default function Home(){
               ratingBackgroundColor="#B1B5C1"
               imageSize={30}
               tintColor='#fffde6'
-              readonly={GARAGE[i]?.rating == 0 ? false : true}
-              onFinishRating={(rating : number) => GARAGE[i]!.rating = rating}
+              readonly={ratingList[i] == 0 ? false : true}
+              onFinishRating={(rating : number) => {
+                stateList[i] = rating;
+                setRatingList(stateList)}
+            }
               style={Style.ratingStyle}/>
             <TouchableOpacity 
               onPress={()=>call(args).catch(console.error)}
@@ -149,7 +164,7 @@ export default function Home(){
     )
   }
 
-  if(latitude != 0 && longitude != 0){
+  if(latitude && longitude){
     return(
     <View style={{flex:1}}>
       <TopBar/>
@@ -188,15 +203,10 @@ export default function Home(){
                   coordinate={{ latitude: latitude, longitude: longitude }}
                   title={'Lokasi Anda'}
                 >
-                <MapViewDirections
-                  origin={origin}
-                  destination={destination}
-                  apikey={null}
-                />
                 <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
                 </Marker>
               </MapView>
-              <TouchableOpacity onPress={() => {navigation.navigate('Order')}} 
+              <TouchableOpacity onPress={() => {navigation.navigate('Order', {id:null, handleType:null})}} 
                   style={[Style.MyButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
                <Icon 
                  name={"tools"} 
@@ -225,7 +235,6 @@ export default function Home(){
       </View>
     )
   }else{
-    setTimeout(()=>{forceUpdate},5000)
     return(
       <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'#242A2F'}}>
         <CustomText 

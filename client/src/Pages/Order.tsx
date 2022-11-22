@@ -12,21 +12,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 type OrderType = StackNavigationProp<RootStackParamList, 'Order'>
 
-export default function Order(){
+export default function Order(props : any){
 
   const navigation = useNavigation<OrderType>();
   
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [vehicle, setVechicle] = React.useState<string>('');
+  const [vehicleColor, setVehicleColor] = React.useState<string>('#b1b5c1');
   const [carColor, setCarColor] = React.useState<string>('#b1b5c1');
   const [motorColor, setMotorColor] = React.useState<string>('#b1b5c1');
+  const [garageType, setGarageType] = React.useState<string>(props.route.params.handleType);
+
+  let Content : any[] = [];
 
   React.useEffect(()=>{
-    if(vehicle == 'mobil'){
+    if(vehicle == 'Mobil'){
       setCarColor('rgba(177, 181, 193, 0.5)')
+      setVehicleColor('rgba(177, 181, 193, 0.5)')
       setMotorColor('#b1b5c1')
-    }if(vehicle == 'motor'){
+    }if(vehicle == 'Motor'){
       setMotorColor('rgba(177, 181, 193, 0.5)')
+      setVehicleColor('rgba(177, 181, 193, 0.5)')
       setCarColor('#b1b5c1')
     }
   },[vehicle])
@@ -40,6 +46,33 @@ export default function Order(){
       navigation.navigate('Waiting');
     }
   }
+
+  if(garageType == 'Mobil' || garageType == 'Motor'){
+      Content.push(
+        <View style={Style.vehicle}>
+          <LogoButton 
+            style={{backgroundColor: vehicleColor}} 
+            onPress={()=>setVechicle(garageType)} 
+            iconName={garageType == 'Mobil' ? 'car' : 'motorcycle'}
+            btnTitle={garageType}/>
+        </View>
+      )
+  }else{
+      Content.push(
+        <View style={Style.vehicle}>
+          <LogoButton 
+            style={{backgroundColor: carColor}} 
+            onPress={()=>setVechicle('Mobil')} 
+            iconName='car'
+            btnTitle="Mobil"/>
+          <LogoButton 
+            style={{backgroundColor: motorColor}} 
+            onPress={()=>setVechicle('Motor')} 
+            iconName='motorcycle'
+            btnTitle="Motor"/>
+        </View>
+      )
+  } 
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
@@ -58,19 +91,8 @@ export default function Order(){
             <Image 
                 style={{width:350, height:250}}
                 source={require("../../assets/images/relaxMechanic.png")}/>
-            <CustomText title='Pilih Jenis Kendaraan Anda' size={20}/>
-              <View style={Style.vehicle}>
-                <LogoButton 
-                  style={{backgroundColor: carColor}} 
-                  onPress={()=>setVechicle('mobil')} 
-                  iconName='car'
-                  btnTitle="Mobil"/>
-                <LogoButton 
-                  style={{backgroundColor: motorColor}} 
-                  onPress={()=>setVechicle('motor')} 
-                  iconName='motorcycle'
-                  btnTitle="Motor"/>
-              </View>
+            <CustomText title='Pilih Jenis Kendaraan Anda' color={'white'} size={20}/>
+            {Content}
           </View>
           <View style={Style.orderSection}>
               <ImportantText title="Pastikan Lokasi Dan Kendaraan Anda Tepat!!"/>

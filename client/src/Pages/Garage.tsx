@@ -1,14 +1,12 @@
-import { Button, View, Text, FlatList, Image, SafeAreaView, TouchableHighlight, Alert, ScrollView} from "react-native";
+import { View, Image, ScrollView} from "react-native";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Style from "../Styles/garageStyle";
 import { RootStackParamList } from './RootStackParamList';
-import { BottomNav } from '../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AbsoluteButton, MultipleButton } from '../Component/CustomButton';
+import { AbsoluteButton} from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
-import { useAppSelector } from "../../redux";
 import { Rating } from "react-native-ratings";
 
 type FindType = StackNavigationProp<RootStackParamList, 'Garage'>
@@ -19,7 +17,7 @@ const DATA = [
     title: 'Bengkel Cepi Jaya',
     location: 'Jalan MH Thamrin 1, Jakarta Pusat.',
     rating: 5,
-    handleType: 'car',
+    handleType: 'Motor',
     openHour: '08.00 AM - 17.00 PM',
     openDay: 'Senin - Minggu',
     website: 'www.cepi.com',
@@ -33,7 +31,7 @@ const DATA = [
     rating: 1.5,
     openHour: '08.30 AM - 17.20 PM',
     openDay: 'Senin - Jumat',
-    handleType: 'motorcycle',
+    handleType: 'Mobil-Motor',
     date: '01/01/2001',
     website: 'www.bos.com',
     phone: '0878123123123',
@@ -46,7 +44,7 @@ const DATA = [
     rating: 4,
     openHour: '07.00 AM - 17.50 PM',
     openDay: 'Rabu - Minggu',
-    handleType: 'car',
+    handleType: 'Mobil',
     date: '01/01/2001',
     website: 'www.kuli.com',
     phone: '0878932131232',
@@ -98,7 +96,7 @@ const DATA = [
     rating: 3.3,
     openHour: '08.00 AM - 17.00 PM',
     openDay: 'Senin - Minggu',
-    handleType: 'car',
+    handleType: 'Mobil',
     date: '01/01/2001',
     website: 'www.cepi.com',
     phone: '087892314322',
@@ -114,9 +112,10 @@ export default function Garage(props){
   const [DataID, setDataID] = React.useState<number>(props.route.params.id);
 
   let icon_list : string[] = [], desc_list : any[] = [], Content : any[] = []; 
-  icon_list = ['map-marker','clock-o','globe', 'phone', 'calendar']
+  icon_list = ['map-marker','clock-o','globe', 'phone', 'calendar', 'wrench']
   desc_list = [DATA[DataID - 1].location, DATA[DataID - 1].openHour, 
-    DATA[DataID - 1].website, DATA[DataID - 1].phone, DATA[DataID - 1].openDay]
+    DATA[DataID - 1].website, DATA[DataID - 1].phone, DATA[DataID - 1].openDay, 
+    DATA[DataID - 1].handleType]
   
   for(let i = 0; i <= icon_list.length;i++){
     Content.push(
@@ -163,7 +162,9 @@ export default function Garage(props){
     </ScrollView>
     <AbsoluteButton 
       title={'Panggil Bengkel'}
-      style={{marginHorizontal:15}}/>
+      style={{marginHorizontal:15}}
+      onPress={() => navigation.navigate('Order', {id:DATA[DataID - 1].id, 
+        handleType:DATA[DataID - 1].handleType})}/>
   </View>
   )
 };

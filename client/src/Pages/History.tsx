@@ -17,8 +17,6 @@ const DATA = [
     id:1,
     title: 'Bengkel cepi jaya',
     location: 'jalan mh thamrin 1, jakarta pusat.',
-    distance: '2.5 km',
-    rating: 5,
     handleType: 'car',
     date: '01/01/2001'
   },
@@ -26,8 +24,6 @@ const DATA = [
     id:2,
     title: 'Bengkel bos jaya',
     location: 'bangalore, singapore.',
-    distance: '7 km',
-    rating: 1.5,
     handleType: 'motorcycle',
     date: '01/01/2001'
   },
@@ -35,8 +31,6 @@ const DATA = [
     id:3,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
-    rating: 4,
     handleType: 'car',
     date: '01/01/2001'
   },
@@ -44,8 +38,6 @@ const DATA = [
     id:4,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
-    rating: 3,
     handleType: 'motorcycle',
     date: '01/01/2001'
   },
@@ -53,8 +45,6 @@ const DATA = [
     id:5,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
-    rating: 2,
     handleType: 'car',
     date: '01/01/2001'
   },
@@ -62,8 +52,6 @@ const DATA = [
     id:6,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
-    rating: 3,
     handleType: 'motorcycle',
     date: '01/01/2001'
   },
@@ -71,8 +59,6 @@ const DATA = [
     id:7,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
-    rating: 3.3,
     handleType: 'car',
     date: '01/01/2001'
   }

@@ -35,7 +35,7 @@ export const AbsoluteButton = (props : any) => {
 export const LogoButton = (props : any) => {
   return(
     <TouchableOpacity style={[Style.vehicleBtn, props.style]}
-      onPress={props.onPress}>
+      onPress={props.onPress} activeOpacity={0.7}>
       <Icon name={props.iconName} size={125} color= {props.iconColor == undefined ? 'black' : props.iconColor}/>
       <Text style={[Style.ButtonText, props.textStyle]}> {props.btnTitle} </Text>
     </TouchableOpacity>

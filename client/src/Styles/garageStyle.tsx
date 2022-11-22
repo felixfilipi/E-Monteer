@@ -22,7 +22,7 @@ export default React.StyleSheet.create({
   descriptionLayout: {
     flexDirection:'row', 
     flex:8, 
-    padding:10,
+    padding:8,
   },
 
   descriptionContainer: {
@@ -32,7 +32,7 @@ export default React.StyleSheet.create({
     borderRadius:20, 
     padding:10,
     paddingTop:20,
-    paddingBottom:-10
+    paddingBottom:-10,
   },
 
   descriptionStyle: {

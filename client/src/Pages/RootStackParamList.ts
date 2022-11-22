@@ -3,7 +3,7 @@ export type RootStackParamList = {
     Login: undefined;
     Home:  undefined;
     Edit: undefined;
-    Order: undefined;
+    Order: {id: number, handleType: string} | undefined;
     Waiting: undefined;
     Find: {prevScreen: boolean} |undefined;
     Garage: {id: number} | undefined;

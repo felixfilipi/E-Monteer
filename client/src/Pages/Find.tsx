@@ -150,10 +150,8 @@ export default function Find(props : any){
   const dispatch = useAppDispatch();
   
   const [destQuery, setDestQuery] = React.useState<string>(searchState);
-  const [posQuery, setPosQuery] = React.useState<string>('');
   
   const onChangeDest = (query : string) => setDestQuery(query);
-  const onChangePos = (query : string) => setPosQuery(query);
   
   React.useEffect(() => {
     dispatch(setSearch(''))
@@ -169,12 +167,6 @@ export default function Find(props : any){
           autoFocus={props.route.params.prevScreen == true ? false : true}
           style={Style.topSearch}
           value={destQuery}/>
-        <Searchbar
-          placeholder="Masukkan Lokasi Anda"
-          onChangeText={onChangePos}
-          autoFocus={props.route.params.prevScreen == true ? true : false}
-          style={Style.bottomSearch}
-          value={posQuery}/>
       </View>
     </View>
     
