@@ -17,6 +17,8 @@ import History from './src/Pages/History';
 import Garage from './src/Pages/Garage';
 import HistoryDetail from './src/Pages/HistoryDetail';
 import {BottomNav} from './src/Component/navBar';
+import ChatHistory from './src/Pages/ChatHistory';
+import Chat from './src/Pages/Chat';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -64,6 +66,12 @@ export default function App() {
                 options={{title:'Detail Riwayat', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="BottomNav" component={BottomNav} 
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="Chat" component={Chat}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="ChatHistory" component={ChatHistory}
                 options={{headerShown: false}}/>
             </Stack.Navigator>
           </NavigationContainer>

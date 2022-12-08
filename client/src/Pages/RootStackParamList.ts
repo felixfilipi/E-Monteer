@@ -10,4 +10,6 @@ export type RootStackParamList = {
     BottomNav: undefined;
     History: undefined;
     HistoryDetail: {id: number} | undefined;
+    Chat: {phone: number} | undefined;
+    ChatHistory: undefined;
 };

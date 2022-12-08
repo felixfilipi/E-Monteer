@@ -9,6 +9,7 @@ import { setDrawer } from '../../redux/component/drawer';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { setNavbar } from '../../redux/component/navbar';
+import { CustomText } from './CustomText';
 
 type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
@@ -23,9 +24,9 @@ export const BottomNav = () => {
   title:string[], icon:string[], navigate:any[], 
   Content:any[] = [];
   
-  title = ['Utama','Cari','Riwayat','Telusuri'];
-  icon = ['home-circle','map-search-outline','history','book'];
-  navigate = ['Home','Find','History','Find'];
+  title = ['Utama','Cari','Riwayat','Chat'];
+  icon = ['home-circle','map-search-outline','history','chat'];
+  navigate = ['Home','Find','History','ChatHistory'];
 
   const navbarPressed = (i : number) => {
     navigation.navigate(navigate[i], {prevPage : false});
@@ -134,3 +135,47 @@ export const TopBar = () => {
     </>
   )
 }
+
+export const ChatBar = () => {
+  return(
+    <>
+    <View style={Style.topBar}>
+      <View style={Style.chatBarLayout}>
+        <View style={{flex:3, flexDirection:'row'}}>
+          <TouchableWithoutFeedback>
+            <View style={Style.backBtn}>
+              <Icon 
+                size={30}
+                name={'arrow-left'}
+                color={'white'}
+                style={Style.avatar}/>
+            </View>
+          </TouchableWithoutFeedback>
+          
+          <TouchableWithoutFeedback>
+            <Avatar.Image 
+              size={45}
+              style={{marginVertical:10}}
+              source={require('../../assets/images/newUser.png')}/>
+          </TouchableWithoutFeedback>
+          <CustomText title={"Mechanic Name"} color={"white"} size={20}
+              style={{textAlignVertical:'center', marginVertical:10, marginLeft:15}}/>
+        </View>
+      </View>
+      <View style={{flex:1, flexDirection:'row'}}>
+        <TouchableWithoutFeedback>
+          <View style={Style.backBtn}>
+            <Icon 
+              size={30}
+              name={'phone'}
+              color={'white'}
+              style={Style.avatar}/>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    </View>
+      <View style={{marginBottom:82}}/>
+    </>
+  )
+}
+

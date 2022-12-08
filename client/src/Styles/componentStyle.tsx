@@ -25,6 +25,11 @@ export default React.StyleSheet.create({
     marginRight: 25,
   },
 
+  backBtn: {
+    paddingLeft: 10,
+    justifyContent:'center'
+  },
+
   logo: {
     height: 75,
     width: 150,
@@ -165,4 +170,8 @@ export default React.StyleSheet.create({
     marginTop: 8
   },
 
+  chatBarLayout: {
+    flexDirection:'row',
+    flex:4
+  },
 })
