@@ -1,13 +1,11 @@
-import { Button, View, Text,FlatList, SafeAreaView, TouchableHighlight, Alert} from "react-native";
+import { View, Text,FlatList, SafeAreaView, TouchableHighlight } from "react-native";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Style from "../Styles/chatHistoryStyle";
 import { RootStackParamList } from './RootStackParamList';
 import { BottomNav } from '../Component/navBar';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { CustomText } from "../Component/CustomText";
-import { useAppSelector } from "../../redux";
+import { CustomText, ImportantText } from "../Component/CustomText";
 import { Avatar } from "react-native-paper";
 
 type HistoryDetailType = StackNavigationProp<RootStackParamList, 'HistoryDetail'>
@@ -81,7 +79,7 @@ const Item = ({ name, message, date, hour, photo, id }) => {
       onPress={() => navigation.navigate('Chat',{phone:id})}
       style={{borderRadius:10}}
     >
-    <View style={Style.FlatListStyle}>
+    <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>
         <View style={{flex:1, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
@@ -107,7 +105,6 @@ const Item = ({ name, message, date, hour, photo, id }) => {
 
 export default function ChatHistory(){
 
-  const vehicleType = useAppSelector(state => state.vehicle);
   const renderItem = ({ item }) => {
     return(
       <Item 
@@ -123,9 +120,12 @@ export default function ChatHistory(){
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <CustomText title="Chat Kamu" style={Style.titleText}/>    
+    <View style={Style.titleContainer}>
+      <CustomText title="Pesan Anda" style={Style.titleText}/>    
+      <ImportantText title="Pesan yang tidak aktif dalam 1 Minggu kedepan akan otomatis terhapus"/>
+    </View>
     <View style={{flex:1, marginBottom:65, marginTop:5}}>
-    <SafeAreaView style={Style.ListContainer}>
+    <SafeAreaView style={Style.listContainer}>
       <FlatList
         data={DATA}
         renderItem={renderItem}

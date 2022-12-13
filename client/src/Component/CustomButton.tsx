@@ -3,6 +3,7 @@ import Style from '../Styles/componentStyle'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { setVehicle } from "../../redux/component/vehicleType";
+import { setOrderType } from '../../redux/component/orderType';
 
 export const CustomButton = (props : any) => {
   return(
@@ -45,7 +46,6 @@ export const LogoButton = (props : any) => {
 export const MultipleButton = (props : any) => {
   
   const dispatch = useAppDispatch();
-  const vehicleState = useAppSelector(state => state.vehicle);
 
   let Content : any[] = []
 
@@ -54,7 +54,7 @@ export const MultipleButton = (props : any) => {
       <TouchableOpacity style={[Style.MyButton,props.style]} 
         activeOpacity={0.8} 
         key={props.keyValue + i}
-        onPress={() => {dispatch(setVehicle(props.changeValue[i]))}}>
+        onPress={() => {dispatch(props.setRedux(props.changeValues[i]))}}>
         <Icon 
           name={props.iconName[i]} 
           size={20} 

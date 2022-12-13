@@ -1,0 +1,17 @@
+1. Example Code Implementation?
+
+CustomerMain cm = new CustomerMain()
+cm.loadChat(cust_id){
+	ChatHistory ch = new ChatHistory()
+	ch.showChatHistory(cust_id);
+}
+
+2. Props in class must be the same with our ERD as possible.
+
+3. Class can be imagined as data type that need to be called when using GET.
+
+4. If there's a private function that work in backend then put it in our class implementation
+
+5. props e ono int string dll, tapi cek masuk e nde set cost list e gampang pengen ta ubah JSON, berarti iki isie yoopo?
+
+jadi klo di flow ini, pay_detail adalah mainnya, fix_detail itu parent dari pay_detail, calcFixExpense untuk hitung total cost dari setiap data, lalu dimasukkan ke props total_expense, lalu setelah semua data di dapat, kita joinAllDetail jadi JSON, untuk kita post ke database menggunakan method setCostList()

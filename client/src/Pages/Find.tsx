@@ -1,5 +1,4 @@
-import { View, KeyboardAvoidingView, Text,
-  ScrollView, TouchableOpacity, FlatList, SafeAreaView, TouchableHighlight, Alert} from "react-native";
+import { View, Text, FlatList, SafeAreaView, TouchableHighlight} from "react-native";
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
@@ -11,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { MultipleButton } from '../Component/CustomButton';
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { setSearch } from "../../redux/component/search";
-import { useComponentDidMount } from '../Component/customHooks';
+import { CustomText } from "../Component/CustomText";
 
 type FindType = StackNavigationProp<RootStackParamList, 'Find'>
 
@@ -20,7 +19,7 @@ const DATA = [
     id:1,
     title: 'Bengkel cepi jaya',
     location: 'jalan mh thamrin 1, jakarta pusat.',
-    distance: '2.5 km',
+    distance: '2.5',
     rating: 5,
     handleType: 'both'
   },
@@ -28,7 +27,7 @@ const DATA = [
     id:2,
     title: 'Bengkel bos jaya',
     location: 'bangalore, singapore.',
-    distance: '7 km',
+    distance: '7',
     rating: 1.5,
     handleType: 'motorcycle',
   },
@@ -36,7 +35,7 @@ const DATA = [
     id:3,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
+    distance: '0.1',
     rating: 4,
     handleType: 'car'
   },
@@ -44,7 +43,7 @@ const DATA = [
     id:4,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
+    distance: '0.1',
     rating: 3,
     handleType: 'motorcycle'
   },
@@ -52,7 +51,7 @@ const DATA = [
     id:5,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
+    distance: '0.1',
     rating: 2,
     handleType: 'car'
   },
@@ -60,7 +59,7 @@ const DATA = [
     id:6,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
+    distance: '0.1',
     rating: 3,
     handleType: 'both'
   },
@@ -68,7 +67,7 @@ const DATA = [
     id:7,
     title: 'Bengkel kuli jaya',
     location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1 km',
+    distance: '0.1',
     rating: 3.3,
     handleType: 'both'
   }
@@ -94,9 +93,8 @@ const Item = ({ id, title, location, distance, rating, handleType }) => {
     <TouchableHighlight 
       underlayColor='white' 
       onPress={() => navigation.navigate('Garage', {id: id})}
-      style={{borderRadius:10}}
     >
-    <View style={Style.FlatListStyle}>
+    <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>
         <View style={{flex:1, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
@@ -116,11 +114,11 @@ const Item = ({ id, title, location, distance, rating, handleType }) => {
           <View style={{flexDirection: 'row'}}>
             <View style={Style.iconContainer}>  
               <Icon name={'map-marker'} size={25} color='#b99504'/>
-              <Text style={Style.IconText}>{distance}</Text>
+              <Text style={Style.iconText}>{distance} Km</Text>
             </View>
             <View style={Style.iconContainer}>
               <Icon name={'star'} size={25} color='#b99504'/>
-              <Text style={Style.IconText}>{rating}</Text>
+              <Text style={Style.iconText}>{rating}</Text>
             </View>
           </View>
         </View>
@@ -159,14 +157,17 @@ export default function Find(props : any){
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <View style={[Style.searchLayout, {marginTop:20}]}>
-      <View style={Style.searchSection}>
-        <Searchbar
-          placeholder="Cari Bengkel Disini"
-          onChangeText={onChangeDest}
-          autoFocus={props.route.params.prevScreen == true ? false : true}
-          style={Style.topSearch}
-          value={destQuery}/>
+    <CustomText title="Cari Bengkel" style={Style.titleText}/> 
+    <View style={{alignItems:'center'}}>
+      <View style={[Style.searchLayout, {marginTop:10}]}>
+        <View style={Style.searchSection}>
+          <Searchbar
+            placeholder="Cari Bengkel Disini"
+            onChangeText={onChangeDest}
+            autoFocus={props.route.params.prevScreen == true ? false : true}
+            style={Style.topSearch}
+            value={destQuery}/>
+        </View>
       </View>
     </View>
     
@@ -179,16 +180,18 @@ export default function Find(props : any){
       iconName={['list','car','motorcycle']}
       style={{marginTop:12}}/>
 
-    <View style={{flex:1, marginBottom:65, marginTop:5}}>
-    <SafeAreaView style={Style.ListContainer}>
-      <FlatList
-        data={vehicleType == 'both' ? DATA : (vehicleType == 'motorcycle' ? MOTOR_DATA : CAR_DATA)}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        nestedScrollEnabled
-        ItemSeparatorComponent={() => (<View style={{backgroundColor: '#C5C2C0', height:1}}/>)}
-        />
-    </SafeAreaView>
+    <View style={Style.contentContainer}>
+      <SafeAreaView style={Style.listContainer}>
+        <FlatList
+          data={vehicleType == 'both' ? DATA : (vehicleType == 'motorcycle' ? MOTOR_DATA : CAR_DATA)}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          nestedScrollEnabled
+          ItemSeparatorComponent={() => (<View style={{backgroundColor: '#C5C2C0', height:1}}/>)}
+          showsVerticalScrollIndicator={false}
+          overScrollMode="never"
+          />
+      </SafeAreaView>
     </View>
     <BottomNav/>
   </View>

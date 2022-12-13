@@ -4,20 +4,55 @@ import React from "react-native"
 
 export default React.StyleSheet.create({
 
-  topSearch: {
-    backgroundColor:'white', 
-    opacity:0.4, 
-    borderTopLeftRadius:20, 
-    borderTopRightRadius: 20
+  contentContainer: {
+    flex:1, 
+    marginBottom:65, 
+    marginTop:5,
   },
 
-  bottomSearch: {
-    backgroundColor:'white', 
-    opacity:0.4, 
-    borderBottomLeftRadius:20, 
-    borderBottomRightRadius: 20
+  descriptionStyle: {
+    color: '#8b8988',
+    fontFamily: 'normal',
+    fontWeight: '200',
+    fontSize: 15,
+    marginBottom: 10,
+    marginLeft: 10
   },
   
+  flatListStyle: {
+    marginLeft: 10,
+    padding: 5,
+    paddingTop: 10,
+    borderRadius: 5
+  },
+
+  handleContainer: {
+    flexDirection:'column', 
+    alignItems:'center',
+  },
+
+  iconContainer: {
+    flex:1,
+    flexDirection: 'column',
+    alignItems:'center', 
+    justifyContent:'center'
+  },
+
+  iconText: {
+    color: '#8b8988',
+    fontFamily: 'normal',
+    fontWeight: '200',
+    fontSize: 15,
+    textAlign:'center'
+  },
+
+  listContainer: {
+    backgroundColor:'#f1f1f1', 
+    flexDirection:'row',
+    margin:10,
+    borderRadius: 20,
+  },
+
   searchSection: {
     flex:1,
   },
@@ -27,7 +62,7 @@ export default React.StyleSheet.create({
     marginHorizontal:10, 
     paddingHorizontal: 5, 
     backgroundColor:'white', 
-    borderRadius:27
+    borderRadius:27,
   },
 
   titleStyle: {
@@ -39,48 +74,16 @@ export default React.StyleSheet.create({
     marginLeft: 10
   },
 
-  descriptionStyle: {
-    color: '#8b8988',
-    fontFamily: 'normal',
-    fontWeight: '200',
-    fontSize: 15,
-    marginBottom: 10,
-    marginLeft: 10
+  titleText : {
+    color: 'white',
+    fontSize:30,
+    marginTop: 20,
+    fontWeight: '600',
   },
 
-  iconContainer: {
-    flex:1,
-    flexDirection: 'column',
-    alignItems:'center', 
-    justifyContent:'center'
+  topSearch: {
+    backgroundColor:'white', 
+    opacity:0.4, 
+    borderRadius:20, 
   },
-
-  IconText: {
-    color: '#8b8988',
-    fontFamily: 'normal',
-    fontWeight: '200',
-    fontSize: 15,
-    textAlign:'center'
-  },
-
-  handleContainer: {
-    flexDirection:'column', 
-    alignItems:'center',
-  },
-
-  FlatListStyle: {
-    padding: 5,
-    paddingTop: 10,
-    borderRadius: 5
-  },
-
-  ListContainer: {
-    backgroundColor:'#f1f1f1', 
-    flexDirection:'row',
-    padding:10,
-    margin:10,
-    paddingVertical: 10,
-    borderRadius: 20,
-  }
-
 })

@@ -1,14 +1,16 @@
+import Icon from "react-native-vector-icons/Entypo";
+import Style from "../Styles/profileStyle";
+import Modal from "react-native-modal";
+import React from "react";
 import { View, TextInput, Button, KeyboardAvoidingView, 
   ToastAndroid, Platform, Alert, Text, 
-  ScrollView, LogBox} from "react-native"
-import { Avatar } from 'react-native-paper';
-import Icon from "react-native-vector-icons/Entypo";
-import Style from "../Styles/profileStyle"
-import React from "react";
-import { useComponentDidMount } from '../Component/customHooks';
-import { useNavigation } from '@react-navigation/native';
+  ScrollView, LogBox, TouchableWithoutFeedback } from "react-native"
+import { Avatar, Divider } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./RootStackParamList";
+import { useComponentDidMount } from '../Component/customHooks';
+import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from "expo-image-picker";
 
 LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
@@ -40,6 +42,8 @@ export default function EditProfile(){
   const [SPassword, setPassword] = React.useState<string>('');
   const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
+  const [SImage, setImage] = React.useState<string>('https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg');
+  const [SModal, setModal] = React.useState<boolean>(false);
 
   const isComponentMounted = useComponentDidMount();
   
@@ -60,11 +64,11 @@ export default function EditProfile(){
             <Icon 
               name={icon_list[i]} 
               size={30} 
-              style={Style.icon}
+              style={Style.iconStyle}
               color="#fff"
               key={"icon" + i}
               />
-            <Text style={Style.title}>{title[i]}</Text>
+            <Text style={Style.inputTitle}>{title[i]}</Text>
           </View>
             <TextInput 
               autoComplete={autocomplete_list[i]}
@@ -87,10 +91,10 @@ export default function EditProfile(){
             <Icon 
               name={icon_list[i]} 
               size={30} 
-              style={Style.icon}
+              style={Style.iconStyle}
               color="#fff"
               key={"Icon" + i}/>
-            <Text style={Style.title}>{title[i]}</Text>
+            <Text style={Style.inputTitle}>{title[i]}</Text>
           </View>
             <TextInput 
               autoComplete={autocomplete_list[i]}
@@ -119,28 +123,81 @@ export default function EditProfile(){
     }
   };
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if(!result.canceled){
+      setImage(result.assets[0].uri);
+      setModal(false);
+    }
+  };
+
+  const takeImage = async ()  => {
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if(!result.canceled){
+      setImage(result.assets[0].uri);
+      setModal(false);
+    };
+  };
+
   return(
       <ScrollView>
         <View style={{ paddingHorizontal:35}}>
           <KeyboardAvoidingView>
-          <View style={Style.avatar}>
-            <Avatar.Image 
-              size={100}
-              style={Style.avatar}
-              source={require('../../assets/images/newUser.png')}/>
-            <Text style={Style.photoLabel}>Change Photo</Text>
-          </View>
-              <View style={Style.flexVertical}>
-                {Content}
-              </View>
-              
-                <View
-                  style={Style.button}>
-                  <Button 
-                      title="Submit"
-                      color="#b99504"
-                      onPress={() => checkInput()}/>
+            <View style={Style.avatarStyle}>
+              <Avatar.Image 
+                size={100}
+                style={Style.avatarStyle}
+                source={{uri: SImage}}/>
+              <Text 
+                style={Style.photoLabel} 
+                onPress={() => setModal(true)}
+              >Change Photo</Text>
+            </View>
+            <View>
+              <Modal 
+                isVisible={SModal}
+                onBackdropPress={() => setModal(false)}
+                style={{justifyContent:'flex-end', margin:0}}>
+                <View style={Style.modalStyle}>
+                  <TouchableWithoutFeedback onPress={takeImage}>
+                    <View style={Style.modalTextLayout}>
+                      <Icon name="camera" size={20} color={'#828483'}/>
+                      <Text 
+                        style={Style.modalText}>Ambil Foto</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  <Divider/>
+                  <TouchableWithoutFeedback onPress={pickImage}>
+                    <View style={Style.modalTextLayout}>
+                      <Icon name="folder-images" size={20} color={'#828483'}/>
+                      <Text 
+                        style={Style.modalText}>Cari Dari Galeri</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
                 </View>
+              </Modal>
+            </View>
+            <View style={Style.flexVertical}>
+              {Content}
+            </View>
+            
+            <View style={Style.buttonStyle}>
+            <Button 
+              title="Submit"
+              color="#b99504"
+              onPress={() => checkInput()}/>
+            </View>
           </KeyboardAvoidingView>
         </View>
       </ScrollView>

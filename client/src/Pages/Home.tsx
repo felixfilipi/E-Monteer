@@ -1,23 +1,24 @@
-import { View, KeyboardAvoidingView, Alert,
-  Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+import Style from "../Styles/homeStyle";
 import call from 'react-native-phone-call';
+import * as Location from 'expo-location';
 import React from 'react';
-import { Searchbar, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
 import Icon from 'react-native-vector-icons/Entypo';
 import MapView, { Marker } from 'react-native-maps';
+import { Searchbar, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
+import { StackNavigationProp } from "@react-navigation/stack";
 import { Rating } from 'react-native-ratings';
-import Style from "../Styles/homeStyle";
 import { TopBar, BottomNav } from '../Component/navBar';
 import { MultipleButton } from '../Component/CustomButton';
 import { RootStackParamList } from './RootStackParamList';
+import { CustomText } from "../Component/CustomText";
+import { View, KeyboardAvoidingView, Alert,
+  Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
 import { setNavbar } from "../../redux/component/navbar";
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { setOrderFail } from "../../redux/component/order";
+import { setOrderFail } from "../../redux/component/orderFail";
+import { setOrderType } from "../../redux/component/orderType";
 import { setSearch } from "../../redux/component/search";
-import * as Location from 'expo-location';
-import { CustomText } from "../Component/CustomText";
+import { useNavigation } from "@react-navigation/native";
 import { setLatitude } from "../../redux/component/latitude";
 import { setLongitude } from "../../redux/component/longitude";
 
@@ -62,11 +63,9 @@ export default function Home(){
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeType>();
   
-  const [errorMsg, setErrorMsg] = React.useState(null);
   const [ratingList, setRatingList] = React.useState<number[]>([GARAGE[0].rating, GARAGE[1].rating, GARAGE[2].rating]);
 
   const onChangeSearch = (query : string) => dispatch(setSearch(query));
-
   React.useEffect(() => {
     if(orderFailState == true){
       Alert.alert("Bengkel Tidak Ditemukan", 
@@ -82,27 +81,25 @@ export default function Home(){
       let tryAgain : boolean = false;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if(status !== 'granted'){
-        setErrorMsg('Permission to access location was denied');
+        Alert.alert('Permission to access location was denied');
         return;
       }
 
       do{
-        try{
-          let location = await Location.getCurrentPositionAsync({});
-          if(location){
-            dispatch(setLatitude(location['coords']['latitude']));
-            dispatch(setLongitude(location['coords']['longitude']));
-          };
+        const waiting = (ms : number) => new Promise(resolve => setTimeout(resolve, ms));
+        const location = await Location.getCurrentPositionAsync({});
+        await waiting(1500);
+        if(location != undefined){
+          dispatch(setLatitude(location['coords']['latitude']));
+          dispatch(setLongitude(location['coords']['longitude']));
           tryAgain = false;
-        }catch{
+        }else{
           tryAgain = true;
-        }
+        };
       }while(tryAgain);
  
-
     })();
   },[]);
-
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
@@ -122,7 +119,7 @@ export default function Home(){
     let stateList = [...ratingList];
 
     Cards.push(
-      <Card style={Style.CardStyle} key={"Card" + i}>
+      <Card style={Style.cardStyle} key={"Card" + i}>
         <Card.Content>
           <Title style={{marginLeft: -5}}> {GARAGE[i].title} </Title>
           <Paragraph>{GARAGE[i].location}</Paragraph>
@@ -134,7 +131,7 @@ export default function Home(){
               />
             <Text style={Style.dateLabel}>{GARAGE[i].date}</Text>
           </View>
-          <View style={Style.CardAction}>
+          <View style={Style.cardAction}>
             <Rating
               type='custom'
               startingValue={GARAGE[i]?.rating}
@@ -149,14 +146,14 @@ export default function Home(){
               style={Style.ratingStyle}/>
             <TouchableOpacity 
               onPress={()=>call(args).catch(console.error)}
-              style={Style.MyButton} 
+              style={Style.myButton} 
               activeOpacity={0.7}>
               <Icon 
                name={"phone"} 
                size={20} 
                color="#fff"
                />
-              <Text style={Style.ButtonText}> Hubungi Bengkel</Text>
+              <Text style={Style.buttonText}> Hubungi Bengkel</Text>
             </TouchableOpacity>
           </View>
         </Card.Content>
@@ -167,7 +164,7 @@ export default function Home(){
   if(latitude && longitude){
     return(
     <View style={{flex:1}}>
-      <TopBar/>
+      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
         <View style={{ alignItems: 'center', flex:1 }}>
           <KeyboardAvoidingView>
@@ -184,9 +181,10 @@ export default function Home(){
                   title={['Terdekat', 'Terfavorit','24 Jam']}
                   direction='row'
                   keyValue={'Home'}
+                  changeValues={['terdekat','terfavorit','24jam']}
+                  setRedux={setOrderType}
                   iconName={['map-marker','heart','clock-o']}/>
             </View>
- 
             <View style={{justifyContent:'center'}}>
               <MapView
                 initialRegion={{
@@ -207,13 +205,13 @@ export default function Home(){
                 </Marker>
               </MapView>
               <TouchableOpacity onPress={() => {navigation.navigate('Order', {id:null, handleType:null})}} 
-                  style={[Style.MyButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
+                  style={[Style.myButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
                <Icon 
                  name={"tools"} 
                  size={20} 
                  color="#fff"
                  />
-               <Text style={Style.ButtonText}> Cari Terdekat</Text>
+               <Text style={Style.buttonText}> Cari Terdekat</Text>
               </TouchableOpacity>
             </View>
 

@@ -165,7 +165,7 @@ export default class App extends Component {
     }
     return (
       <>
-    <ChatBar/>
+    <ChatBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
       <View
         style={styles.container}
         accessibilityLabel='main'

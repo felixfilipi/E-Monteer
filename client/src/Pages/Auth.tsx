@@ -36,7 +36,6 @@ export function Register(){
   const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
 
-
   const isComponentMounted = useComponentDidMount();
   
   React.useEffect(() => {

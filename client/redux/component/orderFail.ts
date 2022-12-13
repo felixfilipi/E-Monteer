@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const orderSlice = createSlice({
+const orderFailSlice = createSlice({
   name: 'orderFail',
   initialState: false,
   reducers: {
@@ -8,5 +8,5 @@ const orderSlice = createSlice({
   },
 })
 
-export const {setOrderFail} = orderSlice.actions
-export default orderSlice.reducer
+export const {setOrderFail} = orderFailSlice.actions
+export default orderFailSlice.reducer

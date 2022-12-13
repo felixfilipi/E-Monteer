@@ -108,7 +108,7 @@ const DrawerComponent = () => {
   )
 }
 
-export const TopBar = () => {
+export const TopBar = (props : any) => {
 
   const drawerState = useAppSelector(state => state.drawer)
   const dispatch = useAppDispatch();
@@ -126,7 +126,7 @@ export const TopBar = () => {
       <Avatar.Image 
         size={60}
         style={Style.avatar}
-        source={require('../../assets/images/newUser.png')}/>
+        source={{uri: props.photoUrl}}/>
       </TouchableWithoutFeedback>
       </View>
     </View>
@@ -136,7 +136,7 @@ export const TopBar = () => {
   )
 }
 
-export const ChatBar = () => {
+export const ChatBar = (props) => {
   return(
     <>
     <View style={Style.topBar}>
@@ -156,7 +156,7 @@ export const ChatBar = () => {
             <Avatar.Image 
               size={45}
               style={{marginVertical:10}}
-              source={require('../../assets/images/newUser.png')}/>
+              source={{uri: props.photoUrl}}/>
           </TouchableWithoutFeedback>
           <CustomText title={"Mechanic Name"} color={"white"} size={20}
               style={{textAlignVertical:'center', marginVertical:10, marginLeft:15}}/>

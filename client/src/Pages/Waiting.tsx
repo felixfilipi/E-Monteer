@@ -7,7 +7,7 @@ import { AbsoluteButton } from '../Component/CustomButton';
 import { CustomText } from '../Component/CustomText'
 import { ImageSlider } from 'react-native-image-slider-banner';
 import { useAppDispatch } from '../../redux';
-import { setOrderFail } from '../../redux/component/order';
+import { setOrderFail } from '../../redux/component/orderFail';
 
 type WaitingType = StackNavigationProp<RootStackParamList, 'Waiting'>
 

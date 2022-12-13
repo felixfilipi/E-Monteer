@@ -1,4 +1,4 @@
-import { Button, View, Text,FlatList, SafeAreaView, TouchableHighlight, Alert} from "react-native";
+import { View, Text,FlatList, SafeAreaView, TouchableHighlight } from "react-native";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -72,9 +72,9 @@ const Item = ({ title, location, handleType, date, id }) => {
     <TouchableHighlight 
       underlayColor='white' 
       onPress={() => navigation.navigate('HistoryDetail',{id:id})}
-      style={{borderRadius:10}}
+      
     >
-    <View style={Style.FlatListStyle}>
+    <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>
         <View style={{flex:1, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
@@ -130,13 +130,15 @@ export default function History(){
       style={{marginTop:12}}/>
     
     <View style={{flex:1, marginBottom:65, marginTop:5}}>
-    <SafeAreaView style={Style.ListContainer}>
+    <SafeAreaView style={Style.listContainer}>
       <FlatList
         data={vehicleType == 'both' ? DATA : (vehicleType == 'motorcycle' ? MOTOR_DATA : CAR_DATA)}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         nestedScrollEnabled
         ItemSeparatorComponent={() => (<View style={{backgroundColor: '#C5C2C0', height:1}}/>)}
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
         />
     </SafeAreaView>
     </View>
