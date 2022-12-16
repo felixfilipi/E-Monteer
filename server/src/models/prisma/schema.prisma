@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://felixfilipi:l0rd3dw4rd@localhost:5432/e_monteer?schema=public"
+}
+
+model Customer {
+  id                  String          @id @unique @default(uuid())
+  email               String          @db.VarChar(50) @unique
+  password            String          
+  phone               String          @db.VarChar(15) @unique 
+  cust_name           String          @db.VarChar(255) 
+  address             String          @db.VarChar(255) 
+  photoUrl            String?         
+  refresh_token       RefreshToken[] 
+  created_at          DateTime        @default(now()) 
+  updated_at          DateTime        @updatedAt
+}
+
+model Mechanic {
+  id                  String          @id @unique @default(uuid())
+  mech_name           String          @db.VarChar(255) 
+  email               String          @db.VarChar(50) @unique
+  phone               String          @db.VarChar(15) @unique 
+  password            String          
+  address             String          @db.VarChar(255) 
+  photoUrl            String?         
+  identityUrl         String          @db.VarChar(255) 
+  refresh_token       RefreshToken[] 
+  speciality          String          @db.VarChar(10) 
+  is_available        Boolean         @default(false) 
+  created_at          DateTime        @default(now()) 
+  updated_at          DateTime        @updatedAt
+}
+
+model Owner {
+  id                  String          @id @unique @default(uuid())
+  email               String          @db.VarChar(50) @unique
+  password            String          
+  owner_name          String          @db.VarChar(255)
+  photoUrl            String?         
+  identityUrl         String?         @db.VarChar(255) 
+  refresh_token       RefreshToken[]  
+  is_available        Boolean         @default(false) 
+  created_at          DateTime        @default(now()) 
+  updated_at          DateTime        @updatedAt
+  Garage              Garage[]  
+}
+
+model Garage {
+  id                  String        @id @unique @default(uuid())
+  Owner               Owner         @relation(fields: [owner_id], references: [id])
+  owner_id            String        @unique
+  rating_id           Int           @unique 
+  garage_phone        String        @db.VarChar(15) @unique
+  garage_name         String        @db.VarChar(255) 
+  garage_photoUrl     String        @db.VarChar(255) 
+  garage_avg_rating   Float?         
+  garage_totalRating  Int?           
+  garage_openHour     String        @db.VarChar(255) 
+  garage_openDay      String        @db.VarChar(255) 
+  garage_site         String         
+  garage_latitude     Float         
+  garage_longitude    Float          
+  garage_speciality   String        @db.VarChar(15) 
+  garage_totalMech    Int?        
+}
+
+model RefreshToken {
+  id                  String          @id @unique @default(uuid())
+  hashedToken         String
+  cust_id             String?
+  Customer            Customer?       @relation(fields: [cust_id], references: [id], onDelete: Cascade)
+  mech_id             String?
+  Mechanic            Mechanic?       @relation(fields: [mech_id], references: [id], onDelete: Cascade)
+  owner_id            String?
+  Owner               Owner?          @relation(fields: [owner_id], references: [id], onDelete: Cascade)
+  revoked             Boolean         @default(false)
+  created_at          DateTime        @default(now())
+  updated_at          DateTime        @updatedAt
+}
+

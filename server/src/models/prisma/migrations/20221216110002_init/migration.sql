@@ -1,0 +1,14 @@
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "password" SET DATA TYPE TEXT,
+ALTER COLUMN "photoUrl" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Garage" ALTER COLUMN "garage_site" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Mechanic" ALTER COLUMN "password" SET DATA TYPE TEXT,
+ALTER COLUMN "photoUrl" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "Owner" ALTER COLUMN "password" SET DATA TYPE TEXT,
+ALTER COLUMN "photoUrl" SET DATA TYPE TEXT;
