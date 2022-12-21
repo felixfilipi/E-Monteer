@@ -16,50 +16,51 @@ export type Mechanic = Prisma.MechanicGetPayload<{
 
 export type Owner = Prisma.OwnerGetPayload<{}>
 
-export async function find_user_by_email_or_phone( email? : string, phone? : string){
+export async function find_user_role_by_id( id : string ){
 
   let data : any = null;
-  let role: string = 'customer';
+  let role: string | null;
   
-  data = await prisma.customer.findMany({
+  data = await prisma.customer.findUnique({
     where:{
-       OR:[
-        {
-          email: email,
-        },
-        {
-          phone: phone,
-        }
-       ],
+      id: id,
     },
+    select:{
+      id:true,
+    }
   });
 
-  if(data === null){
-    data = await prisma.mechanic.findMany({
+  if(data !== null){
+    role = 'customer';
+  }else{
+    data = await prisma.mechanic.findUnique({
       where:{
-        OR:[
-          {
-            email : email,
-          },
-          {
-            phone: phone,
-          }
-        ]
+        id : id,
       },
+      select:{
+        id:true,
+      }
     });
-    role = 'mechanic'
+    if(data !== null){
+      role = 'mechanic';
+    }else{
+      data = await prisma.owner.findUnique({
+        where:{
+          id : id,
+        },
+        select:{
+          id:true,
+        }
+      });
+      if(data !== null){
+        role = 'owner';
+      }else{
+        role = null;
+      }
+    }
   }
 
-  if(data === null){
-    data = await prisma.owner.findUnique({
-      where:{
-        email : email,
-      },
-    });
-    role = 'owner'
-  }
-
-  return { role, data }
+  return role;
 }
 
 export async function find_user_by_email_phone(email : string){
@@ -107,6 +108,51 @@ export async function find_user_by_email_phone(email : string){
 
   return { role, data }
 }
+export async function find_user_by_email_or_phone( email? : string, phone? : string){
+
+  let data : any = null;
+  let role: string = 'customer';
+  
+  data = await prisma.customer.findMany({
+    where:{
+       OR:[
+        {
+          email: email,
+        },
+        {
+          phone: phone,
+        }
+       ],
+    },
+  });
+
+  if(data === null){
+    data = await prisma.mechanic.findMany({
+      where:{
+        OR:[
+          {
+            email : email,
+          },
+          {
+            phone: phone,
+          }
+        ]
+      },
+    });
+    role = 'mechanic'
+  }
+
+  if(data === null){
+    data = await prisma.owner.findUnique({
+      where:{
+        email : email,
+      },
+    });
+    role = 'owner'
+  }
+
+  return { role, data }
+}
 
 export function create_user_by_email_password(role : string, user : Customer | Mechanic | Owner){
   if(role === 'customer'){ 
@@ -129,7 +175,7 @@ export function create_user_by_email_password(role : string, user : Customer | M
   }
 };
 
-export function find_user_by_id(role : string, id : string){
+export async function find_user_by_id(role : string, id : string){
   if(role === 'customer'){
     return prisma.customer.findUnique({
       where:{

@@ -1,14 +1,8 @@
 import { prisma } from './db';
 import { hashToken } from '../utils/hashToken';
+import { IModelRefreshToken } from '../types/auth.types';
 
-interface IParams{
-  role: string,
-  jti: string,
-  refreshToken: string,
-  id: string,
-}
-
-export function add_refresh_token({ role, jti, refreshToken, id } : IParams){
+export function add_refresh_token({ role, jti, refreshToken, id } : IModelRefreshToken){
   if(role === 'customer'){
     return prisma.refreshToken.create({
       data:{
