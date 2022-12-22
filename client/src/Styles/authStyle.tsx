@@ -4,6 +4,11 @@ import React from "react-native";
 
 export default React.StyleSheet.create({
     
+  avatarStyle: {
+      alignItems:'center', 
+      marginTop:10
+  },
+
   button: {
       backgroundColor: "#b99504",
       marginTop: 50,
@@ -53,4 +58,43 @@ export default React.StyleSheet.create({
       paddingHorizontal: 15,
       borderRadius: 5,
   },
+
+  textInp2: {
+    backgroundColor: "#434647",
+    color: "#fff",
+    height: 30,
+    flex: 2,
+    fontSize: 15,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+},
+
+modalStyle: {
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    paddingHorizontal:20,
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+
+  modalText: {
+    fontSize:18, 
+    color:'#828483',
+    paddingVertical:15,
+    paddingLeft:10,
+  },
+
+  modalTextLayout: {
+    flexDirection:'row', 
+    alignItems:'center',
+  },
+
+  photoLabel: {
+    color:'white',
+    marginTop:15,
+    fontSize:15,
+    fontWeight:'500',
+    textAlignVertical:'center'
+  },
+  
 })
