@@ -4,6 +4,7 @@ import React from "react";
 import { ScrollView, View, Text, Image } from "react-native";
 import { RootStackParamList } from "../RootStackParamList";
 import Style from "../../Styles/checkOrderStyle";
+import { CustomButton } from "../../Component/CustomButton";
 
 type CheckOrderType = StackNavigationProp<RootStackParamList, 'CheckOrder'>;
 
@@ -22,37 +23,41 @@ const CURRENTORDER = [
 export default function CheckOrder(props){
    const [OrderID, setOrderID] = React.useState<number>(props.route.params.id);
 
-   let costlist : any[] = [], Content:any[] = [];
+   let costlist = 0, Content:any[] = [];
 
    for(let i=0; i<=CURRENTORDER[OrderID - 1].ServiceName.length-1; i++)
    {
     Content.push(
-      <View style={{flex: 4, flexDirection: 'row'}}>
-        <Text>{CURRENTORDER[OrderID - 1].ServiceName[i]}</Text>
-        <Text>{CURRENTORDER[OrderID - 1].ServiceCost[i]}</Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text>{CURRENTORDER[OrderID - 1].ServiceName[i]} {'\t'}</Text>
+        <Text>Rp{CURRENTORDER[OrderID - 1].ServiceCost[i]},00</Text>
       </View>
     )
+    costlist = costlist + CURRENTORDER[OrderID - 1].ServiceCost[i];
    }
 
    return(
     <View style={{flex:1, marginTop:20}}>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
         <View style={{ flex:1 }}>
-          <View style={{alignItems:'center', justifyContent: 'center', flexDirection: 'row',}}>
+          <View style={{alignItems:'center', justifyContent: 'center', flexDirection: 'row'}}>
             <Image style={Style.iconImage} source={{uri: CURRENTORDER[OrderID - 1].MechanicPhoto}}/>
             <Text style={Style.titleStyle}>{CURRENTORDER[OrderID - 1].MechanicName}</Text>
           </View>
           <View style={Style.contentContainer}>
             <View style={Style.customerDetail}>
-              <Text style={Style.customerDetailText}>Nama Customer {'\t'} {CURRENTORDER[OrderID - 1].CustomerName} {'\n'}</Text>
-              <Text style={Style.customerDetailText}>Lokasi {CURRENTORDER[OrderID - 1].CustomerLocation}</Text>
+              <Text style={Style.detailText}>Nama Customer {'\t'} {CURRENTORDER[OrderID - 1].CustomerName} {'\n'}</Text>
+              <Text style={Style.detailText}>Lokasi {CURRENTORDER[OrderID - 1].CustomerLocation}</Text>
             </View>
           </View>
           <Text
           style={Style.textLabel}>Rincian Perbaikan</Text>
           <View style={Style.contentContainer}>
-          <View style={Style.costListDetail}>
+            <View style={Style.costListDetail}>
             {Content}
+            <Text style={Style.detailText}>TOTAL BIAYA {'\t'} Rp{costlist},00</Text>
+            <CustomButton title="EDIT"></CustomButton>
+            <CustomButton title="BUAT BUKTI PEMBAYARAN"></CustomButton>
             </View>
           </View>
         </View>
