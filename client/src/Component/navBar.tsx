@@ -13,27 +13,22 @@ import { CustomText } from './CustomText';
 
 type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
-export const BottomNav = () => {
+export const BottomNav = (props) => {
 
   const dispatch = useAppDispatch();
   const navbarState = useAppSelector(state => state.navbar);
 
   const navigation = useNavigation<NavigationType>();
   
-  let color:string, fontColor: string,
-  title:string[], icon:string[], navigate:any[], 
-  Content:any[] = [];
+  let color:string, fontColor: string, Content:any[] = [], 
+  title:string[] = props.title;
   
-  title = ['Utama','Cari','Riwayat','Chat'];
-  icon = ['home-circle','map-search-outline','history','chat'];
-  navigate = ['Home','Find','History','ChatHistory'];
-
   const navbarPressed = (i : number) => {
-    navigation.navigate(navigate[i], {prevPage : false});
+    navigation.navigate(props.navigate[i], {prevPage : false});
     dispatch(setNavbar(i));
   }
    
-  for(let i=0; i<=title.length - 1; i++){
+  for(let i=0; i<= props.size - 1; i++){
 
     if(i == navbarState){
       color = '#cca405';
@@ -49,8 +44,8 @@ export const BottomNav = () => {
         style={[Style.bottomNavBtn, {backgroundColor: color}]}
         onPress={() => navbarPressed(i)}>
         <>
-          <Icon name={icon[i]} size={25} color={fontColor}/>
-          <Text style={[Style.bottomNavText,{color: fontColor}]}>{title[i]}</Text>
+          <Icon name={props.icon[i]} size={25} color={fontColor}/>
+          <Text style={[Style.bottomNavText,{color: fontColor}]}>{props.title[i]}</Text>
         </>
       </TouchableHighlight>
     )

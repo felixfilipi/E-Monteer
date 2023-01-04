@@ -4,11 +4,10 @@ import * as Location from 'expo-location';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Entypo';
 import MapView, { Marker } from 'react-native-maps';
-import { Searchbar, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
+import { Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Rating } from 'react-native-ratings';
-import { TopBar, BottomNav } from '../Component/navBar';
-import { MultipleButton } from '../Component/CustomButton';
+import { TopBar } from '../Component/navBar';
 import { RootStackParamList } from './RootStackParamList';
 import { CustomText } from "../Component/CustomText";
 import { View, KeyboardAvoidingView, Alert,
@@ -16,13 +15,12 @@ import { View, KeyboardAvoidingView, Alert,
 import { setNavbar } from "../../redux/component/navbar";
 import { useAppDispatch, useAppSelector } from '../../redux';
 import { setOrderFail } from "../../redux/component/orderFail";
-import { setOrderType } from "../../redux/component/orderType";
 import { setSearch } from "../../redux/component/search";
 import { useNavigation } from "@react-navigation/native";
 import { setLatitude } from "../../redux/component/latitude";
 import { setLongitude } from "../../redux/component/longitude";
 
-type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
+type OrderMainType = StackNavigationProp<RootStackParamList, 'OrderMain'>
 
 const GARAGE = [
   {
@@ -54,14 +52,14 @@ const GARAGE = [
   },
 ]
 
-export default function Home(){
+export default function OrderMain(){
 
   const orderFailState = useAppSelector(state => state.orderFail);
   const searchState = useAppSelector(state => state.search);
   const latitude = useAppSelector(state => state.latitude);
   const longitude = useAppSelector(state => state.longitude);
   const dispatch = useAppDispatch();
-  const navigation = useNavigation<HomeType>();
+  const navigation = useNavigation<OrderMainType>();
   
   const [ratingList, setRatingList] = React.useState<number[]>([GARAGE[0].rating, GARAGE[1].rating, GARAGE[2].rating]);
 
@@ -161,92 +159,32 @@ export default function Home(){
     )
   }
 
-  if(latitude && longitude){
     return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
-      <ScrollView contentContainerStyle={{flexGrow:1}}>
-        <View style={{ alignItems: 'center', flex:1 }}>
-          <KeyboardAvoidingView>
-            <View style={Style.searchSection}>
-              <Searchbar
-                placeholder="Cari Bengkel"
-                onChangeText={onChangeSearch}
-                style={{backgroundColor:'#fff'}}
-                value={searchState}
-                onSubmitEditing={() => submitSearch(searchState)}
-              />
-                <MultipleButton 
-                  size={3} 
-                  title={['Terdekat', 'Terfavorit','24 Jam']}
-                  direction='row'
-                  keyValue={'Home'}
-                  changeValues={['terdekat','terfavorit','24jam']}
-                  setRedux={setOrderType}
-                  iconName={['map-marker','heart','clock-o']}/>
-            </View>
-            <View style={{justifyContent:'center'}}>
-              <MapView
-                initialRegion={{
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-                }}
-                style={{width:Dimensions.get('window').width, 
-                    height:300, 
-                    justifyContent:'center'}}
-              >
-                <Marker
-                  coordinate={{ latitude: latitude, longitude: longitude }}
-                  title={'Lokasi Anda'}
-                >
-                <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
-                </Marker>
-              </MapView>
-              <TouchableOpacity onPress={() => {navigation.navigate('Order', {id:null, handleType:null})}} 
-                  style={[Style.myButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
-               <Icon 
-                 name={"tools"} 
-                 size={20} 
-                 color="#fff"
-                 />
-               <Text style={Style.buttonText}> Cari Terdekat</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={{marginBottom:-50}}>
-                <Text style={Style.historyLabel} 
-                  onPress={() => navigation.navigate('History')}>Pesanan Terakhir</Text>
-                <View style={{marginBottom:30}}>
-                <ScrollView horizontal={true}>
-                  <View style={{flexDirection:'row'}}>
-                  { Cards }
-                  </View>
-                </ScrollView>
-                </View>
-            </View>
-            </KeyboardAvoidingView>
-          </View>
-        </ScrollView>
-        <BottomNav 
-          title = {['Utama','Cari','Riwayat','Chat']}
-          icon = {['home-circle','map-search-outline','history','chat']}
-          navigate = {['Home','Find','History','ChatHistory']}
-          size = {4}
-          />
-      </View>
+      <MapView
+        initialRegion={{
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+        }}
+        style={{width:Dimensions.get('window').width, 
+            height:Dimensions.get('window').height, 
+            justifyContent:'center'}}
+      >
+      <TouchableOpacity style={{position:'absolute', top:0}}>
+        <View style={{backgroundColor:'#3a4447', borderRadius:30, padding:5, width:40}}>
+          <Icon name="chevron-left" size={30} color="black"/>
+        </View>
+      </TouchableOpacity>
+        <Marker
+         coordinate={{ latitude: latitude, longitude: longitude }}
+         title={'Lokasi Anda'}
+        >
+        <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
+        </Marker>
+      </MapView>
+    </View>
     )
-  }else{
-    return(
-      <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'#242A2F'}}>
-        <CustomText 
-          title="Sedang memuat" 
-          color={'white'}
-          style={{fontSize:20}}/>
-        <ActivityIndicator animating={true} color={'#b99504'} size={30}/>
-      </View>
-    )
-  }
 };
 

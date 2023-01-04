@@ -142,7 +142,12 @@ export default function History(){
         />
     </SafeAreaView>
     </View>
-    <BottomNav/>
+    <BottomNav 
+      title = {['Utama','Cari','Riwayat','Chat']}
+      icon = {['home-circle','map-search-outline','history','chat']}
+      navigate = {['Home','Find','History','ChatHistory']}
+      size = {4}
+      />
   </View>
   )
 };

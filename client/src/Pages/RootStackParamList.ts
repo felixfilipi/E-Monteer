@@ -12,4 +12,7 @@ export type RootStackParamList = {
     HistoryDetail: {id: number} | undefined;
     Chat: {phone: number} | undefined;
     ChatHistory: undefined;
+    RegisterGarage: undefined;
+    MechanicMain: undefined;
+    OrderMain: undefined;
 };

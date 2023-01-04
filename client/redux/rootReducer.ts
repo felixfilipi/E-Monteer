@@ -7,6 +7,7 @@ import searchReducer from './component/search';
 import vehicleReducer from './component/vehicleType';
 import latitudeReducer from './component/latitude';
 import longitudeReducer from './component/longitude';
+import role from './component/role';
 
 const rootReducer = combineReducers({
   drawer: drawerReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   vehicle: vehicleReducer,
   latitude: latitudeReducer,
   longitude: longitudeReducer,
+  role: role
 })
 
 export default rootReducer

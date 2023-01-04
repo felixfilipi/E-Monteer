@@ -645,7 +645,7 @@ export function RegisterGarage(){
               <Text style={Style.signText}> Already Have account?? 
                 <Text 
                     style={{color:"#b99504"}}
-                    onPress={()=>(navigation.navigate('Login', {userrole:SEmail}))}> Sign In </Text>
+                    onPress={()=>(navigation.navigate('Login'))}> Sign In </Text>
               </Text>
               <Text style={Style.signText}> Register as Customer?? 
                 <Text 

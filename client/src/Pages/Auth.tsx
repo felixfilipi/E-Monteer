@@ -7,13 +7,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "./RootStackParamList"
 import { useComponentDidMount } from '../Component/customHooks';
+import { useAppDispatch, useAppSelector } from '../../redux';
+import { setRole } from "../../redux/component/role";
 
 type RegisterType = StackNavigationProp<RootStackParamList, 'Register'>
 type LoginType = StackNavigationProp<RootStackParamList, 'Login'>
 
 export function Register(){
 
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<RegisterType>();
+  dispatch(setRole('Mechanic'));
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
@@ -35,7 +39,8 @@ export function Register(){
   const [SPassword, setPassword] = React.useState<string>('');
   const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
-
+  
+  const role = useAppSelector(state => state.role);
   const isComponentMounted = useComponentDidMount();
   
   React.useEffect(() => {
@@ -97,7 +102,13 @@ export function Register(){
     if(SPassword?.length! < 8){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
-      navigation.navigate('Home');
+      if(role === 'Customer'){
+        navigation.navigate('Home');
+      }else if(role === 'Mechanic'){
+        navigation.navigate('MechanicMain');
+      }else if(role === 'Owner'){
+        navigation.navigate('MechanicMain');
+      }
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
     }else{
@@ -122,10 +133,15 @@ export function Register(){
                       color="#b99504"
                       onPress={() => checkInput()}/>
               </View>
-              <Text style={Style.signText}> Already Have account?? 
+              <Text style={Style.signText}> Already Have Account?? 
                 <Text 
                     style={{color:"#b99504"}}
                     onPress={()=>(navigation.navigate('Login'))}> Sign In </Text>
+              </Text>
+              <Text style={[Style.signText, {marginTop:8}]}> Want to Register Your Garage?? 
+                <Text 
+                    style={{color:"#b99504"}}
+                    onPress={()=>(navigation.navigate('RegisterGarage'))}> Join </Text>
               </Text>
           </KeyboardAvoidingView>
         </View>
@@ -150,7 +166,7 @@ export function Login(){
 
   const checkInput = () => {
     if(SButton == true){
-        navigation.navigate('Home');
+        navigation.navigate('MechanicMain');
     }else{
         Platform.OS === 'android' ? ToastAndroid.show('Please Fill All Required Field!!', ToastAndroid.SHORT) : Alert.alert("Please Fill All Required Field!!")
     }      

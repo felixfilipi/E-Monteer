@@ -16,7 +16,7 @@ export default React.StyleSheet.create({
 
   flexVertical: {
       flexDirection: "column",
-      marginTop: 35
+      marginTop: 20
   },
 
   flexHorizontal: {

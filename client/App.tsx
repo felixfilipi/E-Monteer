@@ -8,6 +8,7 @@ import store from './redux';
 import { RootStackParamList } from './src/Pages/RootStackParamList';
 import { DefaultTheme } from 'react-native-paper';
 import { Register, Login} from './src/Pages/Auth';
+import { RegisterGarage } from './src/Pages/Garage/RegisterGarage';
 import EditProfile from './src/Pages/Profile';
 import Home from './src/Pages/Home';
 import Order from './src/Pages/Order';
@@ -19,6 +20,9 @@ import HistoryDetail from './src/Pages/HistoryDetail';
 import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
+import MechanicMain from './src/Pages/Mechanic/MechanicMain';
+import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
+import OrderMain from './src/Pages/OrderMain';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -73,6 +77,18 @@ export default function App() {
               <Stack.Screen
                 name="ChatHistory" component={ChatHistory}
                 options={{headerShown: false}}/>
+              <Stack.Screen
+                name="RegisterGarage" component={RegisterGarage} 
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="MechanicMain" component={MechanicMain}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name="ChatHistoryMechanic" component={ChatHistoryMechanic}
+                options={{headerShown:false}}/>
+              <Stack.Screen
+                name="OrderMain" component={OrderMain}
+                options={{headerShown:false}}/>
             </Stack.Navigator>
           </NavigationContainer>
       </View>
