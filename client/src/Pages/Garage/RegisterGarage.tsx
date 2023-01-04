@@ -121,24 +121,17 @@ export function RegisterGarage(){
   autocomplete_list:any[], inputType:any[], maxLength:number[],
   Content:any[] = [], fields:any[];
   
-  placeholder_list = ['Input Your Name Here','Input Your Email Here',
-    'Input Your Phone Number Here', 'Input Your Address Here',
-    'Input Garage Name Here', 'Input Garage Location Here', 'Choose Garage Location',
+  placeholder_list = ['Input Garage Name Here', 'Input Garage Location Here', 'Choose Garage Location',
     'Input Garage Type Here', 'Input Mechanic Total Here',
-    'Input Garage Open Hour Here', 'Input Garage Open Day Here',
-    'Input Your Password Here', 'Input Your Password Again']
-  icon_list = ['user','mail','phone','location', 'garage', 'location', 'location-pin' ,
-    'car', 'wrench', 'clock', 'calendar', 'key', 'shield']
-  autocomplete_list = ['name','email','tel','postal-address', 'off', 'postal-address',
-    'off','off','off','off','off','password', 'password-new']
-  inputType = ['default', 'default', 'phone-pad', 'default', 'default', 'default',
-    'default', 'default', 'numeric', 'default', 'default', 'default']
-  maxLength = [30, 40, 13, 100, 30, 100, 100, 20, 10, 10, 20, 20, 20]
+    'Input Garage Open Hour Here', 'Input Garage Open Day Here']
+  icon_list = ['garage', 'location', 'location-pin' ,
+    'car', 'wrench', 'clock', 'calendar']
+  autocomplete_list = ['off', 'postal-address',
+    'off','off','off','off','off']
+  inputType = ['default', 'default',
+    'default', 'default', 'numeric', 'default']
+  maxLength = [30, 100, 100, 20, 10, 10, 20]
 
-  const [SName, setName] = React.useState<string>('');
-  const [SEmail, setEmail] = React.useState<string>('');
-  const [SPhone, setPhone] = React.useState<number>(0);
-  const [SAddress, setAddress] = React.useState<string>('');
   const [SGarName, setGarName] = React.useState<string>('');
   const [SGarLoc, setGarLoc] = React.useState<string>('');
   const [SChooseGar, setChooseGar] = React.useState<string>('Choose Your Location');
@@ -146,8 +139,6 @@ export function RegisterGarage(){
   const [SMechTotal, setMechTotal] = React.useState<number>(0);
   const [SOpenHour, setOpenHour] = React.useState<string>('');
   const [SOpenDay, setOpenDay] = React.useState<string>('');
-  const [SPassword, setPassword] = React.useState<string>('');
-  const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [opendate, setOpenDate] = useState(new Date());
   const [closedate, setCloseDate] = useState(new Date());
   const [show, setShow] = React.useState<boolean>(false);
@@ -156,8 +147,8 @@ export function RegisterGarage(){
   const [isOpenDatePickerVisible, setOpenDatePickerVisibility] = useState(false);
   const [isCloseDatePickerVisible, setCloseDatePickerVisibility] = useState(false);
   const [SButton, setButton] = React.useState<boolean>(false);
-  const [SIDCardImage, setIDCardImage] = React.useState<string>('https://cdn3.iconfinder.com/data/icons/glyph/227/Button-Add-1-512.png');
   const [SGarageImage, setGarageImage] = React.useState<string>('https://cdn3.iconfinder.com/data/icons/glyph/227/Button-Add-1-512.png');
+  const [ImageUpload, setImageUpload] = React.useState<boolean>(false);
   const [SModal, setModal] = React.useState<boolean>(false);
   const [selectedStartDay, setSelectedStartDay] = React.useState<string>("Senin");
   const [selectedEndDay, setSelectedEndDay] = React.useState<string>("Senin");
@@ -238,20 +229,6 @@ export function RegisterGarage(){
     setCloseText(ftime);
     hideCloseDatePicker();
   };
-  
-  const pickIDCardImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setModal(false);
-    }
-  };
 
   const pickGarageImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -263,21 +240,9 @@ export function RegisterGarage(){
 
     if(!result.canceled){
       setGarageImage(result.assets[0].uri);
+      setImageUpload(true);
       setModal(false);
     }
-  };
-
-  const takeIDCardImage = async ()  => {
-
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setModal(false);
-    };
   };
 
   const takeGarageImage = async ()  => {
@@ -289,6 +254,7 @@ export function RegisterGarage(){
 
     if(!result.canceled){
       setGarageImage(result.assets[0].uri);
+      setImageUpload(true);
       setModal(false);
     };
   };
@@ -322,43 +288,21 @@ export function RegisterGarage(){
   
   React.useEffect(() => {
     if(isComponentMounted){
-      setButton(SName !== '' && SEmail !== '' && SPhone !== 0 && SAddress !== '' && SGarName !== '' 
+      setButton(SGarName !== '' 
       && SGarLoc !== '' && SChooseGar !== '' && SGarType !== '' && SMechTotal !== 0 && SOpenHour !== ''
-      && SOpenDay !== '' && SPassword !== '' && SPasswordValid !== '')
+      && SOpenDay !== '')
     }
-  },[SName, SEmail, SPhone, SAddress, SGarName, SGarLoc, SChooseGar, SGarType, SMechTotal, 
-    SOpenHour, SOpenDay, SPassword, SPasswordValid])
+  },[SGarName, SGarLoc, SChooseGar, SGarType, SMechTotal, 
+    SOpenHour, SOpenDay])
 
-  fields = [setName, setEmail, setPhone, setAddress, setGarName, setGarLoc, 
-    setChooseGar, setGarType, setMechTotal, setOpenHour, setOpenDay, setPassword, setPasswordValid]
+  fields = [setGarName, setGarLoc, 
+    setChooseGar, setGarType, setMechTotal, setOpenHour, setOpenDay]
 
   const showMode = (currentMode) => {
     setShow
   }
   for(let i = 0; i <= icon_list.length - 1; i++){
-    if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
-      Content.push(
-        <View style={Style.flexHorizontal} key={"View" + i}>
-          <Icon 
-            name={icon_list[i]} 
-            size={30} 
-            style={Style.icon}
-            color="#fff"
-            key={"Icon" + i}/>
-          <TextInput 
-            autoComplete={autocomplete_list[i]}
-            maxLength={maxLength[i]}
-            placeholder={placeholder_list[i]}
-            placeholderTextColor="#fff"
-            autoCapitalize='none'
-            secureTextEntry={true}
-            keyboardType={inputType[i]}
-            onChangeText={(value) => fields[i](value)}
-            style={Style.textInp}
-            key={"Input" + i}/>
-          </View>
-      )
-    }else if(icon_list[i] == 'garage' || icon_list[i] == 'car' || icon_list[i] == 'wrench'){
+    if(icon_list[i] == 'garage' || icon_list[i] == 'car' || icon_list[i] == 'wrench'){
       MIcon.loadFont();
       Content.push(
         <View style={Style.flexHorizontal} key={"View" + i}>
@@ -539,15 +483,11 @@ export function RegisterGarage(){
     }
   };
 
-  const userrole = "Garage";
-
   const checkInput = () => {
-    if(SPassword?.length! < 8){
-      Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
-    }else if(SButton == true && SPassword == SPasswordValid){
-      navigation.navigate('Home');
-    }else if(SButton == true && SPassword != SPasswordValid){
-      Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
+    if(SButton == true && ImageUpload == true){
+      navigation.navigate('GarageHome');
+    }else if(ImageUpload == false){
+      Platform.OS === 'android' ? ToastAndroid.show('Please Upload Your ID Card!!', ToastAndroid.SHORT) : Alert.alert("Please Upload Your ID Card!!")
     }else{
       Platform.OS === 'android' ? ToastAndroid.show('Please Fill All Required Field!!', ToastAndroid.SHORT) : Alert.alert("Please Fill All Required Field!!")
     }
@@ -562,42 +502,6 @@ export function RegisterGarage(){
                   style={Style.logo}/>
               <View style={Style.flexVertical}>
                   {Content}
-              </View>
-              <View style={{ paddingHorizontal:35, backgroundColor:"#434647", marginTop: 30, paddingBottom: 10}}>
-                <View style={Style.avatarStyle}>
-                  <Avatar.Image 
-                    size={100}
-                    style={Style.avatarStyle}
-                    source={{uri: SIDCardImage}}/>
-                  <Text 
-                    style={Style.photoLabel} 
-                    onPress={() => setModal(true)}
-                  >Upload ID Card</Text>
-                </View>
-                <View>
-                  <Modal 
-                    isVisible={SModal}
-                    onBackdropPress={() => setModal(false)}
-                    style={{justifyContent:'flex-end', margin:0}}>
-                    <View style={Style.modalStyle}>
-                      <TouchableWithoutFeedback onPress={takeIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="camera" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Ambil Foto</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                      <Divider/>
-                      <TouchableWithoutFeedback onPress={pickIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="folder-images" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Cari Dari Galeri</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </Modal>
-                </View>
               </View>
               <View style={{ paddingHorizontal:35, backgroundColor:"#434647", marginTop: 30, paddingBottom: 10}}>
                 <View style={Style.avatarStyle}>
@@ -645,7 +549,11 @@ export function RegisterGarage(){
               <Text style={Style.signText}> Already Have account?? 
                 <Text 
                     style={{color:"#b99504"}}
+<<<<<<< HEAD
                     onPress={()=>(navigation.navigate('Login'))}> Sign In </Text>
+=======
+                    onPress={()=>(navigation.navigate('Login', {userrole:'Owner'}))}> Sign In </Text>
+>>>>>>> 57c071e8be5c74bf057cc75200c65e718242c940
               </Text>
               <Text style={Style.signText}> Register as Customer?? 
                 <Text 
