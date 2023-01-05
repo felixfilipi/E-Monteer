@@ -29,24 +29,19 @@ export default React.StyleSheet.create({
     fontWeight:'bold'
   },
 
-  drawerContainer: {
-    backgroundColor:'white',
-    width:243,
-    position:'absolute',
-    zIndex: 5,
-    display:'flex',
-    right:0,
-    borderRadius:10,
-    borderColor:'#b99504',
-    borderWidth:2
-  },
-
   historyLabel: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     paddingHorizontal: 15,
     paddingTop: 20
+  },
+
+  loading: {
+    flex:1, 
+    justifyContent:'center', 
+    alignItems:'center', 
+    backgroundColor:'#242A2F'
   },
 
   myButton: {

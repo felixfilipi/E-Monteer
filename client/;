@@ -230,7 +230,7 @@ export default function MechanicOrder(){
                     nestedScrollEnabled/>
                 </View>
                 <View style={Style.modalMetaContainer}>
-                  <View style={Style.modalTotalLayout}>
+                  <View style={{flexDirection:'row',flex:2}}>
                     <CustomText
                       title="Estimasi Total Biaya"
                       color="black"
@@ -245,15 +245,9 @@ export default function MechanicOrder(){
                       />
                   </View>
                   <View style={{flex:2}}>
-                    <View style={Style.modalButtonLayout}>
-                      <CustomButton 
-                        title="Tambah Pesanan" 
-                        style={{flex:1}} 
-                        textStyle={Style.modalButtonText}/>
-                      <CustomButton 
-                        title="Konfirmasi Pesanan" 
-                        style={{flex:1, backgroundColor:'#59a540'}} 
-                        textStyle={Style.modalButtonText}/>
+                    <View style={{flex:2, flexDirection:'row'}}>
+                      <CustomButton title="Tambah Pesanan" style={{flex:1}} textStyle={{fontWeight:'700'}}/>
+                      <CustomButton title="Konfirmasi Pesanan" style={{flex:1, backgroundColor:'#59a540'}} textStyle={{fontWeight:'700'}}/>
                     </View>
                   </View>
                 </View>

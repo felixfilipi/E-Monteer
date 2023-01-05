@@ -239,7 +239,7 @@ export default function CustomerHome(){
     )
   }else{
     return(
-      <View style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'#242A2F'}}>
+      <View style={Style.loading}>
         <CustomText 
           title="Sedang memuat" 
           color={'white'}

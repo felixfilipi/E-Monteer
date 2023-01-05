@@ -10,15 +10,6 @@ export default React.StyleSheet.create({
     color:'#b99504',
   },
 
-  titleStyle: {
-    color: '#b99504',
-    fontFamily: 'normal',
-    fontWeight: '700',
-    fontSize: 20,
-    marginBottom: 10,
-    marginLeft: 10
-  },
-
   descriptionLayout: {
     flexDirection:'row', 
     flex:8, 

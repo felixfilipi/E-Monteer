@@ -3,7 +3,7 @@
 import React from "react-native";
 
 export default React.StyleSheet.create({
-  AvatarMarker:{
+  avatarMarker:{
     padding:3, 
     backgroundColor:'#b99504', 
     borderRadius:30
@@ -78,9 +78,51 @@ export default React.StyleSheet.create({
     alignItems:'center', 
     backgroundColor:'#242A2F'
   },
-  MapView:{
+  mapView:{
     flex:1,
     marginBottom:-8,
     justifyContent:'center',
   },
+  modalMask:{
+    flex:1, 
+    backgroundColor:'rgba(0, 0, 0, 0.5)', 
+    marginBottom:-30
+  },
+  modalMaskLayout:{
+    flex:4, 
+    justifyContent:'center',
+  },
+  modalLayout:{
+    flex:4, 
+    backgroundColor:'#fefefe', 
+    borderRadius:20
+  },
+  modalClose:{
+    alignItems:'flex-end', 
+    margin:10
+  },
+  modalTitle:{
+    marginBottom:0, 
+    padding:15, 
+    textAlign:'left'
+  },
+  modalListLayout:{
+    flex:3, 
+    margin:15, 
+    borderWidth:0.4, 
+    borderColor:'#9ca8ac', 
+    borderRadius:20
+  },
+  modalMetaContainer:{
+    flex:1, 
+    padding:15
+  },
+  modalTotalLayout:{
+    flexDirection:'row',
+    flex:2
+  },
+  modalButtonLayout:{
+    flex:2, 
+    flexDirection:'row'
+  }
 })
