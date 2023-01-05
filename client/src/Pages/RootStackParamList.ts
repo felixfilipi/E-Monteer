@@ -1,5 +1,6 @@
 export type RootStackParamList = {
   Register: undefined;
+  RegisterMechanic: undefined;
   Login: undefined;
   CustomerHome:  undefined;
   EditProfile: undefined;
@@ -20,4 +21,7 @@ export type RootStackParamList = {
   GarageMain: undefined;
   CostList: undefined;
   ChatHistoryMechanic: undefined;
+  CheckOrder: {id: number} | undefined;
+  MechanicView: undefined;
+  MechanicEdit: undefined;
 };
