@@ -85,7 +85,7 @@ export default React.StyleSheet.create({
   },
   modalMask:{
     flex:1, 
-    backgroundColor:'rgba(0, 0, 0, 0.5)', 
+    backgroundColor:'rgba(71, 76, 78, 0.8)', 
     marginBottom:-30
   },
   modalMaskLayout:{
@@ -124,5 +124,9 @@ export default React.StyleSheet.create({
   modalButtonLayout:{
     flex:2, 
     flexDirection:'row'
-  }
+  },
+  modalButtonText:{
+    fontWeight:'700'
+  },
+
 })

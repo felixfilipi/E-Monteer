@@ -57,7 +57,8 @@ export default function MechanicOrder(){
   const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicOrderType>();
   const [retry, setRetry] = React.useState<boolean>(false);
-  const [modalVisible, setModalVisible] = React.useState<boolean>(false);
+  const [estimationModal, setEstimationModal] = React.useState<boolean>(false);
+  const [cancelModal, setCancelModal] = React.useState<boolean>(false);
 
   const renderItem = ({ item }) => {
     return(
@@ -71,6 +72,36 @@ export default function MechanicOrder(){
   let distance : number = 2.4;
   let service_cost : number = 0;
   let CostList : any = [
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
     {
       description:'Bensin', 
       quantity:5, 
@@ -96,17 +127,15 @@ export default function MechanicOrder(){
         return;
       }
       do{
+        setTimeout(() => setRetry(true), 3000);
         const location = await Location.getCurrentPositionAsync({});
         if(location != undefined){
           dispatch(setLatitude(location['coords']['latitude']));
           dispatch(setLongitude(location['coords']['longitude']));
-          if(!latitude && !longitude){
-            setTimeout(() => {setRetry(true)}, 1000);
-          }else{
-            setRetry(false);
-          }
+        }else{
+          setRetry(true);
         }
-      }while(retry == true)
+      }while(retry == true);
  
     })();
   },[]);
@@ -187,7 +216,7 @@ export default function MechanicOrder(){
                 title="Buat Estimasi Pembayaran" 
                 style={Style.estimateButton}
                 textStyle={Style.estimateButtonText}
-                onPress={()=>{setModalVisible(true)}}/>
+                onPress={()=>{setEstimationModal(true)}}/>
               <View style={{flexDirection:'column', flex:1}}>
                 <CustomButton 
                   title="Panggil Derek"
@@ -196,33 +225,65 @@ export default function MechanicOrder(){
                 <CustomButton 
                   title="Batalkan Pesanan"
                   style={{borderRadius:30, backgroundColor:'#b41d12'}}
-                  textStyle={{fontWeight:'700'}}/>
+                  textStyle={{fontWeight:'700'}}
+                  onPress={() => setCancelModal(true)}/>
               </View>
             </View>
           </View>
         </View>
+
         <Modal
           animationType="fade"
           transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(!modalVisible)}>
+          visible={cancelModal}
+          onRequestClose={() => setCancelModal(!cancelModal)}>
+          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+            <View style={{backgroundColor:'#fefefe', padding:20, borderRadius:20, zIndex:1}}>
+              <CustomText title="Apakah anda ingin membatalkan pesanan?" size={20}/>
+              <View style={{marginTop:20, flexDirection:'row', justifyContent:'space-evenly'}}>
+                <TouchableOpacity activeOpacity={0.7} onPress={() => setCancelModal(false)}>
+                  <View>
+                    <View style={{padding:15, borderRadius:50, backgroundColor:'#b99504'}}>
+                      <Icon name="cross" size={25} color="#fefefe"/>
+                    </View>
+                    <CustomText title="Tidak" size={15} color="black" style={{marginVertical:5, marginLeft:0}}/>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7}> 
+                  <View>
+                    <View style={{padding:15, borderRadius:50, backgroundColor:'#3676a2'}}>
+                      <Icon name="check" size={25} color="#fefefe"/>
+                    </View>
+                    <CustomText title="Ya" size={15} color="black" style={{marginVertical:5, marginLeft:0}}/>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <TouchableWithoutFeedback onPress={() => setCancelModal(false)}>
+              <View style={{position:'absolute', top:0, bottom:0, left:0, right:0, backgroundColor:'rgba(71, 76, 78, 0.8)'}}/>
+            </TouchableWithoutFeedback>
+          </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={estimationModal}
+          onRequestClose={() => setEstimationModal(!estimationModal)}>
           <View style={Style.modalMaskLayout}>
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <TouchableWithoutFeedback onPress={() => setEstimationModal(false)}>
               <View style={Style.modalMask}/>
             </TouchableWithoutFeedback>
               <View style={Style.modalLayout}>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <TouchableOpacity onPress={() => setEstimationModal(false)}>
                   <View style={Style.modalClose}>
                     <Icon name='cross' size={30} color='#9ca8ac'/>
                   </View>
                 </TouchableOpacity>
-                <View style={{marginTop:10}}>
-                  <CustomText 
-                    title="Estimasi Biaya" 
-                    color="black" 
-                    size={20}
-                    style={Style.modalTitle}/>
-                </View>
+                <CustomText 
+                  title="Estimasi Biaya" 
+                  color="black" 
+                  size={20}
+                  style={Style.modalTitle}/>
                 <View style={Style.modalListLayout}>
                   <FlatList
                     data={CostList}
