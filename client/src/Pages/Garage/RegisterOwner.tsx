@@ -2,8 +2,8 @@ import { Image, View, TextInput, Button, KeyboardAvoidingView,
     ToastAndroid, Platform, Alert, Text, ScrollView, Linking, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from "react-native"
   import Modal from "react-native-modal";
   import Icon from "react-native-vector-icons/Entypo";
-  import Style from "../../Styles/authStyle"
-  import React, { useState }  from "react";
+  import Style from "../../Styles/AuthStyle"
+  import React from "react";
   import { StackNavigationProp } from "@react-navigation/stack";
   import { useNavigation } from "@react-navigation/native";
   import { RootStackParamList } from "../RootStackParamList"
@@ -196,7 +196,7 @@ import { Image, View, TextInput, Button, KeyboardAvoidingView,
                 <Text style={Style.signText}> Already Have account?? 
                   <Text 
                       style={{color:"#b99504"}}
-                      onPress={()=>(navigation.navigate('Login', {userrole:'Owner'}))}> Sign In </Text>
+                      onPress={()=>(navigation.navigate('Login'))}> Sign In </Text>
                 </Text>
                 <Text style={Style.signText}> Register as Customer?? 
                   <Text 

@@ -1,17 +1,12 @@
 import React from 'react';
-import Style from "../Styles/historyDetailStyle";
+import Style from "../Styles/HistoryDetailStyle";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import call from 'react-native-phone-call';
-import { useNavigation } from "@react-navigation/native";
 import { View, ScrollView} from "react-native";
 import { Avatar } from 'react-native-paper'; 
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from './RootStackParamList';
 import { AbsoluteButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
 import { Rating } from "react-native-ratings";
-
-type FindType = StackNavigationProp<RootStackParamList, 'Garage'>
 
 const GARAGE = [
   {
@@ -142,10 +137,9 @@ const GARAGE = [
   }
 ];
 
-export default function HistoryDetail(props){
+export default function HistoryDetail(props : any){
 
-  const navigation = useNavigation<FindType>();
-  const [DataID, setDataID] = React.useState<number>(props.route.params.id);
+  const DataID : number = props.route.params.id;
   const [rating, setRating] = React.useState<number>(GARAGE[props.route.params.id - 1].rating);
   const [rateState, setRateState] = React.useState<boolean>(GARAGE[props.route.params.id - 1].rating != 0 ? true : false);
 

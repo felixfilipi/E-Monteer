@@ -8,7 +8,7 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
-import Style from '../../Styles/mechanicStyle';
+import Style from '../../Styles/MechanicStyle/MechanicMain';
 
 const DATA = [
   {
@@ -31,7 +31,7 @@ const Item = ({name, location, photoUrl}) => {
       </View>
         <CustomButton title={"Periksa"} 
           style={{borderRadius:20}} 
-          onPress={() => navigation.navigate('OrderMain')}/>
+          onPress={() => navigation.navigate('MechanicOrder')}/>
     </View>
   )
 }

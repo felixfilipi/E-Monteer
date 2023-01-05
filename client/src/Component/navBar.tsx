@@ -1,7 +1,7 @@
 import { Avatar, Drawer } from 'react-native-paper';
 import {Text, View, Image, TouchableWithoutFeedback, Alert, TouchableHighlight, TouchableOpacity } from 'react-native';
 import React from 'react';
-import Style from '../Styles/componentStyle';
+import Style from '../Styles/ComponentStyle';
 import { RootStackParamList } from '../Pages/RootStackParamList';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -13,15 +13,14 @@ import { CustomText } from './CustomText';
 
 type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
-export const BottomNav = (props) => {
+export const BottomNav = (props : any) => {
 
   const dispatch = useAppDispatch();
   const navbarState = useAppSelector(state => state.navbar);
 
   const navigation = useNavigation<NavigationType>();
   
-  let color:string, fontColor: string, Content:any[] = [], 
-  title:string[] = props.title;
+  let color:string, fontColor: string, Content:any[] = [], title:string[] = props.title;
   
   const navbarPressed = (i : number) => {
     navigation.navigate(props.navigate[i], {prevPage : false});
@@ -45,7 +44,7 @@ export const BottomNav = (props) => {
         onPress={() => navbarPressed(i)}>
         <>
           <Icon name={props.icon[i]} size={25} color={fontColor}/>
-          <Text style={[Style.bottomNavText,{color: fontColor}]}>{props.title[i]}</Text>
+          <Text style={[Style.bottomNavText,{color: fontColor}]}>{title[i]}</Text>
         </>
       </TouchableHighlight>
     )
@@ -60,7 +59,7 @@ export const BottomNav = (props) => {
   )
 }
 
-type EditType = StackNavigationProp<RootStackParamList, 'Edit'>
+type EditProfileType = StackNavigationProp<RootStackParamList, 'EditProfile'>
 
 const DrawerComponent = () => {
   
@@ -68,11 +67,11 @@ const DrawerComponent = () => {
   const dispatch = useAppDispatch();
 
   const [drawerActive, setDrawerActive] = React.useState<string>();
-  const navigation = useNavigation<EditType>();
+  const navigation = useNavigation<EditProfileType>();
 
   React.useEffect(() => {
     if(drawerState == true && drawerActive == 'edit'){
-      navigation.navigate('Edit');
+      navigation.navigate('EditProfile');
       dispatch(setDrawer(false));
     }else if(drawerState == true && drawerActive == 'out'){
       Alert.alert("Keluar", "Apakah anda yakin ingin keluar?", 
@@ -131,7 +130,7 @@ export const TopBar = (props : any) => {
   )
 }
 
-export const ChatBar = (props) => {
+export const ChatBar = (props : any) => {
   return(
     <>
     <View style={Style.topBar}>

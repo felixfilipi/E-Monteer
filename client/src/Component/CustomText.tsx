@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native';
-import Style from '../Styles/componentStyle';
+import Style from '../Styles/ComponentStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const CustomText = (props: any) => {

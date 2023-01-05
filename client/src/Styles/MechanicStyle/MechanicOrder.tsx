@@ -1,0 +1,86 @@
+"use strict"
+
+import React from "react-native";
+
+export default React.StyleSheet.create({
+  AvatarMarker:{
+    padding:3, 
+    backgroundColor:'#b99504', 
+    borderRadius:30
+  },
+  contactContainer:{
+    flexDirection:'row', 
+    padding: 15, 
+    alignItems:'center',
+    borderWidth:0.4,
+    borderColor:'#c7c2c1',
+    borderRadius:15,
+    backgroundColor:'#fefefe',
+    marginTop:10
+  },
+  contactLayout:{
+    flex:2,
+    flexDirection:'column',
+    paddingHorizontal:5
+  },
+  contactText:{
+    textAlign:'left', 
+    fontWeight:'700'
+  },
+  contactIcon:{
+    padding:10, 
+    borderRadius:25, 
+    backgroundColor:'#b99504'
+  },
+  commandLayout:{
+    borderRadius:10, 
+    padding:10, 
+    marginTop:10, 
+    borderWidth:0.2, 
+    borderColor:'#c7c2c1'
+  },
+  commandVerticalLayout:{
+    flexDirection:'row', 
+    justifyContent:'center'
+  },
+  commandContainer:{
+    flex:1, 
+    backgroundColor:'#fefefe', 
+    borderWidth:1, 
+    borderColor:'#c7c2c1', 
+    borderTopEndRadius:10, 
+    borderTopStartRadius:10, 
+    padding:10
+  },
+  estimateButton:{
+    borderRadius:50, 
+    backgroundColor:'#59a540', 
+    flex:1
+  },
+  estimateButtonText:{
+    color:'white', 
+    padding:10, 
+    fontWeight:'bold'
+  },
+  FloatingButton:{
+    position:'absolute', 
+    left:10
+  },
+  FloatingButtonLayout:{
+    backgroundColor:'rgba(255, 255, 255, 0.7)', 
+    borderRadius:30, 
+    padding:5, 
+    width:40
+  },  
+  loading:{
+    flex:1, 
+    justifyContent:'center', 
+    alignItems:'center', 
+    backgroundColor:'#242A2F'
+  },
+  MapView:{
+    flex:1,
+    marginBottom:-8,
+    justifyContent:'center',
+  },
+})

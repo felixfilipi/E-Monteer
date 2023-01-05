@@ -1,7 +1,7 @@
 import { Image, View, TextInput, Button, KeyboardAvoidingView, 
   ToastAndroid, Platform, Alert, Text, ScrollView} from "react-native"
 import Icon from "react-native-vector-icons/Entypo";
-import Style from "../Styles/authStyle"
+import Style from "../Styles/AuthStyle"
 import React from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
@@ -103,7 +103,7 @@ export function Register(){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
       if(role === 'Customer'){
-        navigation.navigate('Home');
+        navigation.navigate('CustomerHome');
       }else if(role === 'Mechanic'){
         navigation.navigate('MechanicMain');
       }else if(role === 'Owner'){
@@ -141,7 +141,7 @@ export function Register(){
               <Text style={[Style.signText, {marginTop:8}]}> Want to Register Your Garage?? 
                 <Text 
                     style={{color:"#b99504"}}
-                    onPress={()=>(navigation.navigate('RegisterGarage'))}> Join </Text>
+                    onPress={()=>(navigation.navigate('RegisterOwner'))}> Join </Text>
               </Text>
           </KeyboardAvoidingView>
         </View>

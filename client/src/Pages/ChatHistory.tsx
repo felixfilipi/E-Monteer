@@ -2,7 +2,7 @@ import { View, Text,FlatList, SafeAreaView, TouchableHighlight } from "react-nat
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/chatHistoryStyle";
+import Style from "../Styles/ChatHistoryStyle";
 import { RootStackParamList } from './RootStackParamList';
 import { BottomNav } from '../Component/navBar';
 import { CustomText, ImportantText } from "../Component/CustomText";

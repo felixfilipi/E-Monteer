@@ -1,9 +1,7 @@
 import {View, Text, TouchableOpacity} from 'react-native';
-import Style from '../Styles/componentStyle'
+import Style from '../Styles/ComponentStyle'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useAppDispatch, useAppSelector } from '../../redux';
-import { setVehicle } from "../../redux/component/vehicleType";
-import { setOrderType } from '../../redux/component/orderType';
+import { useAppDispatch } from '../../redux';
 
 export const CustomButton = (props : any) => {
   return(

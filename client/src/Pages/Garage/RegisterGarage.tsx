@@ -1,12 +1,11 @@
 import { Image, View, TextInput, Button, KeyboardAvoidingView, 
   ToastAndroid, Platform, Alert, Text, ScrollView, Linking, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from "react-native"
-import MapView, {PROVIDER_GOOGLE, Polyline, Marker} from "react-native-maps";
-import Geolocation from 'react-native-geolocation-service';
+import MapView, {Marker} from "react-native-maps";
 import Modal from "react-native-modal";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from "react-native-vector-icons/Entypo";
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Style from "../../Styles/authStyle"
+import Style from '../../Styles/AuthStyle';
 import React, { useState }  from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
@@ -20,102 +19,11 @@ import { useAppDispatch, useAppSelector } from "../../../redux";
 import { setLatitude } from "../../../redux/component/latitude";
 import { setLongitude } from "../../../redux/component/longitude";
 
-type RegisterTypeGarage = StackNavigationProp<RootStackParamList, 'RegisterGarage'>
+type RegisterGarageType = StackNavigationProp<RootStackParamList, 'RegisterGarage'>
 
-// export default class Map extends React.Component{
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       latitude: 0,
-//       longitude: 0,
-//       coordinates: [],
-//     };
-//   }
-
-//   async componentDidMount() {
-//     Geolocation.getCurrentPosition(
-//       position => {
-//         this.setState({
-//           latitude: position.coords.latitude,
-//           longitude: position.coords.longitude,
-//           coordinates: this.state.coordinates.concat({
-//             latitude: position.coords.latitude,
-//             longitude: position.coords.longitude,
-//           }),
-//         });
-//       },
-//       error => {
-//         Alert.alert(error.message.toString());
-//       },
-//       {
-//         showLocationDialog: true,
-//         enableHighAccuracy: true,
-//         timeout: 20000,
-//         maximumAge: 0,
-//       },
-//     );
-
-//     Geolocation.watchPosition(
-//       position => {
-//         this.setState({
-//           latitude: position.coords.latitude,
-//           longitude: position.coords.longitude,
-//           coordinates: this.state.coordinates.concat({
-//             latitude: position.coords.latitude,
-//             longitude: position.coords.longitude,
-//           }),
-//         });
-//       },
-//       error => {
-//         console.log(error);
-//       },
-//       {
-//         showLocationDialog: true,
-//         enableHighAccuracy: true,
-//         timeout: 20000,
-//         maximumAge: 0,
-//         distanceFilter: 0,
-//       },
-//     );
-//   }
-//   render() {
-//     return (
-//       <View style={{flex: 1}}>
-//         <MapView
-//           provider={PROVIDER_GOOGLE}
-//           customMapStyle={mapStyle}
-//           style={{flex: 1}}
-//           region={{
-//             latitude: this.state.latitude,
-//             longitude: this.state.longitude,
-//             latitudeDelta: 0.0922,
-//             longitudeDelta: 0.0421,
-//           }}>
-//           <Marker
-//             coordinate={{
-//               latitude: this.state.latitude,
-//               longitude: this.state.longitude,
-//             }}></Marker>
-//           <Polyline
-//             coordinates={this.state.coordinates}
-//             strokeColor="#bf8221"
-//             strokeColors={[
-//               '#bf8221',
-//               '#ffe066',
-//               '#ffe066',
-//               '#ffe066',
-//               '#ffe066',
-//             ]}
-//             strokeWidth={3}
-//           />
-//         </MapView>
-//       </View>
-//     );
-//   }
-// }
 export function RegisterGarage(){
 
-  const navigation = useNavigation<RegisterTypeGarage>();
+  const navigation = useNavigation<RegisterGarageType>();
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
@@ -270,22 +178,6 @@ export function RegisterGarage(){
     };
   }
  
-//   const openMap = async (latitude, longitude, label='MyLabel') => {
-//     const tag = `${Platform.OS === 'ios' ? 'maps' : 'geo'}:0,0?q=`;  
-//     const link = Platform.select({
-//         ios: `${scheme}${label}@${latitude},${longitude}`,
-//         android: `${scheme}${latitude},${longitude}(${label})`
-//     });
-
-//     try {
-//         const supported = await Linking.canOpenURL(link);
-
-//         if (supported) Linking.openURL(link);
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-  
   React.useEffect(() => {
     if(isComponentMounted){
       setButton(SGarName !== '' 
@@ -485,7 +377,7 @@ export function RegisterGarage(){
 
   const checkInput = () => {
     if(SButton == true && ImageUpload == true){
-      navigation.navigate('GarageHome');
+      navigation.navigate('GarageMain');
     }else if(ImageUpload == false){
       Platform.OS === 'android' ? ToastAndroid.show('Please Upload Your ID Card!!', ToastAndroid.SHORT) : Alert.alert("Please Upload Your ID Card!!")
     }else{
@@ -549,11 +441,7 @@ export function RegisterGarage(){
               <Text style={Style.signText}> Already Have account?? 
                 <Text 
                     style={{color:"#b99504"}}
-<<<<<<< HEAD
                     onPress={()=>(navigation.navigate('Login'))}> Sign In </Text>
-=======
-                    onPress={()=>(navigation.navigate('Login', {userrole:'Owner'}))}> Sign In </Text>
->>>>>>> 57c071e8be5c74bf057cc75200c65e718242c940
               </Text>
               <Text style={Style.signText}> Register as Customer?? 
                 <Text 

@@ -3,16 +3,16 @@ import React from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/findStyle";
-import { RootStackParamList } from './RootStackParamList';
-import { BottomNav } from '../Component/navBar';
+import Style from "../../Styles/CustomerStyle/FindGarage";
+import { RootStackParamList } from '../RootStackParamList';
+import { BottomNav } from '../../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { MultipleButton } from '../Component/CustomButton';
-import { useAppDispatch, useAppSelector } from '../../redux';
-import { setSearch } from "../../redux/component/search";
-import { CustomText } from "../Component/CustomText";
+import { MultipleButton } from '../../Component/CustomButton';
+import { useAppDispatch, useAppSelector } from '../../../redux';
+import { setSearch } from "../../../redux/component/search";
+import { CustomText } from "../../Component/CustomText";
 
-type FindType = StackNavigationProp<RootStackParamList, 'Find'>
+type FindGarageType = StackNavigationProp<RootStackParamList, 'FindGarage'>
 
 const DATA = [
   {
@@ -88,11 +88,11 @@ for(let i = 0; i <= DATA.length; i++){
 
 const Item = ({ id, title, location, distance, rating, handleType }) => {
 
-  const navigation = useNavigation<FindType>();
+  const navigation = useNavigation<FindGarageType>();
   return(
     <TouchableHighlight 
       underlayColor='white' 
-      onPress={() => navigation.navigate('Garage', {id: id})}
+      onPress={() => navigation.navigate('GarageDetail', {id: id})}
     >
     <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>

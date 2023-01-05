@@ -2,14 +2,14 @@ import { View, Image, ScrollView} from "react-native";
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/garageStyle";
-import { RootStackParamList } from './RootStackParamList';
+import Style from "../../Styles/CustomerStyle/GarageDetail";
+import { RootStackParamList } from '../RootStackParamList';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AbsoluteButton} from '../Component/CustomButton';
-import { CustomText } from "../Component/CustomText";
+import { AbsoluteButton} from '../../Component/CustomButton';
+import { CustomText } from "../../Component/CustomText";
 import { Rating } from "react-native-ratings";
 
-type FindType = StackNavigationProp<RootStackParamList, 'Garage'>
+type GarageDetailType = StackNavigationProp<RootStackParamList, 'GarageDetail'>
 
 const DATA = [
   {
@@ -106,10 +106,10 @@ const DATA = [
 ];
 
 
-export default function Garage(props){
+export default function GarageDetail(props){
 
-  const navigation = useNavigation<FindType>();
-  const [DataID, setDataID] = React.useState<number>(props.route.params.id);
+  const navigation = useNavigation<GarageDetailType>();
+  const DataID : number = props.route.params.id;
 
   let icon_list : string[] = [], desc_list : any[] = [], Content : any[] = []; 
   icon_list = ['map-marker','clock-o','globe', 'phone', 'calendar', 'wrench']
@@ -163,7 +163,7 @@ export default function Garage(props){
     <AbsoluteButton 
       title={'Panggil Bengkel'}
       style={{marginHorizontal:15}}
-      onPress={() => navigation.navigate('Order', {id:DATA[DataID - 1].id, 
+      onPress={() => navigation.navigate('OrderGarage', {id:DATA[DataID - 1].id, 
         handleType:DATA[DataID - 1].handleType})}/>
   </View>
   )

@@ -1,4 +1,4 @@
-import Style from "../Styles/homeStyle";
+import Style from "../../Styles/CustomerStyle/CustomerHome";
 import call from 'react-native-phone-call';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -7,22 +7,22 @@ import MapView, { Marker } from 'react-native-maps';
 import { Searchbar, Card, Title, Paragraph, ActivityIndicator } from 'react-native-paper';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Rating } from 'react-native-ratings';
-import { TopBar, BottomNav } from '../Component/navBar';
-import { MultipleButton } from '../Component/CustomButton';
-import { RootStackParamList } from './RootStackParamList';
-import { CustomText } from "../Component/CustomText";
+import { TopBar, BottomNav } from '../../Component/navBar';
+import { MultipleButton } from '../../Component/CustomButton';
+import { RootStackParamList } from '../RootStackParamList';
+import { CustomText } from "../../Component/CustomText";
 import { View, KeyboardAvoidingView, Alert,
   Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
-import { setNavbar } from "../../redux/component/navbar";
-import { useAppDispatch, useAppSelector } from '../../redux';
-import { setOrderFail } from "../../redux/component/orderFail";
-import { setOrderType } from "../../redux/component/orderType";
-import { setSearch } from "../../redux/component/search";
+import { setNavbar } from "../../../redux/component/navbar";
+import { useAppDispatch, useAppSelector } from '../../../redux';
+import { setOrderFail } from "../../../redux/component/orderFail";
+import { setOrderType } from "../../../redux/component/orderType";
+import { setSearch } from "../../../redux/component/search";
 import { useNavigation } from "@react-navigation/native";
-import { setLatitude } from "../../redux/component/latitude";
-import { setLongitude } from "../../redux/component/longitude";
+import { setLatitude } from "../../../redux/component/latitude";
+import { setLongitude } from "../../../redux/component/longitude";
 
-type HomeType = StackNavigationProp<RootStackParamList, 'Home'>
+type HomeType = StackNavigationProp<RootStackParamList, 'CustomerHome'>
 
 const GARAGE = [
   {
@@ -54,7 +54,7 @@ const GARAGE = [
   },
 ]
 
-export default function Home(){
+export default function CustomerHome(){
 
   const orderFailState = useAppSelector(state => state.orderFail);
   const searchState = useAppSelector(state => state.search);
@@ -103,7 +103,7 @@ export default function Home(){
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
-    navigation.navigate('Find', {prevScreen:true});
+    navigation.navigate('FindGarage', {prevScreen:true});
     dispatch(setNavbar(1));
   }
 
@@ -204,7 +204,7 @@ export default function Home(){
                 <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
                 </Marker>
               </MapView>
-              <TouchableOpacity onPress={() => {navigation.navigate('Order', {id:null, handleType:null})}} 
+              <TouchableOpacity onPress={() => {navigation.navigate('OrderGarage', {id:null, handleType:null})}} 
                   style={[Style.myButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
                <Icon 
                  name={"tools"} 

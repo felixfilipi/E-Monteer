@@ -2,7 +2,7 @@ import { View, Text,FlatList, SafeAreaView, TouchableHighlight } from "react-nat
 import React from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/historyStyle";
+import Style from "../Styles/HistoryStyle";
 import { RootStackParamList } from './RootStackParamList';
 import { BottomNav } from '../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';

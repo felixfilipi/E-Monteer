@@ -1,7 +1,7 @@
 import { TopBar, BottomNav } from '../../Component/navBar';
 import { CustomText } from '../../Component/CustomText';
 import Icon from "react-native-vector-icons/AntDesign";
-import { View, ScrollView, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
+import { View, TouchableHighlight, FlatList } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../RootStackParamList';
 import React from 'react';
@@ -35,10 +35,10 @@ const DATA = [
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
 ]
-type MechanicMainType = StackNavigationProp<RootStackParamList, 'MechanicMain'>
+type GarageMainType = StackNavigationProp<RootStackParamList, 'GarageMain'>
 
 const Item = ({name, location, photoUrl}) => {
-  const navigation = useNavigation<MechanicMainType>();
+  const navigation = useNavigation<GarageMainType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
@@ -51,7 +51,7 @@ const Item = ({name, location, photoUrl}) => {
   )
 }
 
-export default function MechanicMain(){
+export default function GarageMain(){
   
   const [available, setAvailable] = React.useState<boolean>(false);
   let title : string, color: string, icon: string;
@@ -117,8 +117,8 @@ export default function MechanicMain(){
           />
       </View>
       <BottomNav 
-        title = {['Utama','Pesanan','Chat']}
-        icon = {['home-circle','history','chat']}
+        title = {['Utama','Pesanan','Montir']}
+        icon = {['home-circle','history','account-wrench']}
         navigate = {['Home','History','ChatHistory']}
         size = {3}
         />

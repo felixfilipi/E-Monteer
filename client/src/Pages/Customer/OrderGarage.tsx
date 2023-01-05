@@ -1,26 +1,26 @@
-import { View, KeyboardAvoidingView, Image,
-  Alert, ScrollView, ToastAndroid, Platform} from "react-native";
+import { View, Image,
+  Alert, ToastAndroid, Platform} from "react-native";
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import Style from "../Styles/orderStyle";
-import { RootStackParamList } from './RootStackParamList';
-import { CustomText, ImportantText } from "../Component/CustomText";
-import { CustomButton, LogoButton } from "../Component/CustomButton";
+import Style from "../../Styles/CustomerStyle/OrderGarage";
+import { RootStackParamList } from '../RootStackParamList';
+import { CustomText, ImportantText } from "../../Component/CustomText";
+import { CustomButton, LogoButton } from "../../Component/CustomButton";
 
-type OrderType = StackNavigationProp<RootStackParamList, 'Order'>
+type OrderGarageType = StackNavigationProp<RootStackParamList, 'OrderGarage'>
 
-export default function Order(props : any){
+export default function OrderGarage(props : any){
 
-  const navigation = useNavigation<OrderType>();
+  const navigation = useNavigation<OrderGarageType>();
   
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [vehicle, setVechicle] = React.useState<string>('');
   const [vehicleColor, setVehicleColor] = React.useState<string>('#b1b5c1');
   const [carColor, setCarColor] = React.useState<string>('#b1b5c1');
   const [motorColor, setMotorColor] = React.useState<string>('#b1b5c1');
-  const [garageType, setGarageType] = React.useState<string>(props.route.params.handleType);
+  const garageType : string = props.route.params.handleType;
 
   let Content : any[] = [];
 
@@ -87,7 +87,7 @@ export default function Order(props : any){
       <View style={{flex:5}}>
         <Image 
             style={{width:350, height:250}}
-            source={require("../../assets/images/relaxMechanic.png")}/>
+            source={require("../../../assets/images/relaxMechanic.png")}/>
         <CustomText title='Pilih Jenis Kendaraan Anda' color={'white'} size={20}/>
         {Content}
       </View>

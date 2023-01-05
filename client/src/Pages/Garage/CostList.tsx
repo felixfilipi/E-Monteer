@@ -3,10 +3,10 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { ScrollView, View, Text, Image } from "react-native";
 import { RootStackParamList } from "../RootStackParamList";
-import Style from "../../Styles/checkOrderStyle";
+import Style from "../../Styles/GarageStyle/CostList";
 import { CustomButton } from "../../Component/CustomButton";
 
-type CheckOrderType = StackNavigationProp<RootStackParamList, 'CheckOrder'>;
+type CostListType = StackNavigationProp<RootStackParamList, 'CostList'>;
 
 const CURRENTORDER = [
     {
@@ -20,9 +20,9 @@ const CURRENTORDER = [
     }
 ];
 
-export default function CheckOrder(props){
-   const [OrderID, setOrderID] = React.useState<number>(props.route.params.id);
+export default function CostList(props){
 
+   const OrderID : number = props.route.params.id;
    let costlist = 0, Content:any[] = [];
 
    for(let i=0; i<=CURRENTORDER[OrderID - 1].ServiceName.length-1; i++)

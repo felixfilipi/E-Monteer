@@ -1,5 +1,5 @@
 import Icon from "react-native-vector-icons/Entypo";
-import Style from "../Styles/profileStyle";
+import Style from "../Styles/ProfileStyle";
 import Modal from "react-native-modal";
 import React from "react";
 import { View, TextInput, Button, KeyboardAvoidingView, 
@@ -15,11 +15,11 @@ import * as ImagePicker from "expo-image-picker";
 LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
 
-type EditType = StackNavigationProp<RootStackParamList, 'Edit'>
+type EditProfileType = StackNavigationProp<RootStackParamList, 'EditProfile'>
 
 export default function EditProfile(){
 
-  const navigation = useNavigation<EditType>();
+  const navigation = useNavigation<EditProfileType>();
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
@@ -115,7 +115,7 @@ export default function EditProfile(){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Profile Updated Successfully!!', ToastAndroid.SHORT) : Alert.alert("Profile Updated Successfully!!")
-      navigation.navigate('Home');
+      navigation.navigate('CustomerHome');
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
     }else{
