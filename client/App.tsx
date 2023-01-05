@@ -100,6 +100,15 @@ export default function App() {
                 options={{headerShown:false}}/>
               <Stack.Screen
                 name="CostList" component={CostList}/>
+              <Stack.Screen
+                name='CheckOrder' component={CheckOrder}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name='MechanicView' component={MechanicView}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name='MechanicEdit' component={MechanicEditProfile}
+                options={{headerShown: false}}/>
             </Stack.Navigator>
           </NavigationContainer>
       </View>
