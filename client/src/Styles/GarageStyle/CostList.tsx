@@ -3,6 +3,13 @@
 import React from "react-native";
 
 export default React.StyleSheet.create({
+  cardDetail:{
+    marginBottom:15, 
+    marginHorizontal:15,
+    borderBottomStartRadius:10,
+    borderBottomEndRadius:10,
+    backgroundColor: '#3a4447'
+  },
   contentContainer: {
     marginBottom:65, 
     marginTop:5,
@@ -42,6 +49,17 @@ export default React.StyleSheet.create({
     height: 50,
   },
 
+  listContainer:{
+    flexDirection:'row', 
+    padding: 15, 
+    flex: 4, 
+    alignItems:'center'
+  },
+  listLayout:{
+    flexDirection: 'column', 
+    flex:3, 
+    paddingHorizontal:5
+  },
   textLabel: {
     color: 'white',
     fontSize: 20,
