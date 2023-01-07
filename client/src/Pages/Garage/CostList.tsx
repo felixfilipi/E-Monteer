@@ -5,6 +5,7 @@ import { ScrollView, View, Text, Image } from "react-native";
 import { RootStackParamList } from "../RootStackParamList";
 import Style from "../../Styles/GarageStyle/CostList";
 import { CustomButton } from "../../Component/CustomButton";
+import { CustomText } from "../../Component/CustomText";
 
 type CostListType = StackNavigationProp<RootStackParamList, 'CostList'>;
 
@@ -20,10 +21,82 @@ const CURRENTORDER = [
     }
 ];
 
+const Item = ({description, quantity, price}) => {
+  return(
+    <View style={{flexDirection:'row', flex:5, padding:15, alignItems:'center'}}>
+      <CustomText title={description} size={15} color='#919b9f' style={{flex:2, marginBottom:0, marginLeft:0, textAlign:'left'}}/>
+        <View style={{flex:1, flexDirection:'row'}}>
+          <CustomText title={'Rp. ' + price} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
+          <CustomText title={' x '} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
+          <CustomText title={'('+ quantity + ')'} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
+        </View>
+      <CustomText title={'Rp. ' + price * quantity} size={15} color='#919b9f' style={{flex:2, marginLeft:0, marginBottom:0, textAlign:'right'}}/>
+    </View>
+  )
+}
+
 export default function CostList(props){
 
    const OrderID : number = props.route.params.id;
    let costlist = 0, Content:any[] = [];
+
+   const renderItem = ({ item }) => {
+    return(
+      <Item
+        description = {item.description}
+        quantity = {item.quantity}
+        price = {item.price}/>
+    )
+  }
+
+  let distance : number = 2.4;
+  let service_cost : number = 0;
+  let CostList : any = [
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Bensin', 
+      quantity:5, 
+      price:10000
+    },
+    {
+      description:'Perjalanan',
+      quantity:distance,
+      price: 2000,
+    }
+  ];
+
+  for(let i = 0; i <= CostList.length - 1; i++){
+    service_cost += CostList[i].quantity * CostList[i].price;
+  };
 
    for(let i=0; i<=CURRENTORDER[OrderID - 1].ServiceName.length-1; i++)
    {
