@@ -23,4 +23,5 @@ export type RootStackParamList = {
   ChatHistoryMechanic: undefined;
   MechanicView: undefined;
   MechanicEdit: undefined;
+  GarageOrder: undefined;
 };
