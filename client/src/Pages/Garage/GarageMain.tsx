@@ -1,7 +1,7 @@
 import { TopBar, BottomNav } from '../../Component/navBar';
 import { CustomText } from '../../Component/CustomText';
 import Icon from "react-native-vector-icons/AntDesign";
-import { View, TouchableHighlight, FlatList } from 'react-native';
+import { View, ScrollView, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../RootStackParamList';
 import React from 'react';
@@ -17,19 +17,19 @@ const DATA = [
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
   {
-    id:1,
+    id:2,
     name: 'Christoper Luis Alexander',
     location: 'MH Thamrin Jakarta Pusat',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
   {
-    id:1,
+    id:3,
     name: 'Christoper Luis Alexander',
     location: 'MH Thamrin Jakarta Pusat',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
   {
-    id:1,
+    id:4,
     name: 'Christoper Luis Alexander',
     location: 'MH Thamrin Jakarta Pusat',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
@@ -37,7 +37,7 @@ const DATA = [
 ]
 type GarageMainType = StackNavigationProp<RootStackParamList, 'GarageMain'>
 
-const Item = ({name, location, photoUrl}) => {
+const Item = ({id, name, location, photoUrl}) => {
   const navigation = useNavigation<GarageMainType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
@@ -46,7 +46,7 @@ const Item = ({name, location, photoUrl}) => {
         <CustomText title={name} size={17} color="white" style={{textAlign:'left'}}/>
         <CustomText title={location} size={12} color="#85898f" style={{textAlign:'left'}}/>
       </View>
-        <CustomButton title={"Periksa"} style={{borderRadius:20}}/>
+        <CustomButton onPress={() => navigation.navigate('CostList', {id: id})} title={"Periksa"} style={{borderRadius:20}}/>
     </View>
   )
 }
@@ -69,6 +69,7 @@ export default function GarageMain(){
   const renderItem = ({ item }) => {
     return(
       <Item 
+        id = {item.id}
         name = {item.name} 
         location = {item.location}
         photoUrl = {item.photoUrl}
@@ -81,7 +82,7 @@ export default function GarageMain(){
       <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
       <View style={{margin:15, borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
-          <CustomText title="Status Anda" color="white" size={20}
+          <CustomText title="Status Bengkel Anda" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
           <TouchableHighlight onPress={() => {(setAvailable(!available))}}>
@@ -101,7 +102,7 @@ export default function GarageMain(){
       </View>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
-          <CustomText title="Pesanan Masuk" color="white" size={20}
+          <CustomText title="Pesanan Saat Ini" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       </View>
@@ -118,8 +119,8 @@ export default function GarageMain(){
       </View>
       <BottomNav 
         title = {['Utama','Pesanan','Montir']}
-        icon = {['home-circle','history','account-wrench']}
-        navigate = {['Home','History','ChatHistory']}
+        icon = {['home-circle','car','account-wrench']}
+        navigate = {['GarageMain','GarageOrder','MechanicView']}
         size = {3}
         />
     </View>
