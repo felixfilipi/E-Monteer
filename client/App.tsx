@@ -52,7 +52,7 @@ export default function App() {
               <Stack.Screen
                 name="Login" component={Login} options={{ headerShown: false }}/>
               <Stack.Screen
-                name="Home" component={CustomerHome} options={{headerShown: false }}/>
+                name="CustomerHome" component={CustomerHome} options={{headerShown: false }}/>
               <Stack.Screen
                 name="Edit" component={EditProfile} 
                 options={{title:'Ganti Profile', headerTintColor:'white'}}/>
