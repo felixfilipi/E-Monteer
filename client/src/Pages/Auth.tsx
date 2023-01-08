@@ -107,7 +107,7 @@ export function Register(){
       }else if(role === 'Mechanic'){
         navigation.navigate('MechanicMain');
       }else if(role === 'Owner'){
-        navigation.navigate('MechanicMain');
+        navigation.navigate('GarageMain');
       }
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
