@@ -111,7 +111,7 @@ export default function App() {
                 name='MechanicEdit' component={MechanicEditProfile}
                 options={{headerShown: false}}/>
               <Stack.Screen
-                name='MechanicEdit' component={GarageOrder}
+                name='GarageOrder' component={GarageOrder}
                 options={{headerShown: false}}/>
             </Stack.Navigator>
           </NavigationContainer>
