@@ -8,6 +8,13 @@ import vehicleReducer from './component/vehicleType';
 import latitudeReducer from './component/latitude';
 import longitudeReducer from './component/longitude';
 import role from './component/role';
+import estimationConfirmation from './component/estimationConfirmation';
+import serviceCostApp from './component/serviceCostApp';
+import costListApp from './component/costListApp';
+import cancelOrder from './component/cancelOrder';
+import custMechanic from './component/custMechanic';
+import orderCreated from './component/orderCreated';
+import userAuth from './component/userAuth';
 
 const rootReducer = combineReducers({
   drawer: drawerReducer,
@@ -18,7 +25,14 @@ const rootReducer = combineReducers({
   vehicle: vehicleReducer,
   latitude: latitudeReducer,
   longitude: longitudeReducer,
-  role: role
+  role: role,
+  estimationConfirmation: estimationConfirmation,
+  serviceCostApp: serviceCostApp,
+  costListApp: costListApp,
+  cancelOrder: cancelOrder,
+  custMechanic: custMechanic,
+  orderCreated: orderCreated,
+  userAuth: userAuth,
 })
 
 export default rootReducer

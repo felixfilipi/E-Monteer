@@ -36,7 +36,7 @@ export const LogoButton = (props : any) => {
     <TouchableOpacity style={[Style.vehicleBtn, props.style]}
       onPress={props.onPress} activeOpacity={0.7}>
       <Icon name={props.iconName} size={125} color= {props.iconColor == undefined ? 'black' : props.iconColor}/>
-      <Text style={[Style.ButtonText, props.textStyle]}> {props.btnTitle} </Text>
+      <Text style={[Style.buttonText, props.textStyle]}> {props.btnTitle} </Text>
     </TouchableOpacity>
   )
 }
@@ -49,7 +49,7 @@ export const MultipleButton = (props : any) => {
 
   for(let i=0; i<=props.size - 1; i++){
     Content.push(
-      <TouchableOpacity style={[Style.MyButton,props.style]} 
+      <TouchableOpacity style={[Style.myButton,props.style]} 
         activeOpacity={0.8} 
         key={props.keyValue + i}
         onPress={() => {dispatch(props.setRedux(props.changeValues[i]))}}>
@@ -58,7 +58,7 @@ export const MultipleButton = (props : any) => {
           size={20} 
           color="#fff"
           />
-        <Text style={[Style.MultipleButtonText, props.textStyle]}>{props.title[i]}</Text>
+        <Text style={[Style.multipleButtonText, props.textStyle]}>{props.title[i]}</Text>
       </TouchableOpacity>
     )
   }

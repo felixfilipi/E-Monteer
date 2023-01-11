@@ -3,23 +3,6 @@
 import React from "react-native"
 
 export default React.StyleSheet.create({
-  topBar: {
-    backgroundColor: '#242A2F',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 3,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex:5
-  },
-
-  topItem: {
-    width: '50%',
-    alignItems: 'flex-end',
-    zIndex:5
-  },
 
   avatar: {
     marginRight: 25,
@@ -30,12 +13,43 @@ export default React.StyleSheet.create({
     justifyContent:'center'
   },
 
-  logo: {
-    height: 75,
-    width: 150,
-    marginRight: 'auto',
-    alignItems: 'flex-start',
-    marginLeft: 10
+  buttonText: {
+    color: 'black',
+    fontFamily: 'normal',
+    fontWeight: '600',
+    fontSize: 20,
+    marginTop: 10
+  },
+
+  bottomNavLayout: {
+    backgroundColor: '#b99504',
+    position: 'absolute', 
+    bottom:0, 
+    left:0, 
+    right:0,
+    alignItems:'stretch',
+  },
+
+  bottomNavBtn: {
+    alignItems:'center',
+    flex: 1,
+    paddingVertical: 5
+  },
+
+  bottomNavText: {
+    fontWeight: '600'
+  },
+
+  chatBarLayout: {
+    flexDirection:'row',
+    flex:4
+  },
+
+  categoryBtn: {
+    flex:1, 
+    margin: 3,
+    marginVertical: 8,
+    backgroundColor: '#b99504',
   },
 
   drawerMask: {
@@ -46,6 +60,16 @@ export default React.StyleSheet.create({
     left:0, 
     right:0, 
     backgroundColor:'rgba(46, 44, 45, 0.8)',
+  },
+
+  descText: {
+    color: 'white',
+    fontFamily: 'normal',
+    fontWeight: '600',
+    fontSize: 20,
+    textAlign:'center',
+    marginBottom: 10,
+    marginLeft: 10
   },
 
   drawerContainer: {
@@ -60,6 +84,76 @@ export default React.StyleSheet.create({
     borderColor:'#b99504',
     borderBottomWidth:2,
     borderLeftWidth:2
+  },
+
+
+  importantText: {
+    color: '#de0004',
+    fontFamily: 'normal',
+    fontWeight: '600',
+    fontSize: 13,
+    marginBottom: 10,
+    marginLeft: 5
+  },
+
+  
+  multipleButtonText: {
+    color: '#fff',
+    marginLeft:5,
+    fontFamily: 'normal'
+  },
+
+  modalButton:{
+    padding:15, 
+    borderRadius:50, 
+    backgroundColor:'#b99504'
+  },
+
+  modalButtonLayout:{
+    marginTop:20, 
+    flexDirection:'row', 
+    justifyContent:'space-evenly'
+  },
+
+  modalLayout: {
+    flex:1, 
+    justifyContent:'center', 
+    alignItems:'center'
+  },
+
+  modalMaskExcept: {
+    backgroundColor:'#fefefe', 
+    padding:20, 
+    borderRadius:20, 
+    zIndex:1
+  },
+
+  modalMask: {
+    position:'absolute', 
+    top:0, 
+    bottom:0, 
+    left:0, 
+    right:0, 
+    backgroundColor:'rgba(71, 76, 78, 0.8)'
+  },
+
+  logo: {
+    height: 75,
+    width: 150,
+    marginRight: 'auto',
+    alignItems: 'flex-start',
+    marginLeft: 10
+  },
+
+  myButton: {
+    backgroundColor: '#b99504',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 7,
+    flexDirection: 'row',
+    margin: 3,
+    marginTop: 8
   },
 
   orderBtn: {
@@ -89,45 +183,23 @@ export default React.StyleSheet.create({
     left:0, 
     right:0
   },
-
-  descText: {
-    color: 'white',
-    fontFamily: 'normal',
-    fontWeight: '600',
-    fontSize: 20,
-    textAlign:'center',
-    marginBottom: 10,
-    marginLeft: 10
-  },
-
-  importantText: {
-    color: '#de0004',
-    fontFamily: 'normal',
-    fontWeight: '600',
-    fontSize: 13,
-    marginBottom: 10,
-    marginLeft: 5
-  },
-
-  ButtonText: {
-    color: 'black',
-    fontFamily: 'normal',
-    fontWeight: '600',
-    fontSize: 20,
-    marginTop: 10
-  },
   
-  MultipleButtonText: {
-    color: '#fff',
-    marginLeft:5,
-    fontFamily: 'normal'
+  topBar: {
+    backgroundColor: '#242A2F',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 3,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex:5
   },
 
-  categoryBtn: {
-    flex:1, 
-    margin: 3,
-    marginVertical: 8,
-    backgroundColor: '#b99504',
+  topItem: {
+    width: '50%',
+    alignItems: 'flex-end',
+    zIndex:5
   },
 
   vehicleBtn: {
@@ -138,40 +210,5 @@ export default React.StyleSheet.create({
     flexDirection: 'column',
     margin: 3,
     marginTop: 8
-  },
-
-  bottomNavLayout: {
-    backgroundColor: '#b99504',
-    position: 'absolute', 
-    bottom:0, 
-    left:0, 
-    right:0,
-    alignItems:'stretch',
-  },
-
-  bottomNavBtn: {
-    alignItems:'center',
-    flex: 1,
-    paddingVertical: 5
-  },
-
-  bottomNavText: {
-    fontWeight: '600'
-  },
-
-  MyButton: {
-    backgroundColor: '#b99504',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    borderRadius: 7,
-    flexDirection: 'row',
-    margin: 3,
-    marginTop: 8
-  },
-
-  chatBarLayout: {
-    flexDirection:'row',
-    flex:4
   },
 })

@@ -8,7 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "./RootStackParamList"
 import { useComponentDidMount } from '../Component/customHooks';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { setRole } from "../../redux/component/role";
+import { setUserAuth } from "../../redux/component/userAuth";
+import { ImportantText } from "../Component/CustomText";
 
 type RegisterType = StackNavigationProp<RootStackParamList, 'Register'>
 type LoginType = StackNavigationProp<RootStackParamList, 'Login'>
@@ -17,7 +18,6 @@ export function Register(){
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation<RegisterType>();
-  dispatch(setRole('Mechanic'));
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
@@ -34,18 +34,17 @@ export function Register(){
 
   const [SName, setName] = React.useState<string>('');
   const [SEmail, setEmail] = React.useState<string>('');
-  const [SPhone, setPhone] = React.useState<number>(0);
+  const [SPhone, setPhone] = React.useState<string>('');
   const [SAddress, setAddress] = React.useState<string>('');
   const [SPassword, setPassword] = React.useState<string>('');
   const [SPasswordValid, setPasswordValid] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
   
-  const role = useAppSelector(state => state.role);
   const isComponentMounted = useComponentDidMount();
   
   React.useEffect(() => {
     if(isComponentMounted){
-      setButton(SName !== '' && SEmail !== '' && SPhone !== 0 && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
+      setButton(SName !== '' && SEmail !== '' && SPhone !== '' && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
     }
   },[SName, SEmail, SPhone, SAddress, SPassword, SPasswordValid])
 
@@ -98,17 +97,27 @@ export function Register(){
     }
   };
 
+  const save_customer_data = (name : string, email : string, phone : string, address : string, password : string, role : string) => {
+    const prevState = useAppSelector(state => state.userAuth);
+    dispatch(setUserAuth([...prevState,
+      {
+        name:name, 
+        email:email,
+        phone:phone,
+        address:address,
+        password:password,
+        role:role,
+        photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'
+      }
+    ]))
+  }
+
   const checkInput = () => {
     if(SPassword?.length! < 8){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
-      if(role === 'Customer'){
-        navigation.navigate('CustomerHome');
-      }else if(role === 'Mechanic'){
-        navigation.navigate('MechanicMain');
-      }else if(role === 'Owner'){
-        navigation.navigate('GarageMain');
-      }
+      save_customer_data(SName, SEmail, SPhone, SAddress, SPassword, 'customer');
+      navigation.navigate('CustomerMain');
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
     }else{
@@ -155,7 +164,9 @@ export function Login(){
   const [SEmail, setEmail] = React.useState<string>('');
   const [SPassword, setPassword] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
-
+  const [SDisplay, setDisplay] = React.useState<boolean>(false);
+  
+  const EXISTING_USER = useAppSelector(state => state.userAuth);
   const isComponentMounted = useComponentDidMount();
   
   React.useEffect(() => {
@@ -166,9 +177,22 @@ export function Login(){
 
   const checkInput = () => {
     if(SButton == true){
-        navigation.navigate('MechanicMain');
+      const isExist = EXISTING_USER.find((val) => val.email === SEmail && val.password === SPassword);
+      if(isExist){
+        if(isExist.role === 'customer'){
+          navigation.navigate('CustomerMain');
+        }else if(isExist.role === 'mechanic'){
+          navigation.navigate('MechanicMain');
+        }else if(isExist.role === 'garage'){
+          navigation.navigate('GarageMain');
+        }
+      }else{
+        setDisplay(true);
+        setEmail('');
+        setPassword('');
+      }
     }else{
-        Platform.OS === 'android' ? ToastAndroid.show('Please Fill All Required Field!!', ToastAndroid.SHORT) : Alert.alert("Please Fill All Required Field!!")
+      Platform.OS === 'android' ? ToastAndroid.show('Please Fill All Required Field!!', ToastAndroid.SHORT) : Alert.alert("Please Fill All Required Field!!")
     }      
   };
 
@@ -192,6 +216,7 @@ export function Login(){
                     <TextInput 
                         autoComplete={"email"}
                         maxLength={40}
+                        value={SEmail}
                         autoCapitalize={'none'}
                         placeholder={"Input your Email here"}
                         placeholderTextColor="#fff"
@@ -209,6 +234,7 @@ export function Login(){
                     <TextInput 
                         autoComplete={"password"}
                         maxLength={20}
+                        value={SPassword}
                         placeholder={"Input your password again"}
                         placeholderTextColor="#fff"
                         onChangeText={(value) => setPassword(value)}
@@ -220,6 +246,14 @@ export function Login(){
             </View>
             <View
                 style={Style.button}>
+                {SDisplay === true ? 
+                  <ImportantText 
+                    title="Email atau Password tidak dapat ditemukan"/>
+                  :
+                <View style={{display:'none'}}>
+                  <ImportantText title="Email atau Password tidak dapat ditemukan"/>
+                </View>
+                }
                 <Button 
                     title="Login"
                     color="#b99504"

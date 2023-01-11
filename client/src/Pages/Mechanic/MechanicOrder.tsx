@@ -6,8 +6,8 @@ import MapView, { Marker } from 'react-native-maps';
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from '../RootStackParamList';
 import { CustomText } from "../../Component/CustomText";
-import { View, Alert,
-  TouchableOpacity, Dimensions, Modal, ScrollView, TouchableWithoutFeedback, FlatList} from "react-native";
+import { View, TouchableOpacity, Dimensions, TextInput, Modal, 
+  TouchableWithoutFeedback, FlatList, KeyboardAvoidingView, ToastAndroid} from "react-native";
 import { ActivityIndicator, Avatar } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../../redux';
 import { useNavigation } from "@react-navigation/native";
@@ -15,6 +15,12 @@ import { setLatitude } from "../../../redux/component/latitude";
 import { setLongitude } from "../../../redux/component/longitude";
 import Style from "../../Styles/MechanicStyle/MechanicOrder";
 import { CustomButton } from '../../Component/CustomButton';
+import NumericInput from 'react-native-numeric-input';
+import { setCostListApp } from '../../../redux/component/costListApp';
+import { setServiceCostApp } from '../../../redux/component/serviceCostApp';
+import { setEstimationConfirmation } from '../../../redux/component/estimationConfirmation';
+import { Confirmation } from '../../Component/Confirmation';
+import { setCancelOrder } from '../../../redux/component/cancelOrder';
 
 type MechanicOrderType = StackNavigationProp<RootStackParamList, 'MechanicOrder'>
 
@@ -52,13 +58,31 @@ const Item = ({description, quantity, price}) => {
 
 export default function MechanicOrder(){
 
+  let distance : number = 2.4;
+  let service_cost : number = 0;
+  let CostList : any = [
+    {
+      description:'Perjalanan',
+      quantity:distance,
+      price: 2000,
+    },
+  ];
+
   const latitude = useAppSelector(state => state.latitude);
   const longitude = useAppSelector(state => state.longitude);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicOrderType>();
   const [retry, setRetry] = React.useState<boolean>(false);
+  const [estConfirmModal, setEstConfirmModal] = React.useState<boolean>(false);
   const [estimationModal, setEstimationModal] = React.useState<boolean>(false);
   const [cancelModal, setCancelModal] = React.useState<boolean>(false);
+  const [addEstModal, setAddEstModal] = React.useState<boolean>(false);
+  const [fixDescription, setFixDescription] = React.useState<string>();
+  const [fixNumber, setFixNumber] = React.useState<number>(0);
+  const [fixPrice, setFixPrice] = React.useState<string>();
+  const [flexState, setFlexState] = React.useState<number>(5);
+  const [costList, setCostList] = React.useState<any[]>(CostList);
+  const [serviceCost, setServiceCost] = React.useState<number>(service_cost);
 
   const renderItem = ({ item }) => {
     return(
@@ -69,61 +93,49 @@ export default function MechanicOrder(){
     )
   }
 
-  let distance : number = 2.4;
-  let service_cost : number = 0;
-  let CostList : any = [
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Bensin', 
-      quantity:5, 
-      price:10000
-    },
-    {
-      description:'Perjalanan',
-      quantity:distance,
-      price: 2000,
-    }
-  ];
 
-  for(let i = 0; i <= CostList.length - 1; i++){
-    service_cost += CostList[i].quantity * CostList[i].price;
-  };
+  const addOrder = () => {
+    setCostList( prevCostList => [...prevCostList, {
+      description:fixDescription,
+      quantity: fixNumber,
+      price: Number(fixPrice),
+    }]);
+    setFixDescription('');
+    setFixPrice('');
+    setFixNumber(0);
+    setAddEstModal(false);
+    setFlexState(5);
+    ToastAndroid.show('List Perbaikan Berhasil Ditambahkan', ToastAndroid.SHORT)
+  }
+
+  const confirmOrder = () => {
+    dispatch(setCostListApp(costList))
+    dispatch(setServiceCostApp(serviceCost))
+    dispatch(setEstimationConfirmation(true))
+    setEstConfirmModal(false);
+    setEstimationModal(false);
+    ToastAndroid.show('Konfirmasi Estimasi Perbaikan Telah Dikirimkan', ToastAndroid.LONG);
+  }
+
+  const cancelOrder = () => {
+    dispatch(setCancelOrder(true));
+    navigation.navigate('MechanicMain');
+    ToastAndroid.show('Anda Telah Membatalkan Pesanan', ToastAndroid.LONG);
+  }
+
+  React.useEffect(() => {
+    for(let i = 0; i <= costList.length - 1; i++){
+      service_cost += costList[i].quantity * costList[i].price;
+    };
+    setServiceCost(service_cost);
+  }, [costList])
   
   React.useEffect(() =>{
     (async () => {
 
       let { status } = await Location.requestForegroundPermissionsAsync();
       if(status !== 'granted'){
-        Alert.alert('Permission to access location was denied');
+        ToastAndroid.show('Permission to access location was denied', ToastAndroid.SHORT);
         return;
       }
       do{
@@ -232,38 +244,19 @@ export default function MechanicOrder(){
           </View>
         </View>
 
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={cancelModal}
-          onRequestClose={() => setCancelModal(!cancelModal)}>
-          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-            <View style={{backgroundColor:'#fefefe', padding:20, borderRadius:20, zIndex:1}}>
-              <CustomText title="Apakah anda ingin membatalkan pesanan?" size={20}/>
-              <View style={{marginTop:20, flexDirection:'row', justifyContent:'space-evenly'}}>
-                <TouchableOpacity activeOpacity={0.7} onPress={() => setCancelModal(false)}>
-                  <View>
-                    <View style={{padding:15, borderRadius:50, backgroundColor:'#b99504'}}>
-                      <Icon name="cross" size={25} color="#fefefe"/>
-                    </View>
-                    <CustomText title="Tidak" size={15} color="black" style={{marginVertical:5, marginLeft:0}}/>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7}> 
-                  <View>
-                    <View style={{padding:15, borderRadius:50, backgroundColor:'#3676a2'}}>
-                      <Icon name="check" size={25} color="#fefefe"/>
-                    </View>
-                    <CustomText title="Ya" size={15} color="black" style={{marginVertical:5, marginLeft:0}}/>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <TouchableWithoutFeedback onPress={() => setCancelModal(false)}>
-              <View style={{position:'absolute', top:0, bottom:0, left:0, right:0, backgroundColor:'rgba(71, 76, 78, 0.8)'}}/>
-            </TouchableWithoutFeedback>
-          </View>
-        </Modal>
+        <Confirmation 
+          visibleModal={cancelModal} 
+          setVisibleModal={setCancelModal} 
+          title= "Apakah Anda Ingin Membatalkan Pesanan?"
+          onTrue={cancelOrder}
+          />
+        <Confirmation 
+          visibleModal={estConfirmModal} 
+          setVisibleModal={setEstConfirmModal}
+          title= "Apakah List Estimasi Biaya Sudah Benar?"
+          onTrue={confirmOrder}
+          />
+
         <Modal
           animationType="fade"
           transparent={true}
@@ -286,7 +279,7 @@ export default function MechanicOrder(){
                   style={Style.modalTitle}/>
                 <View style={Style.modalListLayout}>
                   <FlatList
-                    data={CostList}
+                    data={costList}
                     renderItem={renderItem}
                     nestedScrollEnabled/>
                 </View>
@@ -299,7 +292,7 @@ export default function MechanicOrder(){
                       style={{flex:1, textAlign:'left'}}
                       />
                     <CustomText
-                      title={'Rp. ' + service_cost}
+                      title={'Rp. ' + serviceCost}
                       color="black"
                       size={15}
                       style={{flex:1, textAlign:'right'}}
@@ -310,16 +303,87 @@ export default function MechanicOrder(){
                       <CustomButton 
                         title="Tambah Pesanan" 
                         style={{flex:1}} 
-                        textStyle={Style.modalButtonText}/>
+                        textStyle={Style.modalButtonText}
+                        onPress={() => {setEstimationModal(false), setAddEstModal(true)}}
+                      />
                       <CustomButton 
                         title="Konfirmasi Pesanan" 
                         style={{flex:1, backgroundColor:'#59a540'}} 
-                        textStyle={Style.modalButtonText}/>
+                        textStyle={Style.modalButtonText}
+                        onPress={() => setEstConfirmModal(true)}
+                      />
                     </View>
                   </View>
                 </View>
               </View>
           </View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={addEstModal}
+          onRequestClose={() => setAddEstModal(!addEstModal)}>
+          <KeyboardAvoidingView style={Style.modalMaskLayout}>
+            <TouchableWithoutFeedback onPress={() => {setAddEstModal(false), setFlexState(5)}}>
+              <View style={[Style.modalMask, {flex:flexState}]}/>
+            </TouchableWithoutFeedback>
+              <View style={[Style.modalLayout]}>
+                <TouchableOpacity onPress={() => {setAddEstModal(false), setFlexState(5)}}>
+                  <View style={Style.modalClose}>
+                    <Icon name='cross' size={30} color='#9ca8ac'/>
+                  </View>
+                </TouchableOpacity>
+                <CustomText 
+                  title="Tambah Estimasi Perbaikan" 
+                  color="black" 
+                  size={20}
+                  style={Style.modalTitle}/>
+                <View style={[Style.modalListLayout]}>
+                  <View style={{flex:1, padding:15}}>
+                    <View style={{flex:3}}>
+                      <View style={{flex:1}}>
+                        <CustomText title="Deskripsi Perbaikan:" size={12} color="black" style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
+                        <TextInput 
+                          onFocus={() => setFlexState(2)}
+                          onEndEditing={() => setFlexState(5)}
+                          onChangeText={setFixDescription} 
+                          value={fixDescription}
+                          style={{borderBottomWidth:0.3, padding:5, marginRight:15, fontSize:15}}
+                          />
+                      </View>
+                      <View style={{flexDirection:'row', flex:1, padding:5}}>
+                        <View style={{flex:1}}>
+                          <CustomText title="Biaya Perbaikan (per unit)" size={12} color="black" style={{textAlign:'left', marginBottom:0, marginLeft:0}}/>
+                          <TextInput
+                            onFocus={() => setFlexState(2)}
+                            onEndEditing={() => setFlexState(5)}
+                            onChangeText={setFixPrice} 
+                            value={fixPrice}
+                            style={{borderBottomWidth:0.3, padding:5, fontSize:15, marginRight:15}}
+                            keyboardType='numeric'
+                          />
+                        </View>
+                        <View style={{flex:1, alignItems:'center'}}>
+                          <CustomText title="Total Perbaikan" size={12} color="black" style={{marginLeft:0}}/>
+                          <NumericInput 
+                            onChange={(value) => setFixNumber(value)}
+                            value={fixNumber}
+                            iconSize={10}
+                            totalWidth={100}
+                            totalHeight={30}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                    <CustomButton 
+                      title="Tambah Pesanan" 
+                      style={{flex:1}} 
+                      textStyle={Style.modalButtonText}
+                      onPress={addOrder}/>
+                  </View>
+                </View>
+              </View>
+          </KeyboardAvoidingView>
         </Modal>
       </View>
       );

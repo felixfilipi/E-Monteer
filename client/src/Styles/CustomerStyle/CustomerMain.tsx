@@ -29,6 +29,13 @@ export default React.StyleSheet.create({
     fontWeight:'bold'
   },
 
+  floatingButtonLayout:{
+    backgroundColor:'rgba(255, 255, 255, 0.7)', 
+    borderRadius:30, 
+    padding:5, 
+    width:40
+  },  
+
   historyLabel: {
     color: 'white',
     fontSize: 20,
@@ -63,5 +70,25 @@ export default React.StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 40
   },
+
+  waitingContainer: {
+    backgroundColor:'white', 
+    flexDirection:'row', 
+    flex:5
+  },
+
+  waitingTextLayout: {
+    flex:4,
+    flexDirection:'column', 
+    justifyContent:'center', 
+    padding:10
+  },
+
+  waitingCancelButton:{
+    flex:1, 
+    justifyContent:'center', 
+    alignItems:'center', 
+    backgroundColor:'#ff522b'
+  }
 
 })

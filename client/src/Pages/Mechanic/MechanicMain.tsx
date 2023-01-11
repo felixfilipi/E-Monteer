@@ -9,15 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
 import Style from '../../Styles/MechanicStyle/MechanicMain';
+import { useAppDispatch, useAppSelector } from '../../../redux';
+import { setCustMechanic } from '../../../redux/component/custMechanic';
 
-const DATA = [
-  {
-    id:1,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-]
 type MechanicMainType = StackNavigationProp<RootStackParamList, 'MechanicMain'>
 
 const Item = ({name, location, photoUrl}) => {
@@ -40,6 +34,7 @@ export default function MechanicMain(){
   
   const [available, setAvailable] = React.useState<boolean>(false);
   let title : string, color: string, icon: string;
+  const dispatch = useAppDispatch();
   
   if(available === true){
     title = "Tersedia";
@@ -50,6 +45,16 @@ export default function MechanicMain(){
     color = "#FF522B";
     icon = "closecircle";
   }
+
+  const cancelStatus = useAppSelector(state => state.cancelOrder);
+  if(cancelStatus){
+    const RAW_DATA = useAppSelector(state => state.custMechanic);
+    RAW_DATA[0].trans_end_dt = Date()
+    dispatch(setCustMechanic(RAW_DATA));
+  }
+  
+  const RAW_DATA = useAppSelector(state => state.custMechanic); 
+  const DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)
 
   const renderItem = ({ item }) => {
     return(

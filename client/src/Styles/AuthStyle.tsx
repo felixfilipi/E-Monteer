@@ -10,7 +10,6 @@ export default React.StyleSheet.create({
   },
 
   button: {
-      backgroundColor: "#b99504",
       marginTop: 50,
   },
 

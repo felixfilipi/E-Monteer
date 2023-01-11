@@ -1,4 +1,4 @@
-import Style from "../../Styles/CustomerStyle/CustomerHome";
+import Style from "../../Styles/CustomerStyle/CustomerMain";
 import call from 'react-native-phone-call';
 import * as Location from 'expo-location';
 import React from 'react';
@@ -21,8 +21,9 @@ import { setSearch } from "../../../redux/component/search";
 import { useNavigation } from "@react-navigation/native";
 import { setLatitude } from "../../../redux/component/latitude";
 import { setLongitude } from "../../../redux/component/longitude";
+import { setOrderCreated } from "../../../redux/component/orderCreated";
 
-type HomeType = StackNavigationProp<RootStackParamList, 'CustomerHome'>
+type HomeType = StackNavigationProp<RootStackParamList, 'CustomerMain'>
 
 const GARAGE = [
   {
@@ -54,9 +55,10 @@ const GARAGE = [
   },
 ]
 
-export default function CustomerHome(){
+export default function CustomerMain(){
 
   const orderFailState = useAppSelector(state => state.orderFail);
+  const orderCreatedState = useAppSelector(state => state.orderCreated);
   const searchState = useAppSelector(state => state.search);
   const latitude = useAppSelector(state => state.latitude);
   const longitude = useAppSelector(state => state.longitude);
@@ -100,6 +102,10 @@ export default function CustomerHome(){
  
     })();
   },[]);
+
+  let _map: any;
+  const fitCamera = () => {
+    _map.fitToCoordinates([{latitude: latitude, longitude: longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
@@ -161,11 +167,54 @@ export default function CustomerHome(){
     )
   }
 
+  const Waiting = () => {
+    const [time, setTime] = React.useState<number>(120);
+    const timerRef = React.useRef(time);
+
+    React.useEffect(() => {
+      const timerId = setInterval(() => {
+        timerRef.current -= 1;
+        if(timerRef.current < 0){
+          clearInterval(timerId);
+          dispatch(setOrderFail(true));
+        }else{
+          setTime(timerRef.current);
+        }
+      }, 1000);
+      return () => {
+        clearInterval(timerId);
+      };
+    }, []);
+
+    const cancelOrder = () => {
+      dispatch(setOrderFail(true));
+      dispatch(setOrderCreated(false));
+    };
+    
+    return(
+      <View style={Style.waitingContainer}>
+        <View style={Style.waitingTextLayout}>
+          <CustomText title="Menunggu Konfirmasi Bengkel Terdekat" size={15} color="black" style={{textAlign:'left'}}/>
+          <CustomText title={"Mohon Tunggu Sebentar (" + time + "s)"} size={10} color="black" style={{textAlign:'left'}}/>
+        </View>
+        <TouchableOpacity 
+          style={Style.waitingCancelButton} 
+          activeOpacity={0.7} 
+          onPress={() => cancelOrder()}>
+          <View>
+            <Icon name="cross" size={30} color="black"/>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   if(latitude && longitude){
     return(
     <View style={{flex:1}}>
       <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
+      {orderCreatedState === true ? <Waiting/> : null}
         <View style={{ alignItems: 'center', flex:1 }}>
           <KeyboardAvoidingView>
             <View style={Style.searchSection}>
@@ -193,6 +242,7 @@ export default function CustomerHome(){
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
                 }}
+                ref={(ref) => _map = ref}
                 style={{width:Dimensions.get('window').width, 
                     height:300, 
                     justifyContent:'center'}}
@@ -205,13 +255,21 @@ export default function CustomerHome(){
                 </Marker>
               </MapView>
               <TouchableOpacity onPress={() => {navigation.navigate('OrderGarage', {id:null, handleType:null})}} 
-                  style={[Style.myButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.7}>
+                  style={[Style.myButton, {position :'absolute', bottom: 8, right: 8}]} activeOpacity={0.9}>
                <Icon 
                  name={"tools"} 
                  size={20} 
                  color="#fff"
                  />
                <Text style={Style.buttonText}> Cari Terdekat</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {fitCamera()}}
+                style={{position:'absolute',left:8, bottom:30}}>
+                <View style={Style.floatingButtonLayout}>
+                  <Icon name="hair-cross" size={30} color="rgba(58, 68, 71, 1)"/>
+                </View>
               </TouchableOpacity>
             </View>
 
@@ -232,7 +290,7 @@ export default function CustomerHome(){
         <BottomNav 
           title = {['Utama','Cari','Riwayat','Chat']}
           icon = {['home-circle','map-search-outline','history','chat']}
-          navigate = {['Home','Find','History','ChatHistory']}
+          navigate = {['CustomerMain','FindGarage','History','ChatHistory']}
           size = {4}
           />
       </View>

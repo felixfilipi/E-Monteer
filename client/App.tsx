@@ -10,7 +10,6 @@ import { DefaultTheme } from 'react-native-paper';
 import { Register, Login} from './src/Pages/Auth';
 import { RegisterGarage } from './src/Pages/Garage/RegisterGarage';
 import EditProfile from './src/Pages/Profile';
-import Waiting from './src/Pages/Customer/Waiting';
 import FindGarage from './src/Pages/Customer/FindGarage';
 import History from './src/Pages/History';
 import GarageDetail from './src/Pages/Customer/GarageDetail';
@@ -24,7 +23,7 @@ import MechanicEditProfile from './src/Pages/Garage/MechanicEdit';
 import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
 import MechanicMain from './src/Pages/Mechanic/MechanicMain';
 import GarageMain from './src/Pages/Garage/GarageMain';
-import CustomerHome from './src/Pages/Customer/CustomerHome';
+import CustomerMain from './src/Pages/Customer/CustomerMain';
 import OrderGarage from './src/Pages/Customer/OrderGarage';
 import MechanicOrder from './src/Pages/Mechanic/MechanicOrder';
 import CostList from './src/Pages/Garage/CostList';
@@ -52,24 +51,21 @@ export default function App() {
               <Stack.Screen
                 name="Login" component={Login} options={{ headerShown: false }}/>
               <Stack.Screen
-                name="CustomerHome" component={CustomerHome} options={{headerShown: false }}/>
+                name="CustomerMain" component={CustomerMain} options={{headerShown: false }}/>
               <Stack.Screen
-                name="Edit" component={EditProfile} 
+                name="EditProfile" component={EditProfile} 
                 options={{title:'Ganti Profile', headerTintColor:'white'}}/>
               <Stack.Screen
-                name="Order" component={OrderGarage} 
+                name="OrderGarage" component={OrderGarage} 
                 options={{title:'Pesan Mechanic', headerTintColor:'white'}}/>
               <Stack.Screen
-                name="Waiting" component={Waiting} 
-                options={{headerShown: false}}/>
-              <Stack.Screen
-                name="Find" component={FindGarage}
+                name="FindGarage" component={FindGarage}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name="History" component={History}
                 options={{headerShown: false}}/>
               <Stack.Screen
-                name="Garage" component={GarageDetail}
+                name="GarageDetail" component={GarageDetail}
                 options={{title:'Detail Bengkel', headerTintColor:'white'}}/>
               <Stack.Screen
                 name="HistoryDetail" component={HistoryDetail}
@@ -93,7 +89,7 @@ export default function App() {
                 name="ChatHistoryMechanic" component={ChatHistoryMechanic}
                 options={{headerShown:false}}/>
               <Stack.Screen
-                name='CheckOrder' component={MechanicOrder}
+                name='MechanicOrder' component={MechanicOrder}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='GarageMain' component={GarageMain}

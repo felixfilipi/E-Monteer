@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { setNavbar } from '../../redux/component/navbar';
 import { CustomText } from './CustomText';
+import { Confirmation } from './Confirmation';
 
 type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
@@ -61,7 +62,7 @@ export const BottomNav = (props : any) => {
 
 type EditProfileType = StackNavigationProp<RootStackParamList, 'EditProfile'>
 
-const DrawerComponent = () => {
+const DrawerComponent = (props: any) => {
   
   const drawerState = useAppSelector(state => state.drawer)
   const dispatch = useAppDispatch();
@@ -69,13 +70,13 @@ const DrawerComponent = () => {
   const [drawerActive, setDrawerActive] = React.useState<string>();
   const navigation = useNavigation<EditProfileType>();
 
+
   React.useEffect(() => {
     if(drawerState == true && drawerActive == 'edit'){
       navigation.navigate('EditProfile');
       dispatch(setDrawer(false));
     }else if(drawerState == true && drawerActive == 'out'){
-      Alert.alert("Keluar", "Apakah anda yakin ingin keluar?", 
-        [{text : "Batal", style: "cancel"}, {text: "Ya"}])
+      props.setActiveModal(true);
       dispatch(setDrawer(false));
     }
   },[drawerActive])
@@ -106,7 +107,13 @@ export const TopBar = (props : any) => {
 
   const drawerState = useAppSelector(state => state.drawer)
   const dispatch = useAppDispatch();
+  const [logoutModal, setLogoutModal] = React.useState<boolean>(false);
 
+  const navigation = useNavigation<EditProfileType>();
+  const logout = () => {
+    setLogoutModal(false);
+    navigation.navigate('Login');
+  }
   return(
     <>
     <View style={Style.topBar}>
@@ -125,7 +132,13 @@ export const TopBar = (props : any) => {
       </View>
     </View>
       <View style={{marginBottom:82}}/>
-        {drawerState == true ? <DrawerComponent/> : null }
+        {drawerState == true ? <DrawerComponent setActiveModal={setLogoutModal}/> : null }
+    <Confirmation
+      visibleModal = {logoutModal}
+      setVisibleModal = {setLogoutModal}
+      title="Apakah Anda Yakin Ingin Keluar?"
+      onTrue={logout}
+      />
     </>
   )
 }
