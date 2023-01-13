@@ -138,7 +138,7 @@ export default function ChatHistory(){
     <BottomNav 
       title = {['Utama','Cari','Riwayat','Chat']}
       icon = {['home-circle','map-search-outline','history','chat']}
-      navigate = {['Home','Find','History','ChatHistory']}
+      navigate = {['CustomerMain','FindGarage','OrderHistory','ChatHistory']}
       size = {4}
       />
   </View>
@@ -180,7 +180,7 @@ export function ChatHistoryMechanic(){
     <BottomNav 
       title = {['Utama','Riwayat','Chat']}
       icon = {['home-circle','history','chat']}
-      navigate = {['MechanicMain','History','ChatHistory']}
+      navigate = {['MechanicMain','OrderHistory','ChatHistory']}
       size = {3}
       />
   </View>

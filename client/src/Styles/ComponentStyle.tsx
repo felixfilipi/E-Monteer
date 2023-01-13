@@ -86,6 +86,12 @@ export default React.StyleSheet.create({
     borderLeftWidth:2
   },
 
+  floatingButtonLayout:{
+    backgroundColor:'rgba(255, 255, 255, 0.7)', 
+    borderRadius:30, 
+    padding:5, 
+    width:40
+  },
 
   importantText: {
     color: '#de0004',
@@ -135,6 +141,48 @@ export default React.StyleSheet.create({
     left:0, 
     right:0, 
     backgroundColor:'rgba(71, 76, 78, 0.8)'
+  },
+
+
+  // location section
+  modalMaskLocation:{
+    flex:1, 
+    backgroundColor:'rgba(71, 76, 78, 0.8)', 
+    marginBottom:-30
+  },
+  modalMaskLayoutLocation:{
+    flex:1, 
+    justifyContent:'center',
+  },
+  modalLayoutLocation:{
+    flex:1, 
+    backgroundColor:'#fefefe', 
+    borderRadius:20
+  },
+  modalCloseLocation:{
+    alignItems:'flex-end', 
+    margin:10
+  },
+  modalTitleLocation:{
+    marginBottom:0, 
+    paddingHorizontal:15,
+    paddingBottom:10,
+    textAlign:'left'
+  },
+  modalMetaContainerLocation:{
+    flex:1, 
+    padding:15
+  },
+  modalTotalLayoutLocation:{
+    flexDirection:'row',
+    justifyContent:'center'
+  },
+  modalButtonLayoutLocation:{
+    flex:1, 
+    flexDirection:'row'
+  },
+  modalButtonTextLocation:{
+    fontWeight:'700'
   },
 
   logo: {

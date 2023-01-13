@@ -128,7 +128,7 @@ const Item = ({ id, title, location, distance, rating, handleType }) => {
   )
 };
 
-export default function Find(props : any){
+export default function Find(){
 
   const renderItem = ({ item }) => {
     return(
@@ -164,7 +164,6 @@ export default function Find(props : any){
           <Searchbar
             placeholder="Cari Bengkel Disini"
             onChangeText={onChangeDest}
-            autoFocus={props.route.params.prevScreen == true ? false : true}
             style={Style.topSearch}
             value={destQuery}/>
         </View>
@@ -196,7 +195,7 @@ export default function Find(props : any){
     <BottomNav 
       title = {['Utama','Cari','Riwayat','Chat']}
       icon = {['home-circle','map-search-outline','history','chat']}
-      navigate = {['Home','Find','History','ChatHistory']}
+      navigate = {['CustomerMain','FindGarage','OrderHistory','ChatHistory']}
       size = {4}
       />
   </View>

@@ -1,6 +1,6 @@
 import { Image, View, TextInput, Button, KeyboardAvoidingView, 
-  ToastAndroid, Platform, Alert, Text, ScrollView, Linking, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from "react-native"
-import MapView, {Marker} from "react-native-maps";
+  ToastAndroid, Platform, Alert, Text, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Dimensions} from "react-native"
+import { Location as LocationModal } from '../../Component/Location'; 
 import Modal from "react-native-modal";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from "react-native-vector-icons/Entypo";
@@ -15,7 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { Avatar, Divider } from "react-native-paper";
 import * as Location from 'expo-location';
-import { useAppDispatch, useAppSelector } from "../../../redux";
+import { useAppDispatch } from "../../../redux";
 import { setLatitude } from "../../../redux/component/latitude";
 import { setLongitude } from "../../../redux/component/longitude";
 
@@ -29,10 +29,10 @@ export function RegisterGarage(){
   autocomplete_list:any[], inputType:any[], maxLength:number[],
   Content:any[] = [], fields:any[];
   
-  placeholder_list = ['Input Garage Name Here', 'Input Garage Location Here', 'Choose Garage Location',
+  placeholder_list = ['Input Garage Name Here', 'Input Garage Location Here', 
     'Input Garage Type Here', 'Input Mechanic Total Here',
     'Input Garage Open Hour Here', 'Input Garage Open Day Here']
-  icon_list = ['garage', 'location', 'location-pin' ,
+  icon_list = ['garage', 'location', 
     'car', 'wrench', 'clock', 'calendar']
   autocomplete_list = ['off', 'postal-address',
     'off','off','off','off','off']
@@ -60,33 +60,28 @@ export function RegisterGarage(){
   const [SModal, setModal] = React.useState<boolean>(false);
   const [selectedStartDay, setSelectedStartDay] = React.useState<string>("Senin");
   const [selectedEndDay, setSelectedEndDay] = React.useState<string>("Senin");
-  const [openMap, setOpenMap] = React.useState<boolean>(false);
-  const latitude = useAppSelector(state => state.latitude);
-  const longitude = useAppSelector(state => state.longitude);
+  const [retry, setRetry] = React.useState<boolean>(false);
+  const [locationModal, setLocationModal] = React.useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   React.useEffect(() =>{
     (async () => {
 
-      let tryAgain : boolean = false;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if(status !== 'granted'){
-        Alert.alert('Permission to access location was denied');
+        ToastAndroid.show('Permission to access location was denied', ToastAndroid.SHORT);
         return;
       }
-
       do{
-        const waiting = (ms : number) => new Promise(resolve => setTimeout(resolve, ms));
+        setTimeout(() => setRetry(true), 3000);
         const location = await Location.getCurrentPositionAsync({});
-        await waiting(1500);
         if(location != undefined){
           dispatch(setLatitude(location['coords']['latitude']));
           dispatch(setLongitude(location['coords']['longitude']));
-          tryAgain = false;
         }else{
-          tryAgain = true;
-        };
-      }while(tryAgain);
+          setRetry(true);
+        }
+      }while(retry == true);
  
     })();
   },[]);
@@ -126,7 +121,7 @@ export function RegisterGarage(){
     hideOpenDatePicker();
   };
 
-  const handleCloseConfirm = (closedate) => {
+  const handleCloseConfirm = (closedate : any) => {
     console.warn("A close date has been picked: ", closedate);
     const currentDate = closedate;
     setShow(Platform.OS === 'ios');
@@ -167,17 +162,6 @@ export function RegisterGarage(){
     };
   };
 
-  const getInitialState = () => {
-    return {
-      region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      },
-    };
-  }
- 
   React.useEffect(() => {
     if(isComponentMounted){
       setButton(SGarName !== '' 
@@ -190,12 +174,8 @@ export function RegisterGarage(){
   fields = [setGarName, setGarLoc, 
     setChooseGar, setGarType, setMechTotal, setOpenHour, setOpenDay]
 
-  const showMode = (currentMode) => {
-    setShow
-  }
   for(let i = 0; i <= icon_list.length - 1; i++){
     if(icon_list[i] == 'garage' || icon_list[i] == 'car' || icon_list[i] == 'wrench'){
-      MIcon.loadFont();
       Content.push(
         <View style={Style.flexHorizontal} key={"View" + i}>
           <MIcon 
@@ -215,53 +195,30 @@ export function RegisterGarage(){
             key={"Input" + i}/>
           </View>
       )
-    }
-    else if(icon_list[i] == 'location-pin'){
+    }else if(icon_list[i] === 'location'){
       Content.push(
-      <View style={Style.flexHorizontal} key={"View" + i}>
-        <Icon 
+        <View style={Style.flexHorizontal} key={"View" + i}>
+          <Icon 
             name={icon_list[i]} 
             size={30} 
             style={Style.icon}
             color="#fff"
             key={"Icon" + i}/>
-        <TouchableOpacity onPress={() => setOpenMap(true)}>
-            <View pointerEvents="none">
+          <TouchableWithoutFeedback 
+            onPress={() => setLocationModal(true)}>
+            <View style={{flex:4, marginLeft:-8}}>
               <TextInput 
-              editable={false}
-              value={SChooseGar}
-              placeholder={SChooseGar}
-              placeholderTextColor="#fff"
-              style={Style.textInp}
-              key={"Input" + i}/>
+                autoComplete={autocomplete_list[i]}
+                editable={false}
+                maxLength={maxLength[i]}
+                placeholder={placeholder_list[i]}
+                placeholderTextColor="#fff"
+                value={SGarLoc}
+                style={[Style.textInp, {flex:0}]}
+                key={"Input" + i}/>
             </View>
-            <View>
-              <Modal
-              isVisible={openMap}
-              onBackdropPress={() => setOpenMap(false)}
-              style={{justifyContent:'flex-end', margin:0}}>
-              <MapView
-              initialRegion={{
-                latitude: latitude,
-                longitude: longitude,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-                }}
-                style={{width:Dimensions.get('window').width, 
-                    height:300, 
-                    justifyContent:'center'}}>
-                <Marker
-                    coordinate={{ latitude: latitude, longitude: longitude }}
-                    title={'Lokasi Anda'}
-                  >
-                <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
-                </Marker>
-              </MapView>
-              </Modal>
-              
-            </View>
-          </TouchableOpacity>
-      </View>
+          </TouchableWithoutFeedback>
+        </View>
       )
     }
     else if(icon_list[i] == 'clock'){
@@ -273,42 +230,43 @@ export function RegisterGarage(){
             style={Style.icon}
             color="#fff"
             key={"Icon" + i}/>
-          <TouchableOpacity onPress={showOpenDatePicker}>
-            <View pointerEvents="none">
-              <TextInput 
-              editable={false}
-              value={opentext}
-              placeholder={opentext}
-              placeholderTextColor="#fff"
-              style={Style.textInp}
-              key={"Input" + i}/>
-            </View>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isOpenDatePickerVisible}
-            mode="time"
-            onConfirm={handleOpenConfirm}
-            onCancel={hideOpenDatePicker}
-          />
-          <Text style={{color:"#b99504"}}> </Text>
-          <TouchableOpacity onPress={showCloseDatePicker}>
-            <View pointerEvents="none">
-              <TextInput 
-              editable={false}
-              value={closetext}
-              placeholder={closetext}
-              placeholderTextColor="#fff"
-              style={Style.textInp}
-              key={"Input" + i}/>
-            </View>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isCloseDatePickerVisible}
-            mode="time"
-            onConfirm={handleCloseConfirm}
-            onCancel={hideCloseDatePicker}
-          />
+          <View style={{flex:4, flexDirection:'row', marginLeft:-8}}>
+            <TouchableOpacity style={{flex:1}} onPress={showOpenDatePicker}>
+              <View pointerEvents="none">
+                <TextInput 
+                editable={false}
+                value={opentext}
+                placeholder={opentext}
+                placeholderTextColor="#fff"
+                style={[Style.textInp, {marginRight:5}]}
+                key={"Input" + i}/>
+              </View>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isOpenDatePickerVisible}
+              mode="time"
+              onConfirm={handleOpenConfirm}
+              onCancel={hideOpenDatePicker}
+            />
+            <TouchableOpacity onPress={showCloseDatePicker} style={{flex:1}}>
+              <View pointerEvents="none">
+                <TextInput 
+                editable={false}
+                value={closetext}
+                placeholder={closetext}
+                placeholderTextColor="#fff"
+                style={Style.textInp}
+                key={"Input" + i}/>
+              </View>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isCloseDatePickerVisible}
+              mode="time"
+              onConfirm={handleCloseConfirm}
+              onCancel={hideCloseDatePicker}
+            />
           </View>
+        </View>
       )
     }else if(icon_list[i] == 'calendar'){
       Content.push(
@@ -319,35 +277,39 @@ export function RegisterGarage(){
             style={Style.icon}
             color="#fff"
             key={"Icon" + i}/>
-            <Picker
-              selectedValue={selectedStartDay}
-              style={Style.textInp2}
-              mode={"dialog"}
-              onValueChange={(itemValue) => setSelectedStartDay(itemValue)}
-            >
-            <Picker.Item label="Senin" value="Senin"/>
-            <Picker.Item label="Selasa" value="Selasa"/>
-            <Picker.Item label="Rabu" value="Rabu"/>
-            <Picker.Item label="Kamis" value="Kamis"/>
-            <Picker.Item label="Jumat" value="Jumat"/>
-            <Picker.Item label="Sabtu" value="Sabtu"/>
-            <Picker.Item label="Minggu" value="Minggu"/>
-            </Picker>
-          <Text style={{color:"#b99504"}}> </Text>
-          <Picker
-              selectedValue={selectedEndDay}
-              style={Style.textInp2}
-              mode={"dialog"}
-              onValueChange={(itemValue) => setSelectedEndDay(itemValue)}
-            >
-            <Picker.Item label="Senin" value="Senin"/>
-            <Picker.Item label="Selasa" value="Selasa"/>
-            <Picker.Item label="Rabu" value="Rabu"/>
-            <Picker.Item label="Kamis" value="Kamis"/>
-            <Picker.Item label="Jumat" value="Jumat"/>
-            <Picker.Item label="Sabtu" value="Sabtu"/>
-            <Picker.Item label="Minggu" value="Minggu"/>
-            </Picker>
+            <View style={[Style.pickerLayout, {marginLeft:-3, marginRight:5}]}>
+              <Picker
+                style={Style.pickerFont}
+                selectedValue={selectedStartDay}
+                mode={"dialog"}
+                onValueChange={(itemValue) => setSelectedStartDay(itemValue)}
+              >
+              <Picker.Item label="Senin" value="Senin"/>
+              <Picker.Item label="Selasa" value="Selasa"/>
+              <Picker.Item label="Rabu" value="Rabu"/>
+              <Picker.Item label="Kamis" value="Kamis"/>
+              <Picker.Item label="Jumat" value="Jumat"/>
+              <Picker.Item label="Sabtu" value="Sabtu"/>
+              <Picker.Item label="Minggu" value="Minggu"/>
+              </Picker>
+            </View>
+            
+            <View style={[Style.pickerLayout]}>
+              <Picker
+                selectedValue={selectedEndDay}
+                style={Style.pickerFont}
+                mode={"dialog"}
+                onValueChange={(itemValue) => setSelectedEndDay(itemValue)}
+              >
+              <Picker.Item label="Senin" value="Senin"/>
+              <Picker.Item label="Selasa" value="Selasa"/>
+              <Picker.Item label="Rabu" value="Rabu"/>
+              <Picker.Item label="Kamis" value="Kamis"/>
+              <Picker.Item label="Jumat" value="Jumat"/>
+              <Picker.Item label="Sabtu" value="Sabtu"/>
+              <Picker.Item label="Minggu" value="Minggu"/>
+              </Picker>
+            </View>
           </View>
       )
      
@@ -389,6 +351,11 @@ export function RegisterGarage(){
       <ScrollView>
         <View style={{ alignItems: 'center'}}>
           <KeyboardAvoidingView>
+            <LocationModal 
+              visibleModal={locationModal} 
+              setVisibleModal={setLocationModal}
+              setOutputModal={SGarLoc}
+            />
               <Image 
                   source={require("../../../assets/images/blogo.png")}
                   style={Style.logo}/>

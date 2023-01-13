@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import { setLatitude } from "../../../redux/component/latitude";
 import { setLongitude } from "../../../redux/component/longitude";
 import { setOrderCreated } from "../../../redux/component/orderCreated";
+import { setOrderTimer } from "../../../redux/component/orderTimer";
 
 type HomeType = StackNavigationProp<RootStackParamList, 'CustomerMain'>
 
@@ -70,8 +71,8 @@ export default function CustomerMain(){
   const onChangeSearch = (query : string) => dispatch(setSearch(query));
   React.useEffect(() => {
     if(orderFailState == true){
-      Alert.alert("Bengkel Tidak Ditemukan", 
-        "Maaf Tidak Ada Bengkel Yang Tersedia di Daerah Sekitar Kamu",
+      Alert.alert("Bengkel Tidak Melayani", 
+        "Maaf Bengkel Tidak Memberi Konfirmasi, Mohon Pesan Kembali",
       );
       dispatch(setOrderFail(false));
     }
@@ -168,7 +169,7 @@ export default function CustomerMain(){
   }
 
   const Waiting = () => {
-    const [time, setTime] = React.useState<number>(120);
+    const time = useAppSelector(state => state.orderTimer);
     const timerRef = React.useRef(time);
 
     React.useEffect(() => {
@@ -177,8 +178,10 @@ export default function CustomerMain(){
         if(timerRef.current < 0){
           clearInterval(timerId);
           dispatch(setOrderFail(true));
+          dispatch(setOrderCreated(false));
+          dispatch(setOrderTimer(120));
         }else{
-          setTime(timerRef.current);
+          dispatch(setOrderTimer(timerRef.current));
         }
       }, 1000);
       return () => {

@@ -115,7 +115,7 @@ export default function EditProfile(){
       Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Password Need at Least 8 Characters!!")
     }else if(SButton == true && SPassword == SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Profile Updated Successfully!!', ToastAndroid.SHORT) : Alert.alert("Profile Updated Successfully!!")
-      navigation.navigate('CustomerHome');
+      navigation.navigate('CustomerMain');
     }else if(SButton == true && SPassword != SPasswordValid){
       Platform.OS === 'android' ? ToastAndroid.show('Password Did Not Match!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
     }else{

@@ -26,45 +26,5 @@ export default React.StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  modalMask:{
-    flex:1, 
-    backgroundColor:'rgba(71, 76, 78, 0.8)', 
-    marginBottom:-30
-  },
-  modalMaskLayout:{
-    flex:1, 
-    justifyContent:'center',
-  },
-  modalLayout:{
-    flex:1, 
-    backgroundColor:'#fefefe', 
-    borderRadius:20
-  },
-  modalClose:{
-    alignItems:'flex-end', 
-    margin:10
-  },
-  modalTitle:{
-    marginBottom:0, 
-    padding:15, 
-    textAlign:'left'
-  },
-  modalMetaContainer:{
-    flex:1, 
-    padding:15
-  },
-  modalTotalLayout:{
-    flexDirection:'row',
-    justifyContent:'center'
-  },
-  modalButtonLayout:{
-    flex:1, 
-    flexDirection:'row'
-  },
-  modalButtonText:{
-    fontWeight:'700'
-  },
- 
+  }, 
 })

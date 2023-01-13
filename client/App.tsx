@@ -18,7 +18,7 @@ import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
 import MechanicView from './src/Pages/Garage/MechanicView';
-import { RegisterOwner } from './src/Pages/Garage/RegisterOwner';
+import { RegisterOwner } from './src/Pages/Auth';
 import MechanicEditProfile from './src/Pages/Garage/MechanicEdit';
 import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
 import MechanicMain from './src/Pages/Mechanic/MechanicMain';

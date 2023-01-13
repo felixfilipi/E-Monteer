@@ -145,7 +145,7 @@ export default function History(){
     <BottomNav 
       title = {['Utama','Cari','Riwayat','Chat']}
       icon = {['home-circle','map-search-outline','history','chat']}
-      navigate = {['Home','Find','History','ChatHistory']}
+      navigate = {['CustomerMain','FindGarage','OrderHistory','ChatHistory']}
       size = {4}
       />
   </View>

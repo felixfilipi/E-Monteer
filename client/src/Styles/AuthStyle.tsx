@@ -5,27 +5,35 @@ import React from "react-native";
 export default React.StyleSheet.create({
     
   avatarStyle: {
-      alignItems:'center', 
-      marginTop:10
+    alignItems:'center', 
+    marginTop:10
   },
 
   button: {
-      marginTop: 50,
+    marginTop: 50,
   },
 
   flexVertical: {
-      flexDirection: "column",
-      marginTop: 20
+    marginTop:20,
+    flexDirection: "column",
   },
 
   flexHorizontal: {
-      flexDirection: "row",
-      marginTop: 25
+    flexDirection: "row",
+    marginTop: 25
   },
 
   icon: {
-      marginTop: 1,
-      flex: 1,
+    marginTop: 1,
+    flex: 1,
+  },
+
+  idCardContainer:{
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:"#434647", 
+    marginTop: 30, 
+    padding:15,
   },
 
   logo: {
@@ -52,23 +60,13 @@ export default React.StyleSheet.create({
       backgroundColor: "#434647",
       color: "#fff",
       height: 40,
-      flex: 3,
+      flex: 4,
       fontSize: 15,
       paddingHorizontal: 15,
       borderRadius: 5,
   },
-
-  textInp2: {
-    backgroundColor: "#434647",
-    color: "#fff",
-    height: 30,
-    flex: 2,
-    fontSize: 15,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-},
-
-modalStyle: {
+  
+  modalStyle: {
     backgroundColor: 'white',
     paddingVertical: 20,
     paddingHorizontal:20,
@@ -96,4 +94,19 @@ modalStyle: {
     textAlignVertical:'center'
   },
   
+  pickerLayout: {
+    backgroundColor: '#434647',
+    color: "#fff",
+    height:40,
+    flex: 2,
+    paddingLeft:6,
+    justifyContent:'center',
+    borderRadius:5,
+    fontSize: 10,
+  },
+
+  pickerFont:{
+    fontSize:15, 
+    color:'white'
+  },
 })

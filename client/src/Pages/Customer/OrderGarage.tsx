@@ -1,5 +1,6 @@
-import { View, Image, Modal, TextInput,
-  Alert, ToastAndroid, Platform, TouchableOpacity, TouchableWithoutFeedback, Dimensions} from "react-native";
+import { View, Image, 
+  Alert, ToastAndroid, Platform, } from "react-native";
+import { Location } from '../../Component/Location';
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
@@ -11,8 +12,6 @@ import { CustomButton, LogoButton } from "../../Component/CustomButton";
 import { useAppDispatch, useAppSelector } from "../../../redux";
 import { setCustMechanic } from "../../../redux/component/custMechanic";
 import { setOrderCreated } from "../../../redux/component/orderCreated";
-import Icon from "react-native-vector-icons/Entypo";
-import MapView, { Marker } from "react-native-maps";
 
 type OrderGarageType = StackNavigationProp<RootStackParamList, 'OrderGarage'>
 
@@ -27,12 +26,9 @@ export default function OrderGarage(props : any){
   const [carColor, setCarColor] = React.useState<string>('#b1b5c1');
   const [motorColor, setMotorColor] = React.useState<string>('#b1b5c1');
   const [locationModal, setLocationModal] = React.useState<boolean>(false);
-  const [addressLoc, setAddressLoc] = React.useState<string>();
   const garageType : string = props.route.params.handleType;
 
   let Content : any[] = [];
-  const latitude = useAppSelector(state => state.latitude);
-  const longitude = useAppSelector(state => state.longitude);
 
   React.useEffect(()=>{
     if(vehicle == 'Mobil'){
@@ -66,10 +62,6 @@ export default function OrderGarage(props : any){
       navigation.navigate('CustomerMain');
     }
   }
-
-  let _map: any;
-  const fitCamera = () => {
-    _map.fitToCoordinates([{latitude: latitude, longitude: longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
 
   if(garageType == 'Mobil' || garageType == 'Motor'){
       Content.push(
@@ -120,85 +112,11 @@ export default function OrderGarage(props : any){
         <CustomButton title="Pesan Sekarang" onPress={() => validateOrder()}/>
       </View>
     </View>
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={locationModal}
-      onRequestClose={() => setLocationModal(!locationModal)}
-    >
-      <View style={Style.modalMaskLayout}>
-        <TouchableWithoutFeedback onPress={() => setLocationModal(false)}>
-          <View style={Style.modalMask}/>
-        </TouchableWithoutFeedback>
-          <View style={Style.modalLayout}>
-            <TouchableOpacity onPress={() => setLocationModal(false)}>
-              <View style={Style.modalClose}>
-                <Icon name='cross' size={30} color='#9ca8ac'/>
-              </View>
-            </TouchableOpacity>
-            <CustomText 
-              title="Lokasi Anda" 
-              color="black" 
-              size={20}
-              style={Style.modalTitle}/>
-            <View style={Style.modalMetaContainer}>
-              <View style={Style.modalTotalLayout}>
-                <CustomText
-                  title="Alamat :"
-                  color="black"
-                  size={15}
-                  style={{flex:1, textAlign:'left'}}
-                  />
-                <TextInput 
-                  onChangeText={setAddressLoc} 
-                  value={addressLoc}
-                  style={{marginTop:-10, flex:3, borderBottomWidth:0.3,  marginRight:15, fontSize:15}}
-                  />
-              </View>
-              <View>
-                <MapView
-                  initialRegion={{
-                  latitude: latitude,
-                  longitude: longitude,
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
-                  }}
-                  ref={(ref) => _map = ref}
-                  style={{ 
-                      height:160,
-                      marginVertical:15,
-                      justifyContent:'center'}}
-                >
-                  <Marker
-                    draggable
-                    coordinate={{ latitude: latitude, longitude: longitude }}
-                    title={'Lokasi Anda'}
-                  >
-                  <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
-                  </Marker>
-                </MapView>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => {fitCamera()}}
-                  style={{position:'absolute',left:8, bottom:45}}>
-                  <View style={Style.floatingButtonLayout}>
-                    <Icon name="hair-cross" size={30} color="rgba(58, 68, 71, 1)"/>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View style={{flex:1}}>
-                <View style={Style.modalButtonLayout}>
-                  <CustomButton 
-                    title="Pasang Lokasi Ini" 
-                    style={{flex:1, backgroundColor:'#59a540'}} 
-                    textStyle={Style.modalButtonText}
-                  />
-                </View>
-              </View>
-            </View>
-          </View>
-      </View>
-    </Modal>
+    <Location 
+      visibleModal={locationModal} 
+      setVisibleModal={setLocationModal}
+      setOutputModal={setSearchQuery}
+    />
   </View>
   )
 };
