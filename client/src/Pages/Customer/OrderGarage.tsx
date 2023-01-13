@@ -1,5 +1,5 @@
 import { View, Image, 
-  Alert, ToastAndroid, Platform, } from "react-native";
+  Alert, ToastAndroid, Platform, TouchableWithoutFeedback, } from "react-native";
 import { Location } from '../../Component/Location';
 import React from 'react';
 import { Searchbar } from 'react-native-paper';
@@ -94,11 +94,14 @@ export default function OrderGarage(props : any){
   <View style={{flex:7,paddingHorizontal: 5}}>
     <View style={{alignItems: 'center', flex:1 }}>
       <View style={Style.searchSection}>
+      <TouchableWithoutFeedback 
+        onPress={() => setLocationModal(true)}>
         <Searchbar
           placeholder="Lokasi Anda"
           onFocus={() => setLocationModal(true)}
           style={{width: '90%',backgroundColor:'#fff', borderRadius: 30}}
           value={searchQuery}/>
+      </TouchableWithoutFeedback>
       </View>
       <View style={{flex:5}}>
         <Image 
@@ -115,7 +118,7 @@ export default function OrderGarage(props : any){
     <Location 
       visibleModal={locationModal} 
       setVisibleModal={setLocationModal}
-      setOutputModal={setSearchQuery}
+      setOutputState={setSearchQuery}
     />
   </View>
   )

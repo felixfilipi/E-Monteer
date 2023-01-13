@@ -7,8 +7,7 @@ import { Provider } from 'react-redux';
 import store from './redux';
 import { RootStackParamList } from './src/Pages/RootStackParamList';
 import { DefaultTheme } from 'react-native-paper';
-import { Register, Login} from './src/Pages/Auth';
-import { RegisterGarage } from './src/Pages/Garage/RegisterGarage';
+import { Register, RegisterGarage, RegisterOwner, Login} from './src/Pages/Auth';
 import EditProfile from './src/Pages/Profile';
 import FindGarage from './src/Pages/Customer/FindGarage';
 import History from './src/Pages/History';
@@ -18,7 +17,6 @@ import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
 import MechanicView from './src/Pages/Garage/MechanicView';
-import { RegisterOwner } from './src/Pages/Auth';
 import MechanicEditProfile from './src/Pages/Garage/MechanicEdit';
 import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
 import MechanicMain from './src/Pages/Mechanic/MechanicMain';
@@ -26,7 +24,7 @@ import GarageMain from './src/Pages/Garage/GarageMain';
 import CustomerMain from './src/Pages/Customer/CustomerMain';
 import OrderGarage from './src/Pages/Customer/OrderGarage';
 import MechanicOrder from './src/Pages/Mechanic/MechanicOrder';
-import CostList from './src/Pages/Garage/CostList';
+import GarageTransaction from './src/Pages/Garage/GarageTransaction';
 import GarageOrder from './src/Pages/Garage/GarageOrder';
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -98,7 +96,7 @@ export default function App() {
                 name='RegisterOwner' component={RegisterOwner}
                 options={{headerShown: false}}/>
               <Stack.Screen
-                name="CostList" component={CostList}
+                name="GarageTransaction" component={GarageTransaction}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='MechanicView' component={MechanicView}

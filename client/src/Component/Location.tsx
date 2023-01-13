@@ -32,7 +32,7 @@ export const Location = (props: any) => {
 
   const setNewLocation = () => {
     props.setOutputState(`${addressLoc} ( ${latitude}, ${longitude} )`);
-    props.visibleModal(false);
+    props.setVisibleModal(false);
   }
 
   let _map: any;
@@ -48,9 +48,9 @@ export const Location = (props: any) => {
     >
       <View style={Style.modalMaskLayoutLocation}>
         <TouchableWithoutFeedback onPress={() => props.setVisibleModal(false)}>
-          <View style={Style.modalMask}/>
+          <View style={Style.modalMaskLocation}/>
         </TouchableWithoutFeedback>
-          <View style={Style.modalLayout}>
+          <View style={Style.modalLayoutLocation}>
             <TouchableOpacity onPress={() => props.setVisibleModal(false)}>
               <View style={Style.modalCloseLocation}>
                 <Icon name='cross' size={30} color='#9ca8ac'/>
@@ -108,7 +108,7 @@ export const Location = (props: any) => {
               </View>
               <View style={{flex:1}}>
                 <ImportantText title="Tahan Marker Untuk Memindahkan Lokasi Anda"/>
-                <View style={Style.modalButtonLayout}>
+                <View style={Style.modalButtonLayoutLocation}>
                   <CustomButton 
                     title="Pasang Lokasi Ini" 
                     style={{flex:1, backgroundColor:'#59a540'}} 

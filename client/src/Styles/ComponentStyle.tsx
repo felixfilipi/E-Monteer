@@ -143,8 +143,9 @@ export default React.StyleSheet.create({
     backgroundColor:'rgba(71, 76, 78, 0.8)'
   },
 
-
+  
   // location section
+
   modalMaskLocation:{
     flex:1, 
     backgroundColor:'rgba(71, 76, 78, 0.8)', 

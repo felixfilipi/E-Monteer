@@ -20,24 +20,24 @@ const MECHANIC = [
 ];
 
 export default function MechanicView() {
-    const navigation = useNavigation<MechanicViewType>();
+  const navigation = useNavigation<MechanicViewType>();
 
-    return (
-        <View style={{flex:1, marginTop:20}}>
-            <ScrollView contentContainerStyle={{flexGrow:1}}>
-                <View style={{ flex:1 }}>
-                <TouchableHighlight style={{alignItems: "center",
-                    backgroundColor: "#DDDDDD",
-                    padding: 10, marginLeft: 50, marginRight: 50}}>
-                    <View style={{alignItems:'center', justifyContent: 'center', flexDirection: 'row'}}>
-                        
-                            <Image source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.jixXH_Els1MXBRmKFdMQPAHaHa%26pid%3DApi&f=1&ipt=f6226b19fdf84268925ffde0669899308c1e64ed116e980234d3ee7858d409c6&ipo=images'}}></Image>
-                            <Text>Tambah Montir</Text>
-                        
-                    </View>
-                    </TouchableHighlight>
-                </View>
-            </ScrollView>
-        </View>
-    )
+  return (
+      <View style={{flex:1, marginTop:20}}>
+          <ScrollView contentContainerStyle={{flexGrow:1}}>
+              <View style={{ flex:1 }}>
+              <TouchableHighlight style={{alignItems: "center",
+                  backgroundColor: "#DDDDDD",
+                  padding: 10, marginLeft: 50, marginRight: 50}}>
+                  <View style={{alignItems:'center', justifyContent: 'center', flexDirection: 'row'}}>
+                      
+                          <Image source={{uri: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.jixXH_Els1MXBRmKFdMQPAHaHa%26pid%3DApi&f=1&ipt=f6226b19fdf84268925ffde0669899308c1e64ed116e980234d3ee7858d409c6&ipo=images'}}></Image>
+                          <Text>Tambah Montir</Text>
+                      
+                  </View>
+                  </TouchableHighlight>
+              </View>
+          </ScrollView>
+      </View>
+  )
 }

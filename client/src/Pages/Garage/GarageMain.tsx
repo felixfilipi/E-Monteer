@@ -1,7 +1,7 @@
 import { TopBar, BottomNav } from '../../Component/navBar';
 import { CustomText } from '../../Component/CustomText';
 import Icon from "react-native-vector-icons/AntDesign";
-import { View, ScrollView, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
+import { View, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../RootStackParamList';
 import React from 'react';
@@ -46,7 +46,7 @@ const Item = ({id, name, location, photoUrl}) => {
         <CustomText title={name} size={17} color="white" style={{textAlign:'left'}}/>
         <CustomText title={location} size={12} color="#85898f" style={{textAlign:'left'}}/>
       </View>
-        <CustomButton onPress={() => navigation.navigate('CostList', {id: id})} title={"Periksa"} style={{borderRadius:20}}/>
+        <CustomButton onPress={() => navigation.navigate('GarageTransaction', {id: id})} title={"Periksa"} style={{borderRadius:20}}/>
     </View>
   )
 }
