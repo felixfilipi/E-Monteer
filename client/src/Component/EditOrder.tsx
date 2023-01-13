@@ -25,7 +25,11 @@ import Icon from "react-native-vector-icons/Entypo";
 export function EditOrder(props : any) {
   
   const [flexState, setFlexState] = React.useState<number>(5);
-  
+
+  const onClose = () =>{
+    props.onCloseState(false);
+  }
+
   return(
     <Modal
       animationType="fade"
@@ -33,11 +37,11 @@ export function EditOrder(props : any) {
       visible={props.visibleModal}
       onRequestClose={() => props.setVisibleModal(!props.visibleModal)}>
       <KeyboardAvoidingView style={Style.modalMaskLayout}>
-        <TouchableWithoutFeedback onPress={() => {props.setVisibleModal(false), setFlexState(5)}}>
+        <TouchableWithoutFeedback onPress={() => {props.setVisibleModal(false), setFlexState(5), onClose()}}>
           <View style={[Style.modalMask, {flex:flexState}]}/>
         </TouchableWithoutFeedback>
           <View style={[Style.modalLayout, {flex:5}]}>
-            <TouchableOpacity onPress={() => {props.setVisibleModal(false), setFlexState(5)}}>
+            <TouchableOpacity onPress={() => {props.setVisibleModal(false), setFlexState(5), onClose()}}>
               <View style={Style.modalClose}>
                 <Icon name='cross' size={30} color='#9ca8ac'/>
               </View>
@@ -67,7 +71,7 @@ export function EditOrder(props : any) {
                         onFocus={() => setFlexState(2)}
                         onEndEditing={() => setFlexState(5)}
                         onChangeText={props.setFixPrice} 
-                        value={props.fixPrice}
+                        value={String(props.fixPrice)}
                         style={{borderBottomWidth:0.3, padding:5, fontSize:15, marginRight:15}}
                         keyboardType='numeric'
                       />

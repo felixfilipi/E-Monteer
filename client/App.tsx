@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import store from './redux';
 import { RootStackParamList } from './src/Pages/RootStackParamList';
 import { DefaultTheme } from 'react-native-paper';
-import { Register, RegisterGarage, RegisterOwner, Login} from './src/Pages/Auth';
+import { Register, RegisterGarage, RegisterOwner, RegisterMechanic, Login} from './src/Pages/Auth';
 import EditProfile from './src/Pages/Profile';
 import FindGarage from './src/Pages/Customer/FindGarage';
 import History from './src/Pages/History';
@@ -16,7 +16,7 @@ import HistoryDetail from './src/Pages/HistoryDetail';
 import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
-import MechanicView from './src/Pages/Garage/MechanicView';
+import GarageEmployee from './src/Pages/Garage/GarageEmployee';
 import MechanicEditProfile from './src/Pages/Garage/MechanicEdit';
 import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
 import MechanicMain from './src/Pages/Mechanic/MechanicMain';
@@ -25,7 +25,7 @@ import CustomerMain from './src/Pages/Customer/CustomerMain';
 import OrderGarage from './src/Pages/Customer/OrderGarage';
 import MechanicOrder from './src/Pages/Mechanic/MechanicOrder';
 import GarageTransaction from './src/Pages/Garage/GarageTransaction';
-import GarageOrder from './src/Pages/Garage/GarageOrder';
+import GarageHistory from './src/Pages/Garage/GarageHistory';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -97,16 +97,19 @@ export default function App() {
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name="GarageTransaction" component={GarageTransaction}
-                options={{headerShown: false}}/>
+                options={{title:'Rincian Transaksi', headerTintColor:'white'}}/>
               <Stack.Screen
-                name='MechanicView' component={MechanicView}
+                name='GarageEmployee' component={GarageEmployee}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='MechanicEdit' component={MechanicEditProfile}
                 options={{headerShown: false}}/>
               <Stack.Screen
-                name='GarageOrder' component={GarageOrder}
+                name='GarageHistory' component={GarageHistory}
                 options={{headerShown: false}}/>
+              <Stack.Screen
+                name='RegisterMechanic' component={RegisterMechanic}
+                options={{title:'Registrasi Mechanic', headerTintColor:'white'}}/>
             </Stack.Navigator>
           </NavigationContainer>
       </View>

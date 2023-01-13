@@ -118,9 +118,9 @@ export default function GarageMain(){
           />
       </View>
       <BottomNav 
-        title = {['Utama','Pesanan','Montir']}
+        title = {['Utama','Pesanan','Mechanic']}
         icon = {['home-circle','car','account-wrench']}
-        navigate = {['GarageMain','GarageOrder','MechanicView']}
+        navigate = {['GarageMain','GarageHistory','GarageEmployee']}
         size = {3}
         />
     </View>

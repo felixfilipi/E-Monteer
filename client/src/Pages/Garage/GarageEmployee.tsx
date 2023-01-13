@@ -35,10 +35,10 @@ const DATA = [
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
 ]
-type GarageOrderType = StackNavigationProp<RootStackParamList, 'GarageOrder'>
+type GarageEmployeeType = StackNavigationProp<RootStackParamList, 'GarageEmployee'>
 
 const Item = ({id, name, location, photoUrl}) => {
-  const navigation = useNavigation<GarageOrderType>();
+  const navigation = useNavigation<GarageEmployeeType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
@@ -46,12 +46,12 @@ const Item = ({id, name, location, photoUrl}) => {
         <CustomText title={name} size={17} color="white" style={{textAlign:'left'}}/>
         <CustomText title={location} size={12} color="#85898f" style={{textAlign:'left'}}/>
       </View>
-        <CustomButton onPress={() => navigation.navigate('GarageTransaction', {id: id})} title={"Periksa"} style={{borderRadius:20}}/>
+        <CustomButton onPress={() => navigation.navigate('GarageTransaction', {id: id})} title={"Update"} style={{borderRadius:20}}/>
     </View>
   )
 }
 
-export default function GarageOrder(){
+export default function GarageEmployee(){
 
   const renderItem = ({ item }) => {
     return(
@@ -64,12 +64,23 @@ export default function GarageOrder(){
     );
   };
 
+  const navigation = useNavigation<GarageEmployeeType>();
   return(
     <View style={{flex:1}}>
       <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic')}>
+          <View style={{flexDirection:'row'}}>
+            <View style={{flex:1}}/>
+            <View style={{backgroundColor:'#b99504',flexDirection:'row', justifyContent:'center', alignContent:'center', padding:15, flex:2, borderRadius:20, marginTop:15}}>
+              <Icon name="adduser" color="white" size={25}/>
+              <CustomText title="Tambah Mechanic" color="white" size={17} style={{marginBottom:0}}/>
+            </View>
+            <View style={{flex:1}}/>
+          </View>
+        </TouchableOpacity>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
-          <CustomText title="Riwayat Pesanan" color="white" size={20}
+          <CustomText title="List Mechanic" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       </View>
@@ -85,9 +96,9 @@ export default function GarageOrder(){
           />
       </View>
       <BottomNav 
-        title = {['Utama','Pesanan','Montir']}
+        title = {['Utama','Pesanan','Mechanic']}
         icon = {['home-circle','car','account-wrench']}
-        navigate = {['GarageMain','GarageOrder','MechanicView']}
+        navigate = {['GarageMain','GarageHistory','MechanicView']}
         size = {3}
         />
     </View>

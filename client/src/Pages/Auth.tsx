@@ -377,6 +377,203 @@ export function RegisterOwner(){
     );
 };
 
+export function RegisterMechanic(){
+
+  const navigation = useNavigation<RegisterTypeOwner>();
+
+  let placeholder_list:string[], icon_list:string[], 
+  autocomplete_list:any[], inputType:any[], maxLength:number[],
+  Content:any[] = [], fields:any[];
+  
+  placeholder_list = ['Masukkan Nama Anda Disini','Masukkan Email Anda Disini',
+    'Masukkan Nomor Telepon Anda Disini', 'Masukkan Alamat Anda Disini', 
+    'Masukkan Password Anda Disini', 'Masukkan Password Anda Kembali']
+  icon_list = ['user','mail','phone','location', 'key', 'shield']
+  autocomplete_list = ['name','email','tel','postal-address', 'password', 'password-new']
+  inputType = ['default', 'default', 'phone-pad', 'default', 'default', 'default']
+  maxLength = [30, 40, 13, 100, 20, 20]
+
+  const [SName, setName] = React.useState<string>('');
+  const [SEmail, setEmail] = React.useState<string>('');
+  const [SPhone, setPhone] = React.useState<number>(0);
+  const [SAddress, setAddress] = React.useState<string>('');
+  const [SPassword, setPassword] = React.useState<string>('');
+  const [SPasswordValid, setPasswordValid] = React.useState<string>('');
+  const [SButton, setButton] = React.useState<boolean>(false);
+  const [SIDCardImage, setIDCardImage] = React.useState<string>();
+  const [ImageUpload, setImageUpload] = React.useState<boolean>(false);
+  const [SModal, setModal] = React.useState<boolean>(false);
+
+  const isComponentMounted = useComponentDidMount();
+  
+  const pickIDCardImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if(!result.canceled){
+      setIDCardImage(result.assets[0].uri);
+      setImageUpload(true);
+      setModal(false);
+    }
+  };
+
+  const takeIDCardImage = async ()  => {
+
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if(!result.canceled){
+      setIDCardImage(result.assets[0].uri);
+      setImageUpload(true);
+      setModal(false);
+    };
+  };
+  
+  const IDCardFilled = () => {
+    return(
+      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
+        <View style={Style.idCardContainer}>
+          <Image 
+            source={{uri: SIDCardImage}} style={{width:'100%', height:150}}/>
+          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  }
+  
+  const IDCardNotFilled = () => {
+    return(
+      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
+        <View style={Style.idCardContainer}>
+          <Icon name="circle-with-plus" size={50} color="white"/>
+          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  }
+  
+  React.useEffect(() => {
+    if(isComponentMounted){
+      setButton(SName !== '' && SEmail !== '' && SPhone !== 0 && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
+    }
+  },[SName, SEmail, SPhone, SAddress, SPassword, SPasswordValid])
+
+  fields = [setName, setEmail, setPhone, setAddress, setPassword, setPasswordValid]
+
+  for(let i = 0; i <= icon_list.length - 1; i++){
+    if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
+      Content.push(
+        <View style={Style.flexHorizontal} key={"View" + i}>
+          <Icon 
+            name={icon_list[i]} 
+            size={30} 
+            style={Style.icon}
+            color="#fff"
+            key={"Icon" + i}/>
+          <TextInput 
+            autoComplete={autocomplete_list[i]}
+            maxLength={maxLength[i]}
+            placeholder={placeholder_list[i]}
+            placeholderTextColor="#fff"
+            autoCapitalize='none'
+            secureTextEntry={true}
+            keyboardType={inputType[i]}
+            onChangeText={(value) => fields[i](value)}
+            style={Style.textInp}
+            key={"Input" + i}/>
+          </View>
+      )
+    }
+    else{
+      Content.push(
+        <View style={Style.flexHorizontal} key={"View" + i}>
+          <Icon 
+            name={icon_list[i]} 
+            size={30} 
+            style={Style.icon}
+            color="#fff"
+            key={"Icon" + i}/>
+          <TextInput 
+            autoComplete={autocomplete_list[i]}
+            maxLength={maxLength[i]}
+            placeholder={placeholder_list[i]}
+            placeholderTextColor="#fff"
+            keyboardType={inputType[i]}
+            onChangeText={(value) => fields[i](value)}
+            style={Style.textInp}
+            key={"Input" + i}/>
+          </View>
+      )
+    }
+  };
+
+  const checkInput = () => {
+    if(SPassword?.length! < 8){
+      Platform.OS === 'android' ? ToastAndroid.show('Password Need at Least 8 Characters!!', ToastAndroid.SHORT) : Alert.alert("Kata Sandi Minimal 8 Karakter!!")
+    }else if(SButton == true && SPassword == SPasswordValid && ImageUpload == true){
+      navigation.navigate('RegisterGarage');
+    }else if(SButton == true && SPassword != SPasswordValid){
+      Platform.OS === 'android' ? ToastAndroid.show('Kata Sandi Tidak Cocok!!', ToastAndroid.SHORT) : Alert.alert("Password did Not Match!!")
+    }else if(ImageUpload == false){
+      Platform.OS === 'android' ? ToastAndroid.show('Foto KTP Belum Terisi!!', ToastAndroid.SHORT) : Alert.alert("Please Upload Your ID Card!!")
+    }else{
+      Platform.OS === 'android' ? ToastAndroid.show('Please Fill All Required Field!!', ToastAndroid.SHORT) : Alert.alert("Tolong Isi Semua Data Yang Diperlukan!!")
+    }
+  };
+
+  return(
+      <ScrollView>
+        <View style={{ alignItems: 'center'}}>
+          <KeyboardAvoidingView>
+              <Image 
+                  source={require("../../assets/images/blogo.png")}
+                  style={[Style.logo, {marginTop:-20, marginBottom: -20}]}/>
+              <View style={[Style.flexVertical, {marginTop:0}]}>
+                  {Content}
+              </View>
+                { SIDCardImage !== undefined ? <IDCardFilled/> : <IDCardNotFilled/> }
+                <View>
+                  <Modal 
+                    isVisible={SModal}
+                    onBackdropPress={() => setModal(false)}
+                    style={{justifyContent:'flex-end', margin:0}}>
+                    <View style={Style.modalStyle}>
+                      <TouchableWithoutFeedback onPress={takeIDCardImage}>
+                        <View style={Style.modalTextLayout}>
+                          <Icon name="camera" size={20} color={'#828483'}/>
+                          <Text 
+                            style={Style.modalText}>Ambil Foto</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                      <TouchableWithoutFeedback onPress={pickIDCardImage}>
+                        <View style={Style.modalTextLayout}>
+                          <Icon name="folder-images" size={20} color={'#828483'}/>
+                          <Text 
+                            style={Style.modalText}>Cari Dari Galeri</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  </Modal>
+                </View>
+              <View
+                  style={[Style.button, {marginBottom:25}]}>
+                  <Button 
+                      title="Daftar"
+                      color="#b99504"
+                      onPress={() => checkInput()}/>
+              </View>
+        </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
+    );
+};
+
 export function RegisterGarage(){
 
   const navigation = useNavigation<RegisterGarageType>();
@@ -735,7 +932,7 @@ export function RegisterGarage(){
             />
               <Image 
                   source={require("../../assets/images/blogo.png")}
-                  style={Style.logo}/>
+                  style={[Style.logo]}/>
               <View style={Style.flexVertical}>
                   {Content}
               </View>

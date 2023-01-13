@@ -11,7 +11,10 @@ import { EditOrder } from "../../Component/EditOrder";
 
 type GarageTransactionType = StackNavigationProp<RootStackParamList, 'GarageTransaction'>;
 
-const Item = ({description, quantity, price}) => {
+const Item = ({ description, quantity, price, onSubmit, 
+  editItemModal, setEditItemModal, itemDescription, setItemDescription,
+  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemRendered}) => {
+
   return(
     <View style={{flexDirection:'row', flex:1, paddingVertical:15, paddingLeft:15, alignItems:'center'}}>
       <CustomText title={description} size={15} color='#919b9f' style={{flex:4, marginBottom:0, marginLeft:0, textAlign:'left'}}/>
@@ -21,8 +24,27 @@ const Item = ({description, quantity, price}) => {
           <CustomText title={'('+ quantity + ')'} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
         </View>
       <CustomText title={'Rp. ' + price * quantity} size={15} color='#919b9f' style={{flex:4, marginLeft:0, marginBottom:0, textAlign:'right'}}/>
-      <Icon name="edit" size={20} color='#919b9f' style={{flex:1, marginLeft:8}}/>
+      <Icon name="edit" 
+        size={20} 
+        color='#919b9f' 
+        onPress={() => setEditItemModal(true)}
+        style={{flex:1, marginLeft:8}}
+        />
       <Icon name="trash" size={20} color='#919b9f' style={{flex:1}}/>
+      <EditOrder 
+        descTitle="Ganti Detail Perbaikan"
+        submitTitle="Ganti Data"
+        visibleModal={editItemModal}
+        setVisibleModal={setEditItemModal}
+        fixDescription={itemDescription}
+        setFixDescription={setItemDescription}
+        fixNumber={itemQuantity}
+        setFixNumber={setItemQuantity}
+        fixPrice={itemPrice}
+        setFixPrice={setItemPrice}
+        onSubmit={onSubmit}
+        onCloseState={setItemRendered}
+        />
     </View>
   )
 }
@@ -34,12 +56,13 @@ const DATA = {
   cust_name: 'Christoper Luis Alexander'
 }
 
-export default function GarageTransaction(props : any){
+export default function GarageTransaction(){
 
   let distance : number = 2.4;
   let service_cost : number = 0;
   let CostList : any = [
     {
+      id:1,
       description:'Perjalanan',
       quantity:distance,
       price: 2000,
@@ -47,18 +70,59 @@ export default function GarageTransaction(props : any){
   ];
 
   const [fixNumber, setFixNumber] = React.useState<number>(0);
-  const [fixPrice, setFixPrice] = React.useState<string>();
+  const [fixPrice, setFixPrice] = React.useState<string>('');
   const [costList, setCostList] = React.useState<any[]>(CostList);
-  const [fixDescription, setFixDescription] = React.useState<string>();
+  const [fixDescription, setFixDescription] = React.useState<string>('');
   const [serviceCost, setServiceCost] = React.useState<number>(service_cost);
-  const [addEstModal, setAddEstModal] = React.useState<boolean>(false);
+  const [addEstModal, setAddEstModal] = React.useState<boolean>(false); 
   
+  const [editItemModal, setEditItemModal] = React.useState<boolean>(false);
+  const [itemDescription, setItemDescription] = React.useState<string>();
+  const [itemQuantity, setItemQuantity] = React.useState<number>();
+  const [itemPrice, setItemPrice] = React.useState<number>();
+  const [itemId, setItemId] = React.useState<number>(2);
+  const [currItemId, setCurrItemId] = React.useState<number>();
+  const [itemRendered, setItemRendered] = React.useState<boolean>(false);
+
+  const changeData = () => {
+    for(let i = 0; i <= costList.length - 1; i++){
+      if(costList[i].id === currItemId){
+        costList[i].description = itemDescription;
+        costList[i].quantity = itemQuantity;
+        costList[i].price = itemPrice;
+      }
+    }
+    setCostList(costList);
+    setEditItemModal(false);
+    ToastAndroid.show('Item berhasil diganti', ToastAndroid.LONG)
+  }
+
+  //problem edit data here
   const renderItem = ({ item }) => {
+    console.log(itemRendered)
+    if(itemRendered === false){
+      setItemDescription(item.description)
+      setItemQuantity(item.quantity)
+      setItemPrice(item.price)
+      setCurrItemId(item.id)
+      setItemRendered(true)
+    } 
     return(
       <Item
         description = {item.description}
         quantity = {item.quantity}
-        price = {item.price}/>
+        price = {item.price}
+        editItemModal = {editItemModal}
+        setEditItemModal = {setEditItemModal}
+        itemDescription = {itemDescription}
+        setItemDescription = {setItemDescription}
+        itemQuantity = {itemQuantity}
+        setItemQuantity = {setItemQuantity}
+        itemPrice = {itemPrice}
+        setItemPrice = {setItemPrice}
+        onSubmit={changeData}
+        setItemRendered={setItemRendered}
+        />
     )
   }
 
@@ -70,7 +134,9 @@ export default function GarageTransaction(props : any){
   }, [costList])
 
   const addOrder = () => {
+    setItemId(itemId + 1);
     setCostList( prevCostList => [...prevCostList, {
+      id:itemId,
       description:fixDescription,
       quantity: fixNumber,
       price: Number(fixPrice),
@@ -151,9 +217,16 @@ export default function GarageTransaction(props : any){
         </View>  
         <EditOrder 
           descTitle="Tambah Estimasi Perbaikan"
-          submitTitle="Ganti Data"
+          submitTitle="Tambah Data"
           visibleModal={addEstModal}
           setVisibleModal={setAddEstModal}
+          fixDescription={fixDescription}
+          setFixDescription={setFixDescription}
+          fixNumber={fixNumber}
+          setFixNumber={setFixNumber}
+          fixPrice={fixPrice}
+          setFixPrice={setFixPrice}
+          onSubmit={addOrder}
         />
       </ScrollView>
     </View>
