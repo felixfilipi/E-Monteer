@@ -17,7 +17,6 @@ import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
 import GarageEmployee from './src/Pages/Garage/GarageEmployee';
-import MechanicEditProfile from './src/Pages/Garage/MechanicEdit';
 import {ChatHistoryMechanic} from './src/Pages/ChatHistory';
 import MechanicMain from './src/Pages/Mechanic/MechanicMain';
 import GarageMain from './src/Pages/Garage/GarageMain';
@@ -100,9 +99,6 @@ export default function App() {
                 options={{title:'Rincian Transaksi', headerTintColor:'white'}}/>
               <Stack.Screen
                 name='GarageEmployee' component={GarageEmployee}
-                options={{headerShown: false}}/>
-              <Stack.Screen
-                name='MechanicEdit' component={MechanicEditProfile}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='GarageHistory' component={GarageHistory}

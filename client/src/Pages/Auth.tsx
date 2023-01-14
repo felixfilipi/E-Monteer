@@ -19,6 +19,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from "expo-image-picker";
+import { AccessPhoto } from "../Component/AccessPhoto";
 
 type RegisterType = StackNavigationProp<RootStackParamList, 'Register'>
 type LoginType = StackNavigationProp<RootStackParamList, 'Login'>
@@ -199,58 +200,6 @@ export function RegisterOwner(){
 
   const isComponentMounted = useComponentDidMount();
   
-  const pickIDCardImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    }
-  };
-
-  const takeIDCardImage = async ()  => {
-
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    };
-  };
-  
-  const IDCardFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View style={Style.idCardContainer}>
-          <Image 
-            source={{uri: SIDCardImage}} style={{width:'100%', height:150}}/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
-  
-  const IDCardNotFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View style={Style.idCardContainer}>
-          <Icon name="circle-with-plus" size={50} color="white"/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
-  
   React.useEffect(() => {
     if(isComponentMounted){
       setButton(SName !== '' && SEmail !== '' && SPhone !== 0 && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
@@ -330,30 +279,13 @@ export function RegisterOwner(){
               <View style={[Style.flexVertical, {marginTop:0}]}>
                   {Content}
               </View>
-                { SIDCardImage !== undefined ? <IDCardFilled/> : <IDCardNotFilled/> }
-                <View>
-                  <Modal 
-                    isVisible={SModal}
-                    onBackdropPress={() => setModal(false)}
-                    style={{justifyContent:'flex-end', margin:0}}>
-                    <View style={Style.modalStyle}>
-                      <TouchableWithoutFeedback onPress={takeIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="camera" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Ambil Foto</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback onPress={pickIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="folder-images" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Cari Dari Galeri</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </Modal>
-                </View>
+              <AccessPhoto
+                photoState={SIDCardImage}
+                setPhotoState={setIDCardImage}
+                setImageUploaded={setImageUpload}
+                visibleModal={SModal}
+                setVisibleModal={setModal}
+              />
               <View
                   style={Style.button}>
                   <Button 
@@ -405,58 +337,6 @@ export function RegisterMechanic(){
   const [SModal, setModal] = React.useState<boolean>(false);
 
   const isComponentMounted = useComponentDidMount();
-  
-  const pickIDCardImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    }
-  };
-
-  const takeIDCardImage = async ()  => {
-
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if(!result.canceled){
-      setIDCardImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    };
-  };
-  
-  const IDCardFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View style={Style.idCardContainer}>
-          <Image 
-            source={{uri: SIDCardImage}} style={{width:'100%', height:150}}/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
-  
-  const IDCardNotFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View style={Style.idCardContainer}>
-          <Icon name="circle-with-plus" size={50} color="white"/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
   
   React.useEffect(() => {
     if(isComponentMounted){
@@ -537,30 +417,13 @@ export function RegisterMechanic(){
               <View style={[Style.flexVertical, {marginTop:0}]}>
                   {Content}
               </View>
-                { SIDCardImage !== undefined ? <IDCardFilled/> : <IDCardNotFilled/> }
-                <View>
-                  <Modal 
-                    isVisible={SModal}
-                    onBackdropPress={() => setModal(false)}
-                    style={{justifyContent:'flex-end', margin:0}}>
-                    <View style={Style.modalStyle}>
-                      <TouchableWithoutFeedback onPress={takeIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="camera" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Ambil Foto</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback onPress={pickIDCardImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="folder-images" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Cari Dari Galeri</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </Modal>
-                </View>
+              <AccessPhoto
+                photoState={SIDCardImage}
+                setPhotoState={setIDCardImage}
+                setImageUploaded={setImageUpload}
+                visibleModal={SModal}
+                setVisibleModal={setModal}
+              />
               <View
                   style={[Style.button, {marginBottom:25}]}>
                   <Button 
@@ -594,7 +457,7 @@ export function RegisterGarage(){
 
   const [SGarName, setGarName] = React.useState<string>('');
   const [SGarLoc, setGarLoc] = React.useState<string>('');
-  const [SGarType, setGarType] = React.useState<string>('');
+  const [SGarType, setGarType] = React.useState<string>('Mobil dan Motor');
   const [SOpenHour, setOpenHour] = React.useState<string>('');
   const [SOpenDay, setOpenDay] = React.useState<string>('');
   const [SButton, setButton] = React.useState<boolean>(false);
@@ -657,58 +520,6 @@ export function RegisterGarage(){
     setCloseText(ftime);
     setCloseDatePickerVisibility(false);
   };
-
-  const pickGarageImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if(!result.canceled){
-      setGarageImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    }
-  };
-
-  const takeGarageImage = async ()  => {
-
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-
-    if(!result.canceled){
-      setGarageImage(result.assets[0].uri);
-      setImageUpload(true);
-      setModal(false);
-    };
-  };
-  
-  const GarageImageFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View>
-          <Image 
-            source={{uri: SGarageImage}} style={{width:'100%', height:150}}/>
-          <CustomText title = "Masukkan Foto Bengkel Anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
-  
-  const GarageImageNotFilled = () => {
-    return(
-      <TouchableWithoutFeedback onPress={() => setModal(true)}>  
-        <View style={Style.idCardContainer}>
-          <Icon name="circle-with-plus" size={50} color="white"/>
-          <CustomText title = "Masukkan Foto Bengkel Anda" color = "white" size={15} style={{marginVertical:15}}/>
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
 
   React.useEffect(() => {
     if(isComponentMounted){
@@ -936,33 +747,14 @@ export function RegisterGarage(){
               <View style={Style.flexVertical}>
                   {Content}
               </View>
-              <View style={{ paddingHorizontal:35, backgroundColor:"#434647", marginTop: 30, paddingBottom: 10}}>
-                <View style={Style.avatarStyle}>
-                { SGarageImage !== undefined ? <GarageImageFilled/> : <GarageImageNotFilled/> }
-                </View>
-                <View>
-                  <Modal 
-                    isVisible={SModal}
-                    onBackdropPress={() => setModal(false)}
-                    style={{justifyContent:'flex-end', margin:0}}>
-                    <View style={Style.modalStyle}>
-                      <TouchableWithoutFeedback onPress={takeGarageImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="camera" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Ambil Foto</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                      <TouchableWithoutFeedback onPress={pickGarageImage}>
-                        <View style={Style.modalTextLayout}>
-                          <Icon name="folder-images" size={20} color={'#828483'}/>
-                          <Text 
-                            style={Style.modalText}>Cari Dari Galeri</Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </Modal>
-                </View>
+              <View style={{ paddingHorizontal:35, backgroundColor:"#434647", marginTop: 30, paddingBottom: 10, flex:1}}>
+                <AccessPhoto
+                  photoState={SGarageImage}
+                  setPhotoState={setGarageImage}
+                  setImageUploaded={setImageUpload}
+                  visibleModal={SModal}
+                  setVisibleModal={setModal}
+                />
               </View>
               <View
                   style={Style.button}>
@@ -976,7 +768,7 @@ export function RegisterGarage(){
                     style={{color:"#b99504"}}
                     onPress={()=>(navigation.navigate('Login'))}> Login </Text>
               </Text>
-              <Text style={[Style.signText, {marginBottom: 10, marginTop:6}]}> Lanjut Daftar Sebagai Customer??
+              <Text style={[Style.signText, {marginBottom: 60, marginTop:6}]}> Lanjut Daftar Sebagai Customer??
                 <Text 
                     style={{color:"#b99504"}}
                     onPress={()=>(navigation.navigate('Register'))}> Disini </Text>

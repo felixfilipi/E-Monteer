@@ -28,14 +28,6 @@ export default React.StyleSheet.create({
     flex: 1,
   },
 
-  idCardContainer:{
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:"#434647", 
-    marginTop: 30, 
-    padding:15,
-  },
-
   logo: {
       width: 300,
       height: 200,
@@ -66,26 +58,6 @@ export default React.StyleSheet.create({
       borderRadius: 5,
   },
   
-  modalStyle: {
-    backgroundColor: 'white',
-    paddingVertical: 20,
-    paddingHorizontal:20,
-    borderRadius: 4,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-
-  modalText: {
-    fontSize:18, 
-    color:'#828483',
-    paddingVertical:15,
-    paddingLeft:10,
-  },
-
-  modalTextLayout: {
-    flexDirection:'row', 
-    alignItems:'center',
-  },
-
   photoLabel: {
     color:'white',
     marginTop:15,

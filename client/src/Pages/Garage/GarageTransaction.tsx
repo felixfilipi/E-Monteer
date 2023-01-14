@@ -1,13 +1,16 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ToastAndroid,  ScrollView, View,  FlatList } from "react-native";
+import { ToastAndroid,  ScrollView, View,  FlatList, Modal, Alert } from "react-native";
 import { RootStackParamList } from "../RootStackParamList";
 import Style from "../../Styles/GarageStyle/GarageTransaction";
 import { CustomButton } from "../../Component/CustomButton";
 import { CustomText } from "../../Component/CustomText";
 import Icon from "react-native-vector-icons/Entypo";
-import { Avatar } from "react-native-paper";
+import { Avatar, Divider } from "react-native-paper";
 import { EditOrder } from "../../Component/EditOrder";
+import { AddPayment } from "../../Component/AddPayment";
+import { Confirmation } from "../../Component/Confirmation";
+import { Done } from "../../Component/Done";
 
 type GarageTransactionType = StackNavigationProp<RootStackParamList, 'GarageTransaction'>;
 
@@ -84,6 +87,13 @@ export default function GarageTransaction(){
   const [currItemId, setCurrItemId] = React.useState<number>();
   const [itemRendered, setItemRendered] = React.useState<boolean>(false);
 
+  const [paymentModal, setPaymentModal] = React.useState<boolean>(false);
+  const [confModal, setConfModal] = React.useState<boolean>(false);
+  const [totalPayment, setTotalPayment] = React.useState<number>();
+  const [doneModal, setDoneModal] = React.useState<boolean>(false);
+  const [paymentFailModal, setPaymentFailModal] = React.useState<boolean>(false);
+  const [isFinished, setIsFinished] = React.useState<boolean>(false);
+
   const changeData = () => {
     for(let i = 0; i <= costList.length - 1; i++){
       if(costList[i].id === currItemId){
@@ -99,7 +109,6 @@ export default function GarageTransaction(){
 
   //problem edit data here
   const renderItem = ({ item }) => {
-    console.log(itemRendered)
     if(itemRendered === false){
       setItemDescription(item.description)
       setItemQuantity(item.quantity)
@@ -148,6 +157,68 @@ export default function GarageTransaction(){
     ToastAndroid.show('List Perbaikan Berhasil Ditambahkan', ToastAndroid.SHORT)
   }
 
+  const createPayment = () => {
+    if(totalPayment < serviceCost){
+      setPaymentFailModal(true);
+    }else{
+      setConfModal(true);
+    }
+  }
+
+  const OnTransaction = () => {
+    return(
+      <View style={Style.modalButtonLayout}>
+        <CustomButton 
+          title="Tambah Pesanan" 
+          style={{flex:1}}
+          onPress={() => setAddEstModal(true)}
+          textStyle={Style.modalButtonText}
+        />
+        <CustomButton
+          onPress={() => setPaymentModal(true)}
+          title="Buat Bukti Pembayaran" 
+          style={{flex:1, backgroundColor:'#59a540'}} 
+          textStyle={Style.modalButtonText}
+        />
+      </View>
+    )
+  }
+
+  const DoneTransaction = () => {
+    return(
+      <View style={{marginTop:-20}}>
+        <View style={{flexDirection:'row', flex:1}}>
+          <CustomText
+            title="Jumlah Pembayaran"
+            color="black"
+            size={15}
+            style={{flex:1, textAlign:'left'}} 
+          />
+          <CustomText
+            title={'Rp. ' + totalPayment}
+            color="black"
+            size={15}
+            style={{flex:1, textAlign:'right'}} 
+          />
+        </View>
+        <Divider/>
+        <View style={{flexDirection:'row', flex:1, marginTop:10}}>
+          <CustomText
+            title="Total Kembalian"
+            color="black"
+            size={15}
+            style={{flex:1, textAlign:'left'}} 
+          />
+          <CustomText
+            title={'Rp. ' + (totalPayment - serviceCost)}
+            color="black"
+            size={15}
+            style={{flex:1, textAlign:'right'}} 
+          />
+        </View>
+      </View>
+    )
+  }
    return(
     <View style={{flex:1, marginTop:20}}>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
@@ -185,7 +256,7 @@ export default function GarageTransaction(){
             <View style={Style.modalMetaContainer}>
               <View style={Style.modalTotalLayout}>
                 <CustomText
-                  title="Estimasi Total Biaya"
+                  title="Total Biaya"
                   color="black"
                   size={15}
                   style={{flex:1, textAlign:'left'}}
@@ -198,25 +269,13 @@ export default function GarageTransaction(){
                   />
               </View>
               <View style={{flex:1}}>
-                <View style={Style.modalButtonLayout}>
-                  <CustomButton 
-                    title="Tambah Pesanan" 
-                    style={{flex:1}}
-                    onPress={() => setAddEstModal(true)}
-                    textStyle={Style.modalButtonText}
-                  />
-                  <CustomButton 
-                    title="Konfirmasi Pesanan" 
-                    style={{flex:1, backgroundColor:'#59a540'}} 
-                    textStyle={Style.modalButtonText}
-                  />
-                </View>
+                {isFinished === true ? <DoneTransaction/> : <OnTransaction/>}
               </View>
             </View>
           </View>
         </View>  
         <EditOrder 
-          descTitle="Tambah Estimasi Perbaikan"
+          descTitle="Tambah Detail Perbaikan"
           submitTitle="Tambah Data"
           visibleModal={addEstModal}
           setVisibleModal={setAddEstModal}
@@ -227,7 +286,35 @@ export default function GarageTransaction(){
           fixPrice={fixPrice}
           setFixPrice={setFixPrice}
           onSubmit={addOrder}
+          onCloseState={setItemRendered}
         />
+        <AddPayment
+          descTitle="Konfirmasi Pembayaran"
+          submitTitle="Buat Pembayaran"
+          total_cost = {serviceCost}
+          totalPayment={totalPayment}
+          setTotalPayment={setTotalPayment}
+          visibleModal={paymentModal}
+          setVisibleModal={setPaymentModal}
+          onSubmit={createPayment}
+        />
+        <Confirmation 
+          visibleModal={confModal} 
+          setVisibleModal={setConfModal} 
+          title= "Apakah Pesanan Anda Dapat Diselesaikan?"
+          onTrue={() => {setConfModal(false), setIsFinished(true), setDoneModal(true)}}/>
+        <Done
+          visibleModal={doneModal} 
+          setVisibleModal={setDoneModal} 
+          title= "Pesanan Berhasil Ditambahkan"
+          onTrue={() => {setDoneModal(false), setPaymentModal(false)}}
+          />
+        <Done
+          visibleModal={paymentFailModal} 
+          setVisibleModal={setPaymentFailModal} 
+          title= "Pembayaran Tidak Dapat Lebih Rendah Dari Total Biaya"
+          onTrue={() => {setPaymentFailModal(false)}}
+          />
       </ScrollView>
     </View>
    )

@@ -101,8 +101,7 @@ export default React.StyleSheet.create({
     marginBottom: 10,
     marginLeft: 5
   },
-
-  
+ 
   multipleButtonText: {
     color: '#fff',
     marginLeft:5,
