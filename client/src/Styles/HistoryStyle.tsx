@@ -26,8 +26,11 @@ export default React.StyleSheet.create({
   listContainer: {
     backgroundColor:'#f1f1f1', 
     flexDirection:'row',
-    margin:10,
-    borderRadius: 20,
+    marginBottom:10,
+    marginHorizontal:15,
+    marginTop:0,
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
   },
 
   titleText : {

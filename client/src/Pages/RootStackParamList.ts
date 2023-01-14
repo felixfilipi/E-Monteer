@@ -10,7 +10,9 @@ export type RootStackParamList = {
   GarageDetail: {id: number} | undefined;
   BottomNav: undefined;
   History: undefined;
+  HistoryMechanic: undefined;
   HistoryDetail: {id: number} | undefined;
+  HistoryDetailMechanic: {id: number} | undefined;
   Chat: {phone: number} | undefined;
   ChatHistory: undefined;
   RegisterGarage: undefined;
@@ -23,5 +25,5 @@ export type RootStackParamList = {
   ChatHistoryMechanic: undefined;
   GarageEmployee: undefined;
   MechanicEdit: undefined;
-  GarageHistory: undefined;
+  HistoryGarage: undefined;
 };

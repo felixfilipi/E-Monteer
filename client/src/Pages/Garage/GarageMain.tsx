@@ -94,7 +94,7 @@ export default function GarageMain(){
             style={{textAlign:'left'}}/>
         </View>
       </View>
-      <View style={{flex:1, marginBottom:70 , marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
+      <View style={{ maxHeight:300 , marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
         <FlatList
           data={DATA}
           renderItem={renderItem}
@@ -108,7 +108,7 @@ export default function GarageMain(){
       <BottomNav 
         title = {['Utama','Pesanan','Mechanic']}
         icon = {['home-circle','car','account-wrench']}
-        navigate = {['GarageMain','GarageHistory','GarageEmployee']}
+        navigate = {['GarageMain','HistoryGarage','GarageEmployee']}
         size = {3}
         />
     </View>

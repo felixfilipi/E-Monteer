@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Style from "../Styles/ChatHistoryStyle";
 import { RootStackParamList } from './RootStackParamList';
-import { BottomNav } from '../Component/navBar';
+import { BottomNav, TopBar } from '../Component/navBar';
 import { CustomText, ImportantText } from "../Component/CustomText";
 import { Avatar } from "react-native-paper";
 
@@ -88,6 +88,7 @@ export default function ChatHistory(){
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
+    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
       <ImportantText title="Pesan yang tidak aktif dalam 1 Minggu kedepan akan otomatis terhapus"/>
@@ -106,7 +107,7 @@ export default function ChatHistory(){
     <BottomNav 
       title = {['Utama','Cari','Riwayat','Chat']}
       icon = {['home-circle','map-search-outline','history','chat']}
-      navigate = {['CustomerMain','FindGarage','OrderHistory','ChatHistory']}
+      navigate = {['CustomerMain','FindGarage','History','ChatHistory']}
       size = {4}
       />
   </View>
@@ -130,6 +131,7 @@ export function ChatHistoryMechanic(){
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
+    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
       <ImportantText title="Pesan yang tidak aktif dalam 1 Minggu kedepan akan otomatis terhapus"/>
@@ -148,7 +150,7 @@ export function ChatHistoryMechanic(){
     <BottomNav 
       title = {['Utama','Riwayat','Chat']}
       icon = {['home-circle','history','chat']}
-      navigate = {['MechanicMain','OrderHistory','ChatHistory']}
+      navigate = {['MechanicMain','HistoryMechanic','ChatHistoryMechanic']}
       size = {3}
       />
   </View>

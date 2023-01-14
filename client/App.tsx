@@ -10,9 +10,8 @@ import { DefaultTheme } from 'react-native-paper';
 import { Register, RegisterGarage, RegisterOwner, RegisterMechanic, Login} from './src/Pages/Auth';
 import EditProfile from './src/Pages/Profile';
 import FindGarage from './src/Pages/Customer/FindGarage';
-import History from './src/Pages/History';
 import GarageDetail from './src/Pages/Customer/GarageDetail';
-import HistoryDetail from './src/Pages/HistoryDetail';
+import {HistoryDetail, HistoryDetailMechanic} from './src/Pages/HistoryDetail';
 import {BottomNav} from './src/Component/navBar';
 import ChatHistory from './src/Pages/ChatHistory';
 import Chat from './src/Pages/Chat';
@@ -24,7 +23,7 @@ import CustomerMain from './src/Pages/Customer/CustomerMain';
 import OrderGarage from './src/Pages/Customer/OrderGarage';
 import MechanicOrder from './src/Pages/Mechanic/MechanicOrder';
 import GarageTransaction from './src/Pages/Garage/GarageTransaction';
-import GarageHistory from './src/Pages/Garage/GarageHistory';
+import { History, HistoryMechanic, HistoryGarage } from './src/Pages/History';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -68,6 +67,9 @@ export default function App() {
                 name="HistoryDetail" component={HistoryDetail}
                 options={{title:'Detail Riwayat', headerTintColor:'white'}}/>
               <Stack.Screen
+                name="HistoryDetailMechanic" component={HistoryDetailMechanic}
+                options={{title:'Detail Riwayat', headerTintColor:'white'}}/>
+              <Stack.Screen
                 name="BottomNav" component={BottomNav} 
                 options={{headerShown: false}}/>
               <Stack.Screen
@@ -101,7 +103,10 @@ export default function App() {
                 name='GarageEmployee' component={GarageEmployee}
                 options={{headerShown: false}}/>
               <Stack.Screen
-                name='GarageHistory' component={GarageHistory}
+                name='HistoryMechanic' component={HistoryMechanic}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name='HistoryGarage' component={HistoryGarage}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='RegisterMechanic' component={RegisterMechanic}

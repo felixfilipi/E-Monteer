@@ -16,6 +16,7 @@ import custMechanic from './component/custMechanic';
 import orderCreated from './component/orderCreated';
 import userAuth from './component/userAuth';
 import orderTimer from './component/orderTimer';
+import doneOrder from './component/doneOrder';
 
 const rootReducer = combineReducers({
   drawer: drawerReducer,
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
   custMechanic: custMechanic,
   orderCreated: orderCreated,
   userAuth: userAuth,
-  orderTimer: orderTimer
+  orderTimer: orderTimer,
+  doneOrder: doneOrder
 })
 
 export default rootReducer

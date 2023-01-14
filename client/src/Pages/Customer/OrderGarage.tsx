@@ -9,7 +9,7 @@ import Style from "../../Styles/CustomerStyle/OrderGarage";
 import { RootStackParamList } from '../RootStackParamList';
 import { CustomText, ImportantText } from "../../Component/CustomText";
 import { CustomButton, LogoButton } from "../../Component/CustomButton";
-import { useAppDispatch, useAppSelector } from "../../../redux";
+import { useAppDispatch } from "../../../redux";
 import { setCustMechanic } from "../../../redux/component/custMechanic";
 import { setOrderCreated } from "../../../redux/component/orderCreated";
 
@@ -95,12 +95,15 @@ export default function OrderGarage(props : any){
     <View style={{alignItems: 'center', flex:1 }}>
       <View style={Style.searchSection}>
       <TouchableWithoutFeedback 
-        onPress={() => setLocationModal(true)}>
-        <Searchbar
-          placeholder="Lokasi Anda"
-          onFocus={() => setLocationModal(true)}
-          style={{width: '90%',backgroundColor:'#fff', borderRadius: 30}}
-          value={searchQuery}/>
+        onPress={() => {setLocationModal(true)}}>
+        <View style={{width:'100%'}}>
+          <Searchbar
+            editable={false}
+            placeholder="Lokasi Anda"
+            onFocus={() => setLocationModal(true)}
+            style={{width: '90%',backgroundColor:'#fff', borderRadius: 30}}
+            value={searchQuery}/>
+          </View>
       </TouchableWithoutFeedback>
       </View>
       <View style={{flex:5}}>

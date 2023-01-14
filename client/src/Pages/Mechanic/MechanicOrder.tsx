@@ -21,6 +21,8 @@ import { setEstimationConfirmation } from '../../../redux/component/estimationCo
 import { Confirmation } from '../../Component/Confirmation';
 import { setCancelOrder } from '../../../redux/component/cancelOrder';
 import { EditOrder } from '../../Component/EditOrder';
+import { CallTowing } from '../../Component/CallTowing';
+import { setDoneOrder } from '../../../redux/component/doneOrder';
 
 type MechanicOrderType = StackNavigationProp<RootStackParamList, 'MechanicOrder'>
 
@@ -81,10 +83,13 @@ export default function MechanicOrder(){
   const [addEstModal, setAddEstModal] = React.useState<boolean>(false);
   const [fixDescription, setFixDescription] = React.useState<string>();
   const [fixNumber, setFixNumber] = React.useState<number>(0);
-  const [fixPrice, setFixPrice] = React.useState<string>();
-  const [flexState, setFlexState] = React.useState<number>(5);
+  const [fixPrice, setFixPrice] = React.useState<string>('');
   const [costList, setCostList] = React.useState<any[]>(CostList);
   const [serviceCost, setServiceCost] = React.useState<number>(service_cost);
+  const [componentMount, setComponentMount] = React.useState<boolean>(false);
+  const [towingModal, setTowingModal] = React.useState<boolean>(false);
+  const [buttonTitle, setButtonTitle] = React.useState<string>('Buat Estimasi Pembayaran');
+  const [doneModal, setDoneModal] = React.useState<boolean>(false);
 
   const renderItem = ({ item }) => {
     return(
@@ -105,7 +110,6 @@ export default function MechanicOrder(){
     setFixPrice('');
     setFixNumber(0);
     setAddEstModal(false);
-    setFlexState(5);
     ToastAndroid.show('List Perbaikan Berhasil Ditambahkan', ToastAndroid.SHORT)
   }
 
@@ -115,6 +119,7 @@ export default function MechanicOrder(){
     dispatch(setEstimationConfirmation(true))
     setEstConfirmModal(false);
     setEstimationModal(false);
+    setButtonTitle('Selesaikan Pesanan');
     ToastAndroid.show('Konfirmasi Estimasi Perbaikan Telah Dikirimkan', ToastAndroid.LONG);
   }
 
@@ -122,6 +127,20 @@ export default function MechanicOrder(){
     dispatch(setCancelOrder(true));
     navigation.navigate('MechanicMain');
     ToastAndroid.show('Anda Telah Membatalkan Pesanan', ToastAndroid.LONG);
+  }
+
+  const doneOrder = () => {
+    dispatch(setDoneOrder(true));
+    navigation.navigate('MechanicMain');
+    ToastAndroid.show('Anda Telah Menyelesaikan Pesanan', ToastAndroid.LONG);
+  }
+
+  const estimate_or_complete = () => {
+    if(buttonTitle === 'Selesaikan Pesanan'){
+      setDoneModal(true);
+    }else{
+      setEstimationModal(true)
+    }
   }
 
   React.useEffect(() => {
@@ -226,15 +245,16 @@ export default function MechanicOrder(){
           <View style={Style.commandLayout}>
             <View style={Style.commandVerticalLayout}>
               <CustomButton 
-                title="Buat Estimasi Pembayaran" 
+                title={buttonTitle} 
                 style={Style.estimateButton}
                 textStyle={Style.estimateButtonText}
-                onPress={()=>{setEstimationModal(true)}}/>
+                onPress={estimate_or_complete}/>
               <View style={{flexDirection:'column', flex:1}}>
                 <CustomButton 
                   title="Panggil Derek"
                   style={{borderRadius:30}}
-                  textStyle={{fontWeight:'700'}}/>
+                  textStyle={{fontWeight:'700'}}
+                  onPress={() => setTowingModal(true)}/>
                 <CustomButton 
                   title="Batalkan Pesanan"
                   style={{borderRadius:30, backgroundColor:'#b41d12'}}
@@ -245,6 +265,12 @@ export default function MechanicOrder(){
           </View>
         </View>
 
+        <Confirmation 
+          visibleModal={doneModal} 
+          setVisibleModal={setDoneModal} 
+          title= "Apakah Anda Ingin Menyelesaikan Pesanan?"
+          onTrue={doneOrder}
+          />
         <Confirmation 
           visibleModal={cancelModal} 
           setVisibleModal={setCancelModal} 
@@ -330,8 +356,15 @@ export default function MechanicOrder(){
           setFixPrice={setFixPrice}
           fixNumber={fixNumber}
           setFixNumber={setFixNumber}
-          onPress={addOrder()}
+          onSubmit={addOrder}
+          onCloseState={setComponentMount}
         />
+      <CallTowing
+        visibleModal={towingModal}
+        setVisibleModal={setTowingModal}
+        descTitle="Panggil Jasa Derek"
+        submitTitle="Panggil Derek"
+      />
       </View>
       );
     }else{

@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Style from "../../Styles/CustomerStyle/FindGarage";
 import { RootStackParamList } from '../RootStackParamList';
-import { BottomNav } from '../../Component/navBar';
+import { BottomNav, TopBar } from '../../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { MultipleButton } from '../../Component/CustomButton';
 import { useAppDispatch, useAppSelector } from '../../../redux';
@@ -157,6 +157,7 @@ export default function Find(){
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
+    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
     <CustomText title="Cari Bengkel" style={Style.titleText}/> 
     <View style={{alignItems:'center'}}>
       <View style={[Style.searchLayout, {marginTop:10}]}>
@@ -195,7 +196,7 @@ export default function Find(){
     <BottomNav 
       title = {['Utama','Cari','Riwayat','Chat']}
       icon = {['home-circle','map-search-outline','history','chat']}
-      navigate = {['CustomerMain','FindGarage','OrderHistory','ChatHistory']}
+      navigate = {['CustomerMain','FindGarage','History','ChatHistory']}
       size = {4}
       />
   </View>

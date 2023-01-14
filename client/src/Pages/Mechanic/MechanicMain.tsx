@@ -47,12 +47,19 @@ export default function MechanicMain(){
   }
 
   const cancelStatus = useAppSelector(state => state.cancelOrder);
+  const doneStatus = useAppSelector(state => state.doneOrder);
   if(cancelStatus){
     const RAW_DATA = useAppSelector(state => state.custMechanic);
     RAW_DATA[0].trans_end_dt = Date()
     dispatch(setCustMechanic(RAW_DATA));
   }
   
+  //if(doneStatus){
+  //  const RAW_DATA = useAppSelector(state => state.custMechanic);
+  //  RAW_DATA[0].trans_end_dt = Date()
+  //  dispatch(setCustMechanic(RAW_DATA));
+  //}
+
   const RAW_DATA = useAppSelector(state => state.custMechanic); 
   const DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)
 
@@ -107,7 +114,7 @@ export default function MechanicMain(){
       <BottomNav 
         title = {['Utama','Pesanan','Chat']}
         icon = {['home-circle','history','chat']}
-        navigate = {['Home','History','ChatHistoryMechanic']}
+        navigate = {['Home','HistoryMechanic','ChatHistoryMechanic']}
         size = {3}
         />
     </View>
