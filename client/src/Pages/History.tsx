@@ -15,55 +15,27 @@ type HistoryDetailType = StackNavigationProp<RootStackParamList, 'HistoryDetail'
 const DATA = [
   {
     id:1,
-    title: 'Bengkel cepi jaya',
-    location: 'jalan mh thamrin 1, jakarta pusat.',
+    title: 'Bengkel HAN Paint & Body Repair',
+    location: 'Jalan Simpang Borobudur II/30 Malang',
     handleType: 'car',
-    date: '01/01/2001'
+    date: '02/01/2023'
   },
   {
     id:2,
-    title: 'Bengkel bos jaya',
-    location: 'bangalore, singapore.',
+    title: 'Bengkel Borobudur',
+    location: 'Jalan Sudimoro 10a Malang',
     handleType: 'motorcycle',
-    date: '01/01/2001'
+    date: '29/12/2022'
   },
   {
     id:3,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
+    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
+    location: 'Jalan KH. Malik Malang',
     handleType: 'car',
-    date: '01/01/2001'
+    date: '21/12/2022'
   },
-  {
-    id:4,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    handleType: 'motorcycle',
-    date: '01/01/2001'
-  },
-  {
-    id:5,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    handleType: 'car',
-    date: '01/01/2001'
-  },
-  {
-    id:6,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    handleType: 'motorcycle',
-    date: '01/01/2001'
-  },
-  {
-    id:7,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    handleType: 'car',
-    date: '01/01/2001'
-  }
-
 ];
+
 
 const Item = ({ title, location, handleType, date, id }) => {
 
