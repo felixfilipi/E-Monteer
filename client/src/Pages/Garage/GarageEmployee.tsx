@@ -12,27 +12,27 @@ import { CustomButton } from '../../Component/CustomButton';
 const DATA = [
   {
     id:1,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
+    name: 'Hendra',
+    location: 'Jalan Soekarno Hatta',
+    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images',
   },
   {
     id:2,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
+    name: 'Hasan',
+    location: 'Jalan Candi Penataran 20',
+    photoUrl: 'https://cdn.pixabay.com/photo/2016/12/13/17/48/master-1904748__480.jpg',
   },
   {
     id:3,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
+    name: 'Budi',
+    location: 'Jalan Simpang Borobudur',
+    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.zrVZ2bFu2ii1pP1b6N-qWQHaFp%26pid%3DApi&f=1&ipt=f01209aaf6c51d9e3e652c5af0dfa50d313f21f4002f90b4b1247e64254c4333&ipo=images',
   },
   {
     id:4,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
+    name: 'Fahri',
+    location: 'Jalan Sukun 9',
+    photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
   },
 ]
 type GarageEmployeeType = StackNavigationProp<RootStackParamList, 'GarageEmployee'>

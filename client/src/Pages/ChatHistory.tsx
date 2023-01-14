@@ -17,7 +17,7 @@ const DATA = [
     message: 'Baik',
     date: '02/01/2023',
     hour: '12.30',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images'
+    photo: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='
   },
   {
     id:2,
@@ -25,15 +25,15 @@ const DATA = [
     message: 'Terima Kasih',
     date: '29/12/2022',
     hour: '16.46',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.zrVZ2bFu2ii1pP1b6N-qWQHaFp%26pid%3DApi&f=1&ipt=f01209aaf6c51d9e3e652c5af0dfa50d313f21f4002f90b4b1247e64254c4333&ipo=images'
+    photo: 'https://media.istockphoto.com/id/1255422375/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=zvRIhHtt98k25vLNi4jzp-R5J1WTQOZPFJXg28hKfOo='
   },
   {
     id:3,
     name: 'Tedjo',
-    message: 'Maafkan saya bos.',
+    message: 'Saya segera ke sana',
     date: '21/01/2022',
     hour: '11.02',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.yIc1gnpA3V5qS239s4QDAQHaH8%26pid%3DApi&f=1&ipt=03c430f69c132a085d6abe7ac06af11d06e76adfe80236ff08beb80a828818e8&ipo=images'
+    photo: 'https://media.istockphoto.com/id/1255433065/id/foto/mekanik-mobil-bekerja-di-garasi-layanan-perbaikan.jpg?s=612x612&w=0&k=20&c=TE4eD2zPxLSWhWtTiMGbFqn7aDOdq5bkaxwmj9y3yws='
   },
 
 ];

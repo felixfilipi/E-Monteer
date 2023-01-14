@@ -27,7 +27,7 @@ const user = {
 const otherUser = {
   _id: 2,
   name: 'React Native',
-  avatar: 'https://facebook.github.io/react/img/logo_og.png',
+  avatar: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE=',
 }
 
 export default class App extends Component {
