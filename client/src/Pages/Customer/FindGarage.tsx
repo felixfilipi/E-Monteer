@@ -17,58 +17,58 @@ type FindGarageType = StackNavigationProp<RootStackParamList, 'FindGarage'>
 const DATA = [
   {
     id:1,
-    title: 'Bengkel cepi jaya',
-    location: 'jalan mh thamrin 1, jakarta pusat.',
-    distance: '2.5',
-    rating: 5,
-    handleType: 'both'
+    title: 'Bengkel HAN Paint & Body Repair',
+    location: 'Jalan Simpang Borobudur II/30 Malang',
+    distance: '7.4',
+    rating: 4.6,
+    handleType: 'car'
   },
   {
     id:2,
-    title: 'Bengkel bos jaya',
-    location: 'bangalore, singapore.',
-    distance: '7',
-    rating: 1.5,
-    handleType: 'motorcycle',
+    title: 'Bengkel Borobudur',
+    location: 'Jalan Sudimoro 10a Malang',
+    distance: '8.2',
+    rating: 4.5,
+    handleType: 'car',
   },
   {
     id:3,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1',
-    rating: 4,
+    title: 'Bengkel Mobil "ipunk motor"',
+    location: 'Jalan Blimbing Indah Tengah VIII C3/6 Malang',
+    distance: '4.2',
+    rating: 5,
     handleType: 'car'
   },
   {
     id:4,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1',
-    rating: 3,
+    title: 'Karunia Nyata Motor',
+    location: 'Jalan Borobudur Ruko A. Yani 17/B4-5 Malang',
+    distance: '5.9',
+    rating: 4.5,
     handleType: 'motorcycle'
   },
   {
     id:5,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1',
-    rating: 2,
-    handleType: 'car'
+    title: 'Bengkel Motor Panggilan 24 Jam',
+    location: 'Jalan Raya Cemorokandang 26 Malang',
+    distance: '6.8',
+    rating: 4.4,
+    handleType: 'motorcycle'
   },
   {
     id:6,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1',
-    rating: 3,
-    handleType: 'both'
+    title: 'Bengkel Suhat Motor',
+    location: 'Jalan Soekarno Hatta 11 Malang',
+    distance: '9.5',
+    rating: 4.6,
+    handleType: 'motorcycle'
   },
   {
     id:7,
-    title: 'Bengkel kuli jaya',
-    location: 'kebon kacang, jakarta pusat.',
-    distance: '0.1',
-    rating: 3.3,
+    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
+    location: 'Jalan KH. Malik Malang',
+    distance: '11.4',
+    rating: 5,
     handleType: 'both'
   }
 
