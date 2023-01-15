@@ -46,27 +46,19 @@ const DATA = [
 const DATA2 = [
   {
     id:1,
-    name: 'Cepi',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
+    name: 'Alexander Wijaya',
+    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
     handleType: 'car',
     date: '02/01/2023'
   },
   {
     id:2,
-    name: 'cepi2',
-    location: 'Jalan Sudimoro 10a Malang',
+    name: 'Ryan Pameswara',
+    location: 'Jalan Raya Singosari 16a, Malang',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
     handleType: 'motorcycle',
     date: '29/12/2022'
-  },
-  {
-    id:3,
-    name: 'cepi3',
-    location: 'Jalan KH. Malik Malang',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-    handleType: 'car',
-    date: '21/12/2022'
   },
 ];
 
@@ -228,7 +220,7 @@ export function HistoryMechanic(){
  
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+      <TopBar photoUrl='https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='/>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Riwayat Pesanan" color="white" size={20}
@@ -280,7 +272,7 @@ export function HistoryGarage(){
       </View>
       <View style= {[Style.listContainer, {backgroundColor: '#3a4447'}]}>
         <FlatList
-          data={DATA3}
+          data={DATA2}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

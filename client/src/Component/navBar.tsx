@@ -165,7 +165,7 @@ export const ChatBar = (props : any) => {
               style={{marginVertical:10}}
               source={{uri: props.photoUrl}}/>
           </TouchableWithoutFeedback>
-          <CustomText title={"Mechanic Name"} color={"white"} size={20}
+          <CustomText title={props.title} color={"white"} size={20}
               style={{textAlignVertical:'center', marginVertical:10, marginLeft:15}}/>
         </View>
       </View>

@@ -27,9 +27,9 @@ const DATA = [
   },
   {
     id:2,
-    name: 'Derek Bang Imam',
-    address: 'Jalan Ikan Paus 15a, Malang',
-    phone: '087892314322',
+    name: 'Derek Dan Towing Malang "MAKOTA 86"',
+    address: 'Jalan A. Yani No 26, blimbing, malang',
+    phone: '0813-3888-8309',
     distance:2,
     cost_per_km: 20000
   },

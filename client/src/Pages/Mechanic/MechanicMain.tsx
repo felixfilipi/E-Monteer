@@ -75,7 +75,7 @@ export default function MechanicMain(){
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+      <TopBar photoUrl='https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='/>
         <View style={Style.cardHeader}>
           <CustomText title="Status Anda" color="white" size={20}
             style={{textAlign:'left'}}/>

@@ -12,22 +12,24 @@ const GARAGE = [
   {
     id:1,
     title: 'Bengkel Borobudur',
-    mechanicName:'Andi',
-    location: 'Jalan Sudimoro 10a Malang',
+    mechanicName:'Andi Wijaya',
+    cust_location: 'Jalan Raya Singosari 16a, Malang',
+    location: 'Jalan Simpang Borobudur II/30, Malang',
     handleType: 'motorcycle',
     date: '29/12/2022',
-    phone: '0878123123123',
-    image: 'https://carro.id/blog/wp-content/uploads/2020/12/Foto-3-Bosch-Module.png',
+    phone: '087892314322',
+    image: 'https://media.istockphoto.com/id/1255422375/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=zvRIhHtt98k25vLNi4jzp-R5J1WTQOZPFJXg28hKfOo=',
     detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
-    totalPaid: 100000,
-    rating: 1,
+    repairTotal: '4.4, 1, 5',
+    price: '5000, 90000, 13000',
+    totalPaid: 200000,
+    rating: 4,
   },
   {
     id:2,
     title: 'Bengkel Borobudur',
     mechanicName:'Andi',
+    cust_location: 'Jalan Raya Singosari 16a, Malang',
     location: 'Jalan Sudimoro 10a Malang',
     handleType: 'motorcycle',
     date: '29/12/2022',
@@ -43,6 +45,7 @@ const GARAGE = [
     id:3,
     title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
     mechanicName:'Tedjo',
+    cust_location: 'Jalan Raya Singosari 16a, Malang',
     location: 'Jalan KH. Malik Malang',
     handleType: 'car',
     date: '21/12/2022',
@@ -59,23 +62,25 @@ const GARAGE = [
 const USER = [
   {
     id:1,
-    title: 'Bengkel Borobudur',
-    custName:'Budi',
-    location: 'Jalan Sudimoro 10a Malang',
+    title: 'Karunia Nyata Motor',
+    custName: 'Alexander Wijaya',
+    cust_location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
+    location: 'Jalan Borobudur Ruko A. Yani 17/B4-5 Malang',
+    image: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
     handleType: 'motorcycle',
-    date: '29/12/2022',
-    phone: '0878123123123',
-    image: 'https://carro.id/blog/wp-content/uploads/2020/12/Foto-3-Bosch-Module.png',
+    date: '15/01/2023',
+    phone: '087892314322',
     detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
+    repairTotal: '5.9, 2',
+    price: '2000, 12000',
     totalPaid: 100000,
-    rating: 1,
+    rating: 5,
   },
   {
     id:2,
     title: 'Bengkel Borobudur',
     custName:'Andi',
+    cust_location: 'Jalan Raya Singosari 16a, Malang',
     location: 'Jalan Sudimoro 10a Malang',
     handleType: 'motorcycle',
     date: '29/12/2022',
@@ -91,6 +96,7 @@ const USER = [
     id:3,
     title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
     custName:'Tedjo',
+    cust_location: 'Jalan Raya Singosari 16a, Malang',
     location: 'Jalan KH. Malik Malang',
     handleType: 'car',
     date: '21/12/2022',
@@ -265,7 +271,7 @@ export function HistoryDetail(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={GARAGE[DataID - 1].location}
+                  title={GARAGE[DataID - 1].cust_location}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>
@@ -326,7 +332,7 @@ export function HistoryDetailMechanic(props : any){
   repairList = USER[DataID - 1].detailRepair.split(',');
   repairTotal = USER[DataID - 1].repairTotal.split(',');
   repairPrice = USER[DataID - 1].price.split(',');
-  for(let i = 0; i <= repairList.length - 1; i++){
+  for(let i = 0; i <= repairList.length - 2; i++){
     totalCost += Number(repairPrice[i]) * Number(repairTotal[i])
   };
   changeMoney = USER[DataID - 1].totalPaid - totalCost;
@@ -460,7 +466,7 @@ export function HistoryDetailMechanic(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={USER[DataID - 1].location}
+                  title={USER[DataID - 1].cust_location}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>

@@ -51,8 +51,8 @@ export default function OrderGarage(props : any){
         [
           {
             id:1,
-            name: 'Christoper Luis Alexander',
-            location: 'MH Thamrin Jakarta Pusat',
+            name: 'Alexander Wijaya',
+            location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
             photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
             trans_end_dt: null,
           }

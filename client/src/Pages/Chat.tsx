@@ -21,13 +21,13 @@ const styles = StyleSheet.create({
 
 const user = {
   _id: 1,
-  name: 'Developer',
+  name: 'Alexander Wijaya',
 }
 
 const otherUser = {
   _id: 2,
-  name: 'React Native',
-  avatar: 'https://facebook.github.io/react/img/logo_og.png',
+  name: 'Rico Purwanto',
+  avatar: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=mmwkfyfoyo2fm6hkqarzz10vuqv8vaigmiqn12zvyde='
 }
 
 export default class App extends Component {
@@ -165,7 +165,9 @@ export default class App extends Component {
     }
     return (
       <>
-    <ChatBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+    <ChatBar
+      title="Rico Purwanto"
+      photoUrl='https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='/>
       <View
         style={styles.container}
         accessibilityLabel='main'

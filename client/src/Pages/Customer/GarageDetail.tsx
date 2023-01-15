@@ -149,7 +149,7 @@ export default function GarageDetail(props){
           tintColor='white'
           readonly={true} 
           />
-        <View style={{marginTop:20}}>
+        <View style={{marginTop:20, marginBottom:-40}}>
           {Content}
         </View>
       </View>

@@ -53,15 +53,15 @@ const Item = ({ description, quantity, price, onSubmit,
 }
 
 const DATA = {
-  mech_name:'Felix Filipi',
-  location:'BCA',
-  photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  cust_name: 'Christoper Luis Alexander'
+  mech_name:'Rico Purwanto',
+  location:'Plaza Araya, jl blimbing indah megah no 2, malang',
+  photoUrl: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE=',
+  cust_name: 'Alexander Wijaya'
 }
 
 export default function GarageTransaction(){
 
-  let distance : number = 2.4;
+  let distance : number = 5.9;
   let service_cost : number = 0;
   let CostList : any = [
     {
@@ -69,6 +69,12 @@ export default function GarageTransaction(){
       description:'Perjalanan',
       quantity:distance,
       price: 2000,
+    },
+    {
+      id:2,
+      description:'Isi Bensin',
+      quantity:2,
+      price: 12000,
     },
   ];
 

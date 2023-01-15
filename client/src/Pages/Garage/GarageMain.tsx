@@ -12,15 +12,9 @@ import { CustomButton } from '../../Component/CustomButton';
 const DATA = [
   {
     id:1,
-    name: 'Hendra',
-    location: 'Jalan Soekarno Hatta',
-    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images',
-  },
-  {
-    id:2,
-    name: 'Budi',
-    location: 'Jalan Simpang Borobudur',
-    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.zrVZ2bFu2ii1pP1b6N-qWQHaFp%26pid%3DApi&f=1&ipt=f01209aaf6c51d9e3e652c5af0dfa50d313f21f4002f90b4b1247e64254c4333&ipo=images',
+    name: 'Alexander Wijaya',
+    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
+    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
   },
 ]
 type GarageMainType = StackNavigationProp<RootStackParamList, 'GarageMain'>

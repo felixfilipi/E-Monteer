@@ -29,7 +29,7 @@ const DATA = [
     location: 'Jalan Sudimoro 10a Malang',
     distance: '8.2',
     rating: 4.5,
-    handleType: 'car',
+    handleType: 'motorcycle',
   },
   {
     id:3,

@@ -30,7 +30,7 @@ const GARAGE = [
   {
     id:1,
     title: 'Bengkel HAN Paint & Body Repair',
-    mechanicName:'Rico',
+    mechanicName:'Rico Purwanto',
     location: 'Jalan Simpang Borobudur II/30 Malang',
     date: '02/01/2023',
     phone: '03414345708',
@@ -39,7 +39,7 @@ const GARAGE = [
   {
     id:2,
     title: 'Bengkel Borobudur',
-    mechanicName:'Andi',
+    mechanicName:'Andi Wijaya',
     location: 'Jalan Sudimoro 10a Malang',
     date: '29/12/2022',
     phone: '085106468000',
@@ -48,7 +48,7 @@ const GARAGE = [
   {
     id:3,
     title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    mechanicName:'Tedjo',
+    mechanicName:'Nauval Suteja',
     location: 'Jalan KH. Malik Malang',
     date: '21/12/2022',
     phone: '0341716440',

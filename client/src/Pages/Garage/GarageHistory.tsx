@@ -12,28 +12,21 @@ import { CustomButton } from '../../Component/CustomButton';
 const DATA = [
   {
     id:1,
-    name: 'Rico Purwanto',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
-    photoUrl: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='
-,
+    name: 'Hendra',
+    location: 'Jalan Soekarno Hatta',
+    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images',
   },
   {
     id:2,
-    name: 'Hasan Kusnadi',
-    location: 'Jalan Candi Penataran 20, Malang',
-    photoUrl: 'https://cdn.pixabay.com/photo/2016/12/13/17/48/master-1904748__480.jpg',
-  },
-  {
-    id:3,
-    name: 'Budi Kosasih',
-    location: 'Jalan Simpang Borobudur 18, Malang',
-    photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
+    name: 'Budi',
+    location: 'Jalan Simpang Borobudur',
+    photoUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.zrVZ2bFu2ii1pP1b6N-qWQHaFp%26pid%3DApi&f=1&ipt=f01209aaf6c51d9e3e652c5af0dfa50d313f21f4002f90b4b1247e64254c4333&ipo=images',
   },
 ]
-type GarageEmployeeType = StackNavigationProp<RootStackParamList, 'GarageEmployee'>
+type GarageHistoryType = StackNavigationProp<RootStackParamList, 'GarageHistory'>
 
 const Item = ({id, name, location, photoUrl}) => {
-  const navigation = useNavigation<GarageEmployeeType>();
+  const navigation = useNavigation<GarageHistoryType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
@@ -41,12 +34,12 @@ const Item = ({id, name, location, photoUrl}) => {
         <CustomText title={name} size={17} color="white" style={{textAlign:'left'}}/>
         <CustomText title={location} size={12} color="#85898f" style={{textAlign:'left'}}/>
       </View>
-        <CustomButton onPress={() => navigation.navigate('RegisterMechanic')} title={"Update"} style={{borderRadius:20}}/>
+        <CustomButton onPress={() => navigation.navigate('GarageTransaction', {id: id})} title={"Periksa"} style={{borderRadius:20}}/>
     </View>
   )
 }
 
-export default function GarageEmployee(){
+export default function GarageOrder(){
 
   const renderItem = ({ item }) => {
     return(
@@ -59,27 +52,16 @@ export default function GarageEmployee(){
     );
   };
 
-  const navigation = useNavigation<GarageEmployeeType>();
   return(
     <View style={{flex:1}}>
       <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic')}>
-          <View style={{flexDirection:'row'}}>
-            <View style={{flex:1}}/>
-            <View style={{backgroundColor:'#b99504',flexDirection:'row', justifyContent:'center', alignContent:'center', padding:15, flex:2, borderRadius:20, marginTop:15}}>
-              <Icon name="adduser" color="white" size={25}/>
-              <CustomText title="Tambah Mechanic" color="white" size={17} style={{marginBottom:0}}/>
-            </View>
-            <View style={{flex:1}}/>
-          </View>
-        </TouchableOpacity>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
-          <CustomText title="List Mechanic" color="white" size={20}
+          <CustomText title="Riwayat Pesanan" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       </View>
-      <View style={{maxHeight:500 ,marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
+      <View style={{flex:1, marginBottom:70 , marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
         <FlatList
           data={DATA}
           renderItem={renderItem}
@@ -93,7 +75,7 @@ export default function GarageEmployee(){
       <BottomNav 
         title = {['Utama','Pesanan','Mechanic']}
         icon = {['home-circle','car','account-wrench']}
-        navigate = {['GarageMain','HistoryGarage','MechanicView']}
+        navigate = {['GarageMain','GarageOrder','GarageEmployee']}
         size = {3}
         />
     </View>

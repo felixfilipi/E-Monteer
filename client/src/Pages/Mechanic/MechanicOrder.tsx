@@ -29,8 +29,8 @@ type MechanicOrderType = StackNavigationProp<RootStackParamList, 'MechanicOrder'
 const DATA = [
   {
     id:1,
-    MechanicName: 'Christoper Luis Alexander',
-    Garage: 'Bengkel Cepi Jaya',
+    MechanicName: 'Alexander Wijaya',
+    Garage: 'Karunia Nyata Motor',
     photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
     latitude: -6.17524,
     longitude: 106.82715,
@@ -62,7 +62,7 @@ const Item = ({description, quantity, price}) => {
 
 export default function MechanicOrder(){
 
-  let distance : number = 2.4;
+  let distance : number = 5.9;
   let service_cost : number = 0;
   let CostList : any = [
     {
@@ -194,6 +194,7 @@ export default function MechanicOrder(){
             style={[Style.mapView, {width:Dimensions.get('window').width}]}
           >
             <Marker
+              draggable
              coordinate={{ latitude: latitude, longitude: longitude }}
              title={'Lokasi Anda'}
             >
@@ -204,6 +205,7 @@ export default function MechanicOrder(){
               </View>
             </Marker>
             <Marker
+              draggable
              coordinate={{ latitude: DATA[0].latitude, longitude: DATA[0].longitude }}
              title={'Lokasi Kejadian'} 
             >
