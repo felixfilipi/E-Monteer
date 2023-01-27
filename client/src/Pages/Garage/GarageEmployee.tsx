@@ -1,38 +1,19 @@
 import { TopBar, BottomNav } from '../../Component/navBar';
 import { CustomText } from '../../Component/CustomText';
 import Icon from "react-native-vector-icons/AntDesign";
-import { View, ScrollView, TouchableHighlight, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../RootStackParamList';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
+import { useAppSelector } from '../../../redux';
 
-const DATA = [
-  {
-    id:1,
-    name: 'Rico Purwanto',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
-    photoUrl: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='
-,
-  },
-  {
-    id:2,
-    name: 'Hasan Kusnadi',
-    location: 'Jalan Candi Penataran 20, Malang',
-    photoUrl: 'https://cdn.pixabay.com/photo/2016/12/13/17/48/master-1904748__480.jpg',
-  },
-  {
-    id:3,
-    name: 'Budi Kosasih',
-    location: 'Jalan Simpang Borobudur 18, Malang',
-    photoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
-  },
-]
 type GarageEmployeeType = StackNavigationProp<RootStackParamList, 'GarageEmployee'>
+let DATA : any[] = [];
 
-const Item = ({id, name, location, photoUrl}) => {
+const Item = ({name, location, photoUrl}) => {
   const navigation = useNavigation<GarageEmployeeType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
@@ -48,10 +29,10 @@ const Item = ({id, name, location, photoUrl}) => {
 
 export default function GarageEmployee(){
 
+  const navigation = useNavigation<GarageEmployeeType>();
   const renderItem = ({ item }) => {
     return(
       <Item 
-        id = {item.id}
         name = {item.name} 
         location = {item.location}
         photoUrl = {item.photoUrl}
@@ -59,11 +40,18 @@ export default function GarageEmployee(){
     );
   };
 
-  const navigation = useNavigation<GarageEmployeeType>();
+  const raw = useAppSelector(state => state.userAuth);
+  const activeStatus = useAppSelector(state => state.activeStatus);
+  
+  if(activeStatus != null){
+    DATA = raw.filter((item) => {item.role == 'Mechanic' && item.garageId == activeStatus.id});
+  }else{
+    navigation.navigate('Login');
+  };
   return(
     <View style={{flex:1}}>
       <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic')}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic', {garageId: activeStatus.id})}>
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}/>
             <View style={{backgroundColor:'#b99504',flexDirection:'row', justifyContent:'center', alignContent:'center', padding:15, flex:2, borderRadius:20, marginTop:15}}>

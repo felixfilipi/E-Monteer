@@ -7,57 +7,8 @@ import { Avatar } from 'react-native-paper';
 import { AbsoluteButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
 import { Rating } from "react-native-ratings";
-
-const GARAGE = [
-  {
-    id:1,
-    title: 'Bengkel Borobudur',
-    mechanicName:'Andi Wijaya',
-    cust_location: 'Jalan Raya Singosari 16a, Malang',
-    location: 'Jalan Simpang Borobudur II/30, Malang',
-    handleType: 'motorcycle',
-    date: '29/12/2022',
-    phone: '087892314322',
-    image: 'https://media.istockphoto.com/id/1255422375/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=zvRIhHtt98k25vLNi4jzp-R5J1WTQOZPFJXg28hKfOo=',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '4.4, 1, 5',
-    price: '5000, 90000, 13000',
-    totalPaid: 200000,
-    rating: 4,
-  },
-  {
-    id:2,
-    title: 'Bengkel Borobudur',
-    mechanicName:'Andi',
-    cust_location: 'Jalan Raya Singosari 16a, Malang',
-    location: 'Jalan Sudimoro 10a Malang',
-    handleType: 'motorcycle',
-    date: '29/12/2022',
-    phone: '0878123123123',
-    image: 'https://carro.id/blog/wp-content/uploads/2020/12/Foto-3-Bosch-Module.png',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
-    totalPaid: 100000,
-    rating: 1,
-  },
-  {
-    id:3,
-    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    mechanicName:'Tedjo',
-    cust_location: 'Jalan Raya Singosari 16a, Malang',
-    location: 'Jalan KH. Malik Malang',
-    handleType: 'car',
-    date: '21/12/2022',
-    phone: '0878932131232',
-    image: 'https://lh3.googleusercontent.com/proxy/d2WkPd-J9TOQ5vfgxe7MmElXs6cNhdKfgkZeU6WbT7Gd3f4rEYvRAhh-YJ2tcIHfBUVFyAyE3paL79LXpCmUdeB2CtNGf3_3nQ0b3DjhI02OTqggLEolRgkn0EXcmf4dWEQTbigfkjP_siJ7pBo7P82eA-sqfaLzUhjQFw=s1360-w1360-h1020',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
-    totalPaid: 100000,
-    rating: 5,
-  },
-];
+import { useAppSelector } from '../../redux';
+import garageData from '../../redux/component/garageData';
 
 const USER = [
   {
@@ -112,12 +63,25 @@ const USER = [
 
 export function HistoryDetail(props : any){
 
-  const DataID : number = props.route.params.id;
-  const [rating, setRating] = React.useState<number>(GARAGE[props.route.params.id - 1].rating);
-  const [rateState, setRateState] = React.useState<boolean>(GARAGE[props.route.params.id - 1].rating != 0 ? true : false);
+  const transactionID : number = props.route.params.id;
+  
+  const raw_transaction = useAppSelector(state => state.transaction);
+  const currentTransaction = raw_transaction.find((item) => item.id === transactionID)
+  
+  const user_data = useAppSelector(state => state.userAuth);
+  const mechanicData = user_data.find((item) => item.id === currentTransaction.mechanicId);
+
+  const fix_detail = useAppSelector(state => state.costListApp);
+  const current_fix_detail = fix_detail.find((item) => item.id === currentTransaction.fixId);
+
+  const garage_data = useAppSelector(state => state.garageData);
+  const current_garage_data = garage_data.find((item) => item.id === currentTransaction.garageId);
+  
+  const [rating, setRating] = React.useState<number>(currentTransaction.rating);
+  const [rateState, setRateState] = React.useState<boolean>(currentTransaction.rating != 0 ? true : false);
 
   const args = {
-    number: GARAGE[DataID - 1].phone,
+    number: mechanicData.phone,
     prompt: false,
     skipCanOpen: true
   }
@@ -130,21 +94,18 @@ export function HistoryDetail(props : any){
   };
 
   let Content: any[] = [], repairList: string[], 
-  repairPrice: string[], repairTotal: string[],
+  repairPrice: number[], repairTotal: number[],
   Payment: any[] = [], PaymentDesc: string[], 
-  PaymentPrice: string[], totalCost:number = 0, changeMoney: number;
+  PaymentPrice: string[], changeMoney: number;
   
-  repairList = GARAGE[DataID - 1].detailRepair.split(',');
-  repairTotal = GARAGE[DataID - 1].repairTotal.split(',');
-  repairPrice = GARAGE[DataID - 1].price.split(',');
-  for(let i = 0; i <= repairList.length - 1; i++){
-    totalCost += Number(repairPrice[i]) * Number(repairTotal[i])
-  };
-  changeMoney = GARAGE[DataID - 1].totalPaid - totalCost;
+  repairList = current_fix_detail.description;
+  repairTotal = current_fix_detail.quantity;
+  repairPrice = current_fix_detail.price;
+  changeMoney = currentTransaction.customer_paid - currentTransaction.service_cost;
   PaymentDesc = ['Biaya Total', 'Total Bayar', 'Kembalian']
   PaymentPrice = [ 
-    String(totalCost),
-    String(GARAGE[DataID - 1].totalPaid), 
+    String(currentTransaction.service_cost),
+    String(currentTransaction.customer_paid),
     String(changeMoney)
   ]
   
@@ -226,15 +187,15 @@ export function HistoryDetail(props : any){
             <View style={{flex:1}}>
               <Avatar.Image 
                 size={60}
-                source={{uri:GARAGE[DataID - 1].image}}
+                source={{uri:mechanicData.photoUrl}}
                 />
             </View>
             <View style={{flexDirection:'column', flex:4}}>
               <CustomText 
-                title={GARAGE[DataID - 1].mechanicName}
+                title={mechanicData.name}
                 style={{textAlign:'left', fontWeight:'700'}}/>
               <CustomText 
-                title={GARAGE[DataID - 1].phone}
+                title={mechanicData.phone}
                 style={{textAlign:'left'}}/>
             </View>
           </View>
@@ -254,7 +215,7 @@ export function HistoryDetail(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={GARAGE[DataID - 1].location}
+                  title={current_garage_data.address}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>
@@ -271,7 +232,7 @@ export function HistoryDetail(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={GARAGE[DataID - 1].cust_location}
+                  title={currentTransaction.pickup_address}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>

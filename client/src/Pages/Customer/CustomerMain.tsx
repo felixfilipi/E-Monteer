@@ -12,62 +12,56 @@ import { MultipleButton } from '../../Component/CustomButton';
 import { RootStackParamList } from '../RootStackParamList';
 import { CustomText } from "../../Component/CustomText";
 import { View, KeyboardAvoidingView, Alert,
-  Text, ScrollView, TouchableOpacity, Dimensions} from "react-native";
+  Text, ScrollView, TouchableOpacity, Dimensions, TouchableWithoutFeedback} from "react-native";
 import { setNavbar } from "../../../redux/component/navbar";
 import { useAppDispatch, useAppSelector } from '../../../redux';
+import { setCustLocation } from "../../../redux/component/custLocation";
 import { setOrderFail } from "../../../redux/component/orderFail";
 import { setOrderType } from "../../../redux/component/orderType";
 import { setSearch } from "../../../redux/component/search";
 import { useNavigation } from "@react-navigation/native";
-import { setLatitude } from "../../../redux/component/latitude";
-import { setLongitude } from "../../../redux/component/longitude";
 import { setOrderCreated } from "../../../redux/component/orderCreated";
 import { setOrderTimer } from "../../../redux/component/orderTimer";
+import { setTransaction } from "../../../redux/component/transaction";
 
 type HomeType = StackNavigationProp<RootStackParamList, 'CustomerMain'>
 
-const GARAGE = [
-  {
-    id:1,
-    title: 'Bengkel HAN Paint & Body Repair',
-    mechanicName:'Rico Purwanto',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
-    date: '02/01/2023',
-    phone: '03414345708',
-    rating: 0,
-  },
-  {
-    id:2,
-    title: 'Bengkel Borobudur',
-    mechanicName:'Andi Wijaya',
-    location: 'Jalan Sudimoro 10a Malang',
-    date: '29/12/2022',
-    phone: '085106468000',
-    rating: 1,
-  },
-  {
-    id:3,
-    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    mechanicName:'Nauval Suteja',
-    location: 'Jalan KH. Malik Malang',
-    date: '21/12/2022',
-    phone: '0341716440',
-    rating: 5,
-  },
-]
-
 export default function CustomerMain(){
 
+  const activeUser = useAppSelector(state => state.activeStatus);
+  
   const orderFailState = useAppSelector(state => state.orderFail);
   const orderCreatedState = useAppSelector(state => state.orderCreated);
+  
   const searchState = useAppSelector(state => state.search);
-  const latitude = useAppSelector(state => state.latitude);
-  const longitude = useAppSelector(state => state.longitude);
+  const custLocation = useAppSelector(state => state.custLocation);
+
+  const raw_userData = useAppSelector(state => state.transaction);
+  const raw_user = useAppSelector(state => state.userAuth);
+
+  const customerData = raw_user.find((item) => item.id == activeUser.id);
+ 
+  const garageData = useAppSelector(state => state.garageData);
+  const historyData = raw_userData.filter((item) => {return item.trans_end_dt !== null && item.cust_id == activeUser.id }).slice(0,3);
+
+  const acceptOrder = useAppSelector(state => state.acceptOrder);
+
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeType>();
-  
-  const [ratingList, setRatingList] = React.useState<number[]>([GARAGE[0].rating, GARAGE[1].rating, GARAGE[2].rating]);
 
+  if(acceptOrder){
+    navigation.navigate('MechanicOrder');
+  }
+
+  const [activeButton, setActiveButton] = React.useState<number>(100);
+  React.useEffect(() => {
+    if(activeButton !== 100){
+      dispatch(setOrderType(activeButton));
+      navigation.navigate('FindGarage', {prevScreen:true});
+      dispatch(setNavbar(1));
+    }
+  },[activeButton])
+  
   const onChangeSearch = (query : string) => dispatch(setSearch(query));
   React.useEffect(() => {
     if(orderFailState == true){
@@ -93,8 +87,7 @@ export default function CustomerMain(){
         const location = await Location.getCurrentPositionAsync({});
         await waiting(1500);
         if(location != undefined){
-          dispatch(setLatitude(location['coords']['latitude']));
-          dispatch(setLongitude(location['coords']['longitude']));
+          dispatch(setCustLocation({ latitude: location['coords']['latitude'], longitude: location['coords']['longitude']}));
           tryAgain = false;
         }else{
           tryAgain = true;
@@ -106,7 +99,7 @@ export default function CustomerMain(){
 
   let _map: any;
   const fitCamera = () => {
-    _map.fitToCoordinates([{latitude: latitude, longitude: longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
+    _map.fitToCoordinates([custLocation], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
 
   const submitSearch = (query: string) => {
     dispatch(setSearch(query));
@@ -114,42 +107,62 @@ export default function CustomerMain(){
     dispatch(setNavbar(1));
   }
 
+  const filter_mechData = raw_user.filter((item) => {return item.role == 'Mechanic'});
+  
+  let mechanicData : any[] = [];
+  for(let i = 0; i <= historyData.length - 1; i++){
+    for(let j = 0; j <= filter_mechData.length - 1; j++){
+      if(filter_mechData[j].id == historyData[i].mechanicId){
+        mechanicData.push(filter_mechData[j]);
+      }
+    }
+  }
+
   let Cards :any[] = [];
-  for(let i = 0; i<=2 ; i++){
-    
+
+  for(let i = 0; i <= historyData.length - 1 ; i++){
+
     let args = {
-      number: GARAGE[i].phone,
+      number: mechanicData[i].phone,
       prompt: false,
       skipCanOpen: true
+    };
+
+    const curr_garage_data = garageData.find(item => item.id == historyData[i].id); 
+
+    var onRating = (rate : number) => {
+      const prevData = [...raw_userData];
+      for(let j = 0; j <= prevData.length - 1; j++){
+        if(prevData[j].id == historyData[i].id){
+          prevData[j].rating = rate;
+        }
+      }
+      dispatch(setTransaction(prevData));
     }
 
-    let stateList = [...ratingList];
-
+  
     Cards.push(
-      <Card style={Style.cardStyle} key={"Card" + i}>
+      <Card style={[Style.cardStyle, {width:380}]} key={"Card" + i}>
         <Card.Content>
-          <Title style={{marginLeft: -5}}> {GARAGE[i].title} </Title>
-          <Paragraph>{GARAGE[i].location}</Paragraph>
+          <Title style={{marginLeft: -5}}> {curr_garage_data.name} </Title>
+          <Paragraph>{curr_garage_data.address}</Paragraph>
           <View style={{flexDirection:'row', marginTop:10}}>
             <Icon 
               name={"stopwatch"} 
               size={18} 
               color="#8d909a"
               />
-            <Text style={Style.dateLabel}>{GARAGE[i].date}</Text>
+            <Text style={Style.dateLabel}>{historyData[i].trans_end_dt}</Text>
           </View>
           <View style={Style.cardAction}>
             <Rating
               type='custom'
-              startingValue={GARAGE[i]?.rating}
+              startingValue={historyData[i]?.rating}
+              readonly={historyData[i].rating == null || undefined ? false : true}
               ratingBackgroundColor="#B1B5C1"
               imageSize={30}
-              tintColor='#fffde6'
-              readonly={ratingList[i] == 0 ? false : true}
-              onFinishRating={(rating : number) => {
-                stateList[i] = rating;
-                setRatingList(stateList)}
-            }
+              tintColor='#fffde6' 
+              onFinishRating={onRating}
               style={Style.ratingStyle}/>
             <TouchableOpacity 
               onPress={()=>call(args).catch(console.error)}
@@ -212,10 +225,14 @@ export default function CustomerMain(){
     )
   }
 
-  if(latitude && longitude){
+  const dragableMarker = (e : any) => {
+    dispatch(setCustLocation({latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude}));
+  }
+
+  if(custLocation.latitude && custLocation.longitude){
     return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+      <TopBar photoUrl={customerData.photoUrl}/>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
       {orderCreatedState === true ? <Waiting/> : null}
         <View style={{ alignItems: 'center', flex:1 }}>
@@ -234,14 +251,14 @@ export default function CustomerMain(){
                   direction='row'
                   keyValue={'Home'}
                   changeValues={['terdekat','terfavorit','24jam']}
-                  setRedux={setOrderType}
+                  setActiveButton = {setActiveButton}
                   iconName={['map-marker','heart','clock-o']}/>
             </View>
             <View style={{justifyContent:'center'}}>
               <MapView
                 initialRegion={{
-                latitude: latitude,
-                longitude: longitude,
+                latitude: custLocation.latitude,
+                longitude: custLocation.longitude,
                 latitudeDelta: 0.01,
                 longitudeDelta: 0.01,
                 }}
@@ -251,8 +268,10 @@ export default function CustomerMain(){
                     justifyContent:'center'}}
               >
                 <Marker
-                  coordinate={{ latitude: latitude, longitude: longitude }}
+                  coordinate={custLocation}
                   title={'Lokasi Anda'}
+                  draggable
+                  onDragEnd={dragableMarker}
                 >
                 <Icon name={'location-pin'} size={50} color={'#4eacea'}/>
                 </Marker>

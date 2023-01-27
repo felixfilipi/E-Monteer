@@ -11,10 +11,14 @@ import { CustomButton } from '../../Component/CustomButton';
 import Style from '../../Styles/MechanicStyle/MechanicMain';
 import { useAppDispatch, useAppSelector } from '../../../redux';
 import { setCustMechanic } from '../../../redux/component/custMechanic';
+import { setMechAvailability } from '../../../redux/component/mechAvailability';
+import { setAcceptOrder } from '../../../redux/component/acceptOrder';
+import { setCancelOrder } from '../../../redux/component/cancelOrder';
 
 type MechanicMainType = StackNavigationProp<RootStackParamList, 'MechanicMain'>
 
 const Item = ({name, location, photoUrl}) => {
+  const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicMainType>();
   return(
     <View style={Style.listContainer}>
@@ -25,14 +29,17 @@ const Item = ({name, location, photoUrl}) => {
       </View>
         <CustomButton title={"Periksa"} 
           style={{borderRadius:20}} 
-          onPress={() => navigation.navigate('MechanicOrder')}/>
+          onPress={() => {navigation.navigate('MechanicOrder'), dispatch(setAcceptOrder(true)), dispatch(setCancelOrder(false))}}/>
     </View>
   )
 }
 
 export default function MechanicMain(){
-  
-  const [available, setAvailable] = React.useState<boolean>(false);
+
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const raw_mechData = useAppSelector(state => state.userAuth);
+  const curr_mech = raw_mechData.find((item) => item.id == activeUser.id);
+  const available = useAppSelector(state => state.mechAvailability);
   let title : string, color: string, icon: string;
   const dispatch = useAppDispatch();
   
@@ -54,14 +61,20 @@ export default function MechanicMain(){
     dispatch(setCustMechanic(RAW_DATA));
   }
   
-  //if(doneStatus){
-  //  const RAW_DATA = useAppSelector(state => state.custMechanic);
-  //  RAW_DATA[0].trans_end_dt = Date()
-  //  dispatch(setCustMechanic(RAW_DATA));
-  //}
+  if(doneStatus){
+    const RAW_DATA = useAppSelector(state => state.custMechanic);
+    RAW_DATA[0].trans_end_dt = Date()
+    dispatch(setCustMechanic(RAW_DATA));
+  }
 
   const RAW_DATA = useAppSelector(state => state.custMechanic); 
-  const DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)
+
+  let DATA : any[];
+  DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)
+  
+  if(available == false){
+    DATA = null;
+  }
 
   const renderItem = ({ item }) => {
     return(
@@ -75,13 +88,13 @@ export default function MechanicMain(){
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='/>
+      <TopBar photoUrl={curr_mech.photoUrl}/>
         <View style={Style.cardHeader}>
           <CustomText title="Status Anda" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       <View style={Style.cardDetail}>
-        <TouchableHighlight onPress={() => {(setAvailable(!available))}}>
+        <TouchableHighlight onPress={() => {(dispatch(setMechAvailability(!available)))}}>
           <View style={{marginVertical:20}}>
             <Icon 
               name={icon} 

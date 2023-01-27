@@ -18,7 +18,7 @@ export function AccessPhoto(props : any) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 4],
+      aspect: [7, 4],
       quality: 1,
     });
 
@@ -49,7 +49,7 @@ export function AccessPhoto(props : any) {
         <View style={Style.idCardContainer}>
           <Image 
             source={{uri: props.photoState}} style={{width:'100%', height:150}}/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
+          <CustomText title = {props.title} color = "white" size={15} style={{marginVertical:15}}/>
         </View>
       </TouchableWithoutFeedback>
     )
@@ -60,7 +60,7 @@ export function AccessPhoto(props : any) {
       <TouchableWithoutFeedback onPress={() => props.setVisibleModal(true)}>  
         <View style={Style.idCardContainer}>
           <Icon name="circle-with-plus" size={50} color="white"/>
-          <CustomText title = "Masukkan foto KTP anda" color = "white" size={15} style={{marginVertical:15}}/>
+          <CustomText title = {props.title} color = "white" size={15} style={{marginVertical:15}}/>
         </View>
       </TouchableWithoutFeedback>
     )

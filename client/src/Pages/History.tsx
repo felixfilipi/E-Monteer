@@ -8,101 +8,29 @@ import { TopBar, BottomNav } from '../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { MultipleButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
-import { useAppSelector } from "../../redux";
 import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../Component/CustomButton';
+import { useAppSelector } from "../../redux";
+import _ from 'lodash';
 
 type HistoryType = StackNavigationProp<RootStackParamList, 'History'>
 type HistoryMechanicType = StackNavigationProp<RootStackParamList, 'HistoryMechanic'>
 type HistoryGarageType = StackNavigationProp<RootStackParamList, 'HistoryGarage'>
 
-const DATA = [
-  {
-    id:1,
-    title: 'Bengkel HAN Paint & Body Repair',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
-    handleType: 'car',
-    date: '02/01/2023',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images'
-  },
-  {
-    id:2,
-    title: 'Bengkel Borobudur',
-    location: 'Jalan Sudimoro 10a Malang',
-    handleType: 'motorcycle',
-    date: '29/12/2022',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images'
-  },
-  {
-    id:3,
-    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    location: 'Jalan KH. Malik Malang',
-    handleType: 'car',
-    date: '21/12/2022',
-    photo: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.gl9N7dsF-16SBTLHN42wpAHaHa%26pid%3DApi&f=1&ipt=8839750ff4c67befd5b773a23a4dd94159a56609f6d859b417e05a700aa8c960&ipo=images'
-  },
-];
-
-const DATA2 = [
-  {
-    id:1,
-    name: 'Alexander Wijaya',
-    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-    handleType: 'car',
-    date: '02/01/2023'
-  },
-  {
-    id:2,
-    name: 'Ryan Pameswara',
-    location: 'Jalan Raya Singosari 16a, Malang',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-    handleType: 'motorcycle',
-    date: '29/12/2022'
-  },
-];
-
-const DATA3 = [
-  {
-    id:1,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-  {
-    id:2,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-  {
-    id:3,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-  {
-    id:4,
-    name: 'Christoper Luis Alexander',
-    location: 'MH Thamrin Jakarta Pusat',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-]
 const Item = ({ title, location, handleType, date, id }) => {
 
   const navigation = useNavigation<HistoryType>();
   return(
     <TouchableHighlight 
       underlayColor='white' 
-      onPress={() => navigation.navigate('HistoryDetail',{id:id})}
-      
+      onPress={() => navigation.navigate('HistoryDetail',{id:id})}     
     >
     <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>
         <View style={{flex:1, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
-            {handleType == 'motorcycle' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
-            {handleType == 'car' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
+            {handleType == 'Motor' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
+            {handleType == 'Mobil' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
           </View>
         </View>
         <View style={{flex:5, paddingHorizontal:10}}>
@@ -117,7 +45,7 @@ const Item = ({ title, location, handleType, date, id }) => {
 };
 
 const ItemMechanic = ({id, name, location, photoUrl}) => {
-  const navigation = useNavigation<HistoryGarageType>();
+  const navigation = useNavigation<HistoryMechanicType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
@@ -144,39 +72,72 @@ const ItemGarage = ({id, name, location, photoUrl}) => {
   )
 }
 
+function joinTables(left, right, leftKey, rightKey) {
+
+    rightKey = rightKey || leftKey;
+
+    var lookupTable = {};
+    var resultTable = [];
+    var forEachLeftRecord = function (currentRecord) {
+        lookupTable[currentRecord[leftKey]] = currentRecord;
+    };
+
+    var forEachRightRecord = function (currentRecord) {
+        var joinedRecord = _.clone(lookupTable[currentRecord[rightKey]]); // using lodash clone
+        _.extend(joinedRecord, currentRecord); // using lodash extend
+        resultTable.push(joinedRecord);
+    };
+
+    left.forEach(forEachLeftRecord);
+    right.forEach(forEachRightRecord);
+
+    return resultTable;
+}
+
 export function History(){
 
-  const vehicleType = useAppSelector(state => state.vehicle);
+  const [activeButton, setActiveButton] = React.useState<number>(0);
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const raw_history = useAppSelector(state => state.transaction);
+  const CustomerHistory = raw_history.filter((item) => item.trans_end_dt != null && item.cust_id == activeUser.id)
+  
+  const raw_GarageData = useAppSelector(state => state.garageData);
+  const raw_user = useAppSelector(state => state.userAuth);
+  const customerData = raw_user.find((item) => {return item.id === activeUser.id});
+  
+  var joinResult = joinTables(raw_GarageData, CustomerHistory, 'id', 'garageId');
+  
   const renderItem = ({ item }) => {
     return(
       <Item 
-        title={item.title} 
-        location={item.location} 
-        handleType={item.handleType}
-        date={item.date}
+        title={item.name} 
+        location={item.pickup_address} 
+        handleType={item.handle_type}
+        date={item.trans_end_dt}
         id={item.id}
         />
     )
   };
  
   let CAR_DATA = [], MOTOR_DATA = [];
-  for(let i = 0; i <= DATA.length; i++){
-    if(DATA[i]?.handleType == 'car'){
-      CAR_DATA.push(DATA[i]);
-    }else if(DATA[i]?.handleType == 'motorcycle'){
-      MOTOR_DATA.push(DATA[i]);
+  for(let i = 0; i <= joinResult.length - 1; i++){
+    if(joinResult[i].handle_type == 'Mobil'){
+      CAR_DATA.push(joinResult[i]);
+    }else if(joinResult[i].handle_type == 'Motor'){
+      MOTOR_DATA.push(joinResult[i]);
     };
   };
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+    <TopBar photoUrl={customerData.photoUrl}/>
     <CustomText title="Riwayat Anda" style={Style.titleText}/>    
     <MultipleButton 
       size={3} 
       title={['Semua','Mobil', 'Motor']}
       direction='row'
       keyValue={'find'}
+      setActiveButton={setActiveButton}
       changeValue={['both','car','motorcycle']}
       iconName={['list','car','motorcycle']}
       style={{marginTop:12}}/>
@@ -184,7 +145,7 @@ export function History(){
     <View style={{flex:1, marginBottom:65, marginTop:5}}>
     <SafeAreaView style={[Style.listContainer, {borderTopEndRadius:15, borderTopStartRadius:15, marginTop:20}]}>
       <FlatList
-        data={vehicleType == 'both' ? DATA : (vehicleType == 'motorcycle' ? MOTOR_DATA : CAR_DATA)}
+        data={activeButton == 0 ? joinResult : (activeButton == 1 ? CAR_DATA : MOTOR_DATA)}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         nestedScrollEnabled
@@ -204,23 +165,31 @@ export function History(){
   )
 };
 
-
 export function HistoryMechanic(){
 
   const renderItem = ({ item }) => {
     return(
       <ItemMechanic 
-        id = {item.id}
+        id = {item.cust_id}
         name = {item.name} 
-        location = {item.location}
+        location = {item.pickup_address}
         photoUrl = {item.photoUrl}
         />
     );
   };
- 
+
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const raw_MechanicHistory = useAppSelector(state => state.transaction);
+  const MechanicHistory = raw_MechanicHistory.filter((item) => item.trans_end_dt != null && item.mechanicId == activeUser.id)
+
+  const raw_user = useAppSelector(state => state.userAuth);
+  const mechanicData = raw_user.find((item) => {return item.id === activeUser.id});
+  
+  var joinResult = joinTables(MechanicHistory, raw_user, 'cust_id', 'id');
+
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='/>
+      <TopBar photoUrl={mechanicData.photoUrl}/>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Riwayat Pesanan" color="white" size={20}
@@ -229,7 +198,7 @@ export function HistoryMechanic(){
       </View>
       <View style= {[Style.listContainer, {backgroundColor: '#3a4447', maxHeight:580}]}>
       <FlatList
-        data={DATA2}
+        data={joinResult}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         nestedScrollEnabled
@@ -250,6 +219,10 @@ export function HistoryMechanic(){
 
 export function HistoryGarage(){
 
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const raw_GarageHistory = useAppSelector(state => state.transaction);
+  const GarageHistory = raw_GarageHistory.filter((item) => item.trans_end_dt != null && item.garageId == activeUser.id)
+  
   const renderItem = ({ item }) => {
     return(
       <ItemGarage 
@@ -272,7 +245,7 @@ export function HistoryGarage(){
       </View>
       <View style= {[Style.listContainer, {backgroundColor: '#3a4447'}]}>
         <FlatList
-          data={DATA2}
+          data={GarageHistory}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

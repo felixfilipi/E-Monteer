@@ -1,5 +1,5 @@
 import { View, Text, FlatList, SafeAreaView, TouchableHighlight} from "react-native";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Searchbar } from 'react-native-paper';
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -8,85 +8,14 @@ import { RootStackParamList } from '../RootStackParamList';
 import { BottomNav, TopBar } from '../../Component/navBar';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { MultipleButton } from '../../Component/CustomButton';
-import { useAppDispatch, useAppSelector } from '../../../redux';
-import { setSearch } from "../../../redux/component/search";
+import { useAppSelector } from '../../../redux';
 import { CustomText } from "../../Component/CustomText";
+import haversineDistance from "haversine-distance";
+import garageData from "../../../redux/component/garageData";
 
 type FindGarageType = StackNavigationProp<RootStackParamList, 'FindGarage'>
 
-const DATA = [
-  {
-    id:1,
-    title: 'Bengkel HAN Paint & Body Repair',
-    location: 'Jalan Simpang Borobudur II/30 Malang',
-    distance: '7.4',
-    rating: 4.6,
-    handleType: 'car'
-  },
-  {
-    id:2,
-    title: 'Bengkel Borobudur',
-    location: 'Jalan Sudimoro 10a Malang',
-    distance: '8.2',
-    rating: 4.5,
-    handleType: 'motorcycle',
-  },
-  {
-    id:3,
-    title: 'Bengkel Mobil "ipunk motor"',
-    location: 'Jalan Blimbing Indah Tengah VIII C3/6 Malang',
-    distance: '4.2',
-    rating: 5,
-    handleType: 'car'
-  },
-  {
-    id:4,
-    title: 'Karunia Nyata Motor',
-    location: 'Jalan Borobudur Ruko A. Yani 17/B4-5 Malang',
-    distance: '5.9',
-    rating: 4.5,
-    handleType: 'motorcycle'
-  },
-  {
-    id:5,
-    title: 'Bengkel Motor Panggilan 24 Jam',
-    location: 'Jalan Raya Cemorokandang 26 Malang',
-    distance: '6.8',
-    rating: 4.4,
-    handleType: 'motorcycle'
-  },
-  {
-    id:6,
-    title: 'Bengkel Suhat Motor',
-    location: 'Jalan Soekarno Hatta 11 Malang',
-    distance: '9.5',
-    rating: 4.6,
-    handleType: 'motorcycle'
-  },
-  {
-    id:7,
-    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    location: 'Jalan KH. Malik Malang',
-    distance: '11.4',
-    rating: 5,
-    handleType: 'both'
-  }
-
-];
-
-let CAR_DATA = [], MOTOR_DATA = [];
-for(let i = 0; i <= DATA.length; i++){
-  if(DATA[i]?.handleType == 'car' || DATA[i]?.handleType == 'both'){
-    CAR_DATA.push(DATA[i]);
-  };
-
-  if(DATA[i]?.handleType == 'motorcycle' || DATA[i]?.handleType == 'both'){
-    MOTOR_DATA.push(DATA[i]);
-  };
-};
-
-
-const Item = ({ id, title, location, distance, rating, handleType }) => {
+const Item = ({ id, name, address, distance, rating, speciality }) => {
 
   const navigation = useNavigation<FindGarageType>();
   return(
@@ -98,17 +27,18 @@ const Item = ({ id, title, location, distance, rating, handleType }) => {
       <View style={{flexDirection:'row'}}>
         <View style={{flex:1, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
-            {handleType == 'motorcycle' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
-            {handleType == 'car' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
-            {handleType == 'both' ? <>
+            {speciality == 'Motor' ? <Icon name={'motorcycle'} size={25} color='#b99504'/> : null}
+            {speciality == 'Mobil' ? <Icon name={'car'} size={25} color='#b99504'/> : null}
+            {speciality == 'Mobil-Motor' ? 
+            <>
               <Icon name={'motorcycle'} size={25} color='#b99504'/>
               <Icon name={'car'} size={25} color='#b99504'/>
             </> : null}
           </View>
         </View>
         <View style={{flex:5, paddingHorizontal:10}}>
-          <Text style={Style.titleStyle}>{title}</Text>
-          <Text style={Style.descriptionStyle}>{location}</Text>
+          <Text style={Style.titleStyle}>{name}</Text>
+          <Text style={Style.descriptionStyle}>{address}</Text>
         </View>
         <View style={{ flex:3, justifyContent:'center', alignContent:'center' }}>
           <View style={{flexDirection: 'row'}}>
@@ -130,42 +60,100 @@ const Item = ({ id, title, location, distance, rating, handleType }) => {
 
 export default function Find(){
 
+  const custLocation = useAppSelector(state => state.custLocation);
+  
   const renderItem = ({ item }) => {
+  const distance = Math.round(haversineDistance({latitude: item.latitude, longitude:item.longitude}, custLocation) / 1000 * 100) / 100;
     return(
       <Item 
-        title={item.title} 
-        location={item.location} 
-        distance={item.distance}
+        name={item.name} 
+        address={item.address} 
+        distance={distance}
         rating={item.rating}
-        handleType={item.handleType}
+        speciality={item.speciality}
         id={item.id}
         />
     )
   };
- 
-  const vehicleType = useAppSelector(state => state.vehicle);
+
   const searchState = useAppSelector(state => state.search);
-  const dispatch = useAppDispatch();
+  const filterType = useAppSelector(state => state.orderType);
   
-  const [destQuery, setDestQuery] = React.useState<string>(searchState);
-  
-  const onChangeDest = (query : string) => setDestQuery(query);
-  
+  const Data = useAppSelector(state => state.garageData);
+  const raw_user = useAppSelector(state => state.userAuth);
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const customerData = raw_user.find((item) => item.id == activeUser.id);
+
+  const [currButton, setCurrButton] = React.useState<number>();
+  const [GarageData, setGarageData] = React.useState<any[]>(Data); 
+  const [destQuery, setDestQuery] = React.useState<string>(searchState); 
+
+  let filteredData : any[] = GarageData;
+
+  const searchData = (searchText : string) => {
+    setDestQuery(searchText);
+    filteredData = Data.slice().filter((item) => {return item.name.toUpperCase().includes(destQuery.toUpperCase())})
+    setGarageData(filteredData)
+  }
+
   React.useEffect(() => {
-    dispatch(setSearch(''))
-  }, []);
+    setDestQuery('');
+  },[currButton])
+
+  if(filterType == 0){
+    let distanceArr : any[] = [];
+    for(let i = 0; i <= Data.length - 1; i++){
+      let distance = Math.round(haversineDistance({latitude: Data[i].latitude, longitude:Data[i].longitude}, custLocation) / 1000 * 100) / 100;
+      distanceArr.push({id: Data[i].id, distance: distance});
+    }
+    distanceArr.sort((a, b) => {return a.distance - b.distance});
+    const keyArr = distanceArr.map((item) => {return item.id});
+    filteredData = Data.slice().sort((a, b) => {return keyArr.indexOf(a.id) - keyArr.indexOf(b.id)});
+  }else if(filterType == 1){
+    filteredData = Data.slice().sort((a, b) => b.rating - a.rating);
+  }else if(filterType == 2){
+    filteredData = Data.slice().filter((item) => item.openHour == '24 Jam');
+  }
+
+  React.useEffect(() => {
+    setGarageData(filteredData);
+  },[])
+
+  let CAR_DATA = [], MOTOR_DATA = [];
+  for(let i = 0; i <= Data.length - 1; i++){
+    if(Data[i]?.speciality == 'Mobil' || Data[i]?.speciality == 'Mobil-Motor'){
+      CAR_DATA.push(Data[i]);
+    };
+  
+    if(Data[i]?.speciality == 'Motor' || Data[i]?.speciality == 'Mobil-Motor'){
+      MOTOR_DATA.push(Data[i]);
+    };
+  };
+
+  React.useEffect(() => {
+    if(currButton == 0){
+      setGarageData(Data);
+    }else if(currButton == 1){
+      setGarageData(CAR_DATA);
+    }else if(currButton == 2){
+      setGarageData(MOTOR_DATA);
+    }
+  }, [currButton])
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+    <TopBar photoUrl={customerData.photoUrl}/>
     <CustomText title="Cari Bengkel" style={Style.titleText}/> 
     <View style={{alignItems:'center'}}>
       <View style={[Style.searchLayout, {marginTop:10}]}>
         <View style={Style.searchSection}>
           <Searchbar
             placeholder="Cari Bengkel Disini"
-            onChangeText={onChangeDest}
+            onChangeText={searchData}
             style={Style.topSearch}
+            clearIcon={(props) => (
+              <Icon name="close" size={20} onPress={() => {setDestQuery(''), setGarageData(Data)}} {...props}/>
+            )}
             value={destQuery}/>
         </View>
       </View>
@@ -175,7 +163,7 @@ export default function Find(){
       size={3} 
       title={['Semua','Mobil', 'Motor']}
       direction='row'
-      keyValue={'find'}
+      setActiveButton={setCurrButton}
       changeValue={['both','car','motorcycle']}
       iconName={['list','car','motorcycle']}
       style={{marginTop:12}}/>
@@ -183,7 +171,7 @@ export default function Find(){
     <View style={Style.contentContainer}>
       <SafeAreaView style={Style.listContainer}>
         <FlatList
-          data={vehicleType == 'both' ? DATA : (vehicleType == 'motorcycle' ? MOTOR_DATA : CAR_DATA)}
+          data={GarageData}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

@@ -6,8 +6,7 @@ import Style from '../Styles/ComponentStyle';
 import MapView, { Marker } from 'react-native-maps';
 import { CustomButton } from './CustomButton';
 import { useAppDispatch, useAppSelector } from '../../redux';
-import { setLatitude } from '../../redux/component/latitude';
-import { setLongitude } from '../../redux/component/longitude';
+import { setCustLocation } from '../../redux/component/custLocation';
 
 /*
 *   props:
@@ -22,22 +21,20 @@ export const Location = (props: any) => {
   const [addressLoc, setAddressLoc] = React.useState<string>();
   
   const dispatch = useAppDispatch();
-  const latitude = useAppSelector(state => state.latitude);
-  const longitude = useAppSelector(state => state.longitude);
+  const custLocation = useAppSelector(state => state.custLocation);
   
   const dragableMarker = (e : any) => {
-    dispatch(setLatitude(e.nativeEvent.coordinate.latitude));
-    dispatch(setLongitude(e.nativeEvent.coordinate.longitude));
+    dispatch(setCustLocation({latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude}));
   }
 
   const setNewLocation = () => {
-    props.setOutputState(`${addressLoc} ( ${latitude}, ${longitude} )`);
+    props.setOutputState(`${addressLoc} ( ${custLocation.latitude}, ${custLocation.longitude} )`);
     props.setVisibleModal(false);
   }
 
   let _map: any;
   const fitCamera = () => {
-    _map.fitToCoordinates([{latitude: latitude, longitude: longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
+    _map.fitToCoordinates([custLocation], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true}) }
   
   return(
     <Modal
@@ -78,8 +75,8 @@ export const Location = (props: any) => {
               <View>
                 <MapView
                   initialRegion={{
-                  latitude: latitude,
-                  longitude: longitude,
+                  latitude: custLocation.latitude,
+                  longitude: custLocation.longitude,
                   latitudeDelta: 0.01,
                   longitudeDelta: 0.01,
                   }}
@@ -90,7 +87,7 @@ export const Location = (props: any) => {
                       justifyContent:'center'}}>
                   <Marker
                     draggable
-                    coordinate={{ latitude: latitude, longitude: longitude }}
+                    coordinate={custLocation}
                     title={'Lokasi Anda'}
                     onDragEnd={(e) => dragableMarker(e)}
                   >

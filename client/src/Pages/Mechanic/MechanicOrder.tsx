@@ -11,8 +11,6 @@ import { View, TouchableOpacity, Dimensions,  Modal,
 import { ActivityIndicator, Avatar } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../../redux';
 import { useNavigation } from "@react-navigation/native";
-import { setLatitude } from "../../../redux/component/latitude";
-import { setLongitude } from "../../../redux/component/longitude";
 import Style from "../../Styles/MechanicStyle/MechanicOrder";
 import { CustomButton } from '../../Component/CustomButton';
 import { setCostListApp } from '../../../redux/component/costListApp';
@@ -23,6 +21,7 @@ import { setCancelOrder } from '../../../redux/component/cancelOrder';
 import { EditOrder } from '../../Component/EditOrder';
 import { CallTowing } from '../../Component/CallTowing';
 import { setDoneOrder } from '../../../redux/component/doneOrder';
+import { setMechLocation } from '../../../redux/component/mechLocation';
 
 type MechanicOrderType = StackNavigationProp<RootStackParamList, 'MechanicOrder'>
 
@@ -72,8 +71,7 @@ export default function MechanicOrder(){
     },
   ];
 
-  const latitude = useAppSelector(state => state.latitude);
-  const longitude = useAppSelector(state => state.longitude);
+  const mechLocation = useAppSelector(state => state.mechLocation);
   const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicOrderType>();
   const [retry, setRetry] = React.useState<boolean>(false);
@@ -162,8 +160,7 @@ export default function MechanicOrder(){
         setTimeout(() => setRetry(true), 3000);
         const location = await Location.getCurrentPositionAsync({});
         if(location != undefined){
-          dispatch(setLatitude(location['coords']['latitude']));
-          dispatch(setLongitude(location['coords']['longitude']));
+          dispatch(setMechLocation({latitude: location['coords']['latitude'], longitude: location['coords']['longitude']}));
         }else{
           setRetry(true);
         }
@@ -175,17 +172,17 @@ export default function MechanicOrder(){
   let _map: any;
 
   const fitCamera = () => {
-    _map.fitToCoordinates([{latitude: latitude, longitude: longitude},{latitude:DATA[0].latitude, longitude:DATA[0].longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true})
+    _map.fitToCoordinates([mechLocation,{latitude:DATA[0].latitude, longitude:DATA[0].longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true})
   }
 
-    if(latitude && longitude){
+    if(mechLocation.latitude && mechLocation.longitude){
     return(
       <View style={{flex:5}}>
         <View style={{flex:2}}>
           <MapView
             initialRegion={{
-            latitude:  (latitude + DATA[0].latitude) / 2,
-            longitude: (longitude + DATA[0].longitude) / 2, 
+            latitude:  (mechLocation.latitude + DATA[0].latitude) / 2,
+            longitude: (mechLocation.longitude + DATA[0].longitude) / 2, 
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
             }}
@@ -195,7 +192,7 @@ export default function MechanicOrder(){
           >
             <Marker
               draggable
-             coordinate={{ latitude: latitude, longitude: longitude }}
+             coordinate={mechLocation}
              title={'Lokasi Anda'}
             >
               <View style={Style.avatarMarker}>

@@ -43,16 +43,14 @@ export const LogoButton = (props : any) => {
 
 export const MultipleButton = (props : any) => {
   
-  const dispatch = useAppDispatch();
-
   let Content : any[] = []
 
   for(let i=0; i<=props.size - 1; i++){
     Content.push(
       <TouchableOpacity style={[Style.myButton,props.style]} 
         activeOpacity={0.8} 
-        key={props.keyValue + i}
-        onPress={() => {dispatch(props.setRedux(props.changeValues[i]))}}>
+        key={i}
+        onPress={() => {(props.setActiveButton(i))}}>
         <Icon 
           name={props.iconName[i]} 
           size={20} 

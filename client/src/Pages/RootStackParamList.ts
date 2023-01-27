@@ -1,6 +1,6 @@
 export type RootStackParamList = {
   Register: undefined;
-  RegisterMechanic: undefined;
+  RegisterMechanic: {garageId: number} | undefined;
   Login: undefined;
   CustomerMain:  undefined;
   EditProfile: undefined;
