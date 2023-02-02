@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { setNavbar } from '../../redux/component/navbar';
 import { CustomText } from './CustomText';
 import { Confirmation } from './Confirmation';
+import call from 'react-native-phone-call';
 
 type NavigationType = StackNavigationProp<RootStackParamList, 'BottomNav'>
 
@@ -144,6 +145,15 @@ export const TopBar = (props : any) => {
 }
 
 export const ChatBar = (props : any) => {
+  
+  const args = {
+    number: props.phoneNumber,
+    prompt: false,
+    skipCanOpen: true,
+  }
+
+  const navigation = useNavigation();
+
   return(
     <>
     <View style={Style.topBar}>
@@ -151,11 +161,16 @@ export const ChatBar = (props : any) => {
         <View style={{flex:3, flexDirection:'row'}}>
           <TouchableWithoutFeedback>
             <View style={Style.backBtn}>
-              <Icon 
-                size={30}
-                name={'arrow-left'}
-                color={'white'}
-                style={Style.avatar}/>
+              <TouchableHighlight
+                onPress={() => navigation.goBack()}
+                style={{borderRadius:30, padding:10, marginRight:10}}>
+                  <Icon 
+                    size={30}
+                    name={'arrow-left'}
+                    color={'white'}
+                    style={[Style.avatar, {marginRight:0}]}
+                    />
+              </TouchableHighlight>
             </View>
           </TouchableWithoutFeedback>
           
@@ -170,15 +185,18 @@ export const ChatBar = (props : any) => {
         </View>
       </View>
       <View style={{flex:1, flexDirection:'row'}}>
-        <TouchableWithoutFeedback>
-          <View style={Style.backBtn}>
+        <View style={Style.backBtn}>
+          <TouchableHighlight
+            style={{borderRadius:30, padding:10}}
+            onPress={() => call(args).catch(console.error)}>
             <Icon 
               size={30}
               name={'phone'}
               color={'white'}
-              style={Style.avatar}/>
-          </View>
-        </TouchableWithoutFeedback>
+              style={[Style.avatar, {marginRight:0}]}
+              />
+          </TouchableHighlight>
+        </View>
       </View>
     </View>
       <View style={{marginBottom:82}}/>

@@ -5,7 +5,7 @@ export const messagesData = [
     createdAt: new Date(),
     user: {
       _id: 1,
-      name: 'Developer',
+      name: 'Cepi',
     },
   },
   {

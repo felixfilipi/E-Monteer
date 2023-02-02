@@ -26,10 +26,6 @@ export function EditOrder(props : any) {
   
   const [flexState, setFlexState] = React.useState<number>(5);
 
-  const onClose = () =>{
-    props.onCloseState(false);
-  }
-
   return(
     <Modal
       animationType="fade"
@@ -37,11 +33,11 @@ export function EditOrder(props : any) {
       visible={props.visibleModal}
       onRequestClose={() => props.setVisibleModal(!props.visibleModal)}>
       <KeyboardAvoidingView style={Style.modalMaskLayout}>
-        <TouchableWithoutFeedback onPress={() => {props.setVisibleModal(false), setFlexState(5), onClose()}}>
+        <TouchableWithoutFeedback onPress={() => {props.setVisibleModal(false), setFlexState(5)}}>
           <View style={[Style.modalMask, {flex:flexState}]}/>
         </TouchableWithoutFeedback>
           <View style={[Style.modalLayout, {flex:5}]}>
-            <TouchableOpacity onPress={() => {props.setVisibleModal(false), setFlexState(5), onClose()}}>
+            <TouchableOpacity onPress={() => {props.setVisibleModal(false), setFlexState(5)}}>
               <View style={Style.modalClose}>
                 <Icon name='cross' size={30} color='#9ca8ac'/>
               </View>
@@ -84,6 +80,8 @@ export function EditOrder(props : any) {
                         iconSize={10}
                         totalWidth={100}
                         totalHeight={30}
+                        minValue={1}
+                        maxValue={50}
                       />
                     </View>
                   </View>

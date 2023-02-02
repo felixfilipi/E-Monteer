@@ -9,9 +9,9 @@ import Style from "../../Styles/CustomerStyle/OrderGarage";
 import { RootStackParamList } from '../RootStackParamList';
 import { CustomText, ImportantText } from "../../Component/CustomText";
 import { CustomButton, LogoButton } from "../../Component/CustomButton";
-import { useAppDispatch } from "../../../redux";
-import { setCustMechanic } from "../../../redux/component/custMechanic";
+import { useAppDispatch, useAppSelector } from "../../../redux";
 import { setOrderCreated } from "../../../redux/component/orderCreated";
+import { setTransaction } from "../../../redux/component/transaction";
 
 type OrderGarageType = StackNavigationProp<RootStackParamList, 'OrderGarage'>
 
@@ -19,7 +19,11 @@ export default function OrderGarage(props : any){
 
   const navigation = useNavigation<OrderGarageType>();
   const dispatch = useAppDispatch();
-  
+
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const all_user = useAppSelector(state => state.userAuth);
+  const curr_user = all_user.find((item) => item.id == activeUser.id);
+
   const [searchQuery, setSearchQuery] = React.useState<string>('');
   const [vehicle, setVechicle] = React.useState<string>('');
   const [vehicleColor, setVehicleColor] = React.useState<string>('#b1b5c1');
@@ -28,6 +32,8 @@ export default function OrderGarage(props : any){
   const [locationModal, setLocationModal] = React.useState<boolean>(false);
   const garageType : string = props.route.params.handleType;
 
+  const transaction = useAppSelector(state => state.transaction);
+  
   let Content : any[] = [];
 
   React.useEffect(()=>{
@@ -47,16 +53,31 @@ export default function OrderGarage(props : any){
       Platform.OS === 'android' ? 
         ToastAndroid.show('Tolong Pilih Jenis Kendaraan dan Pastikan Lokasi Anda Tepat', ToastAndroid.LONG) : Alert.alert('Tolong Pilih Jenis Kendaraan dan Pastikan Lokasi Anda Tepat')
     }else{
-      dispatch(setCustMechanic(
-        [
-          {
-            id:1,
-            name: 'Alexander Wijaya',
-            location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
-            photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-            trans_end_dt: null,
-          }
-        ]
+      const new_transaction = transaction.map((item : any) => {return {...item}})
+      const location = searchQuery.split('|')
+      const address = location[0].trim();
+      const geolocation = location[1].split(', ');
+      const lat = Number(geolocation[0].trim());
+      const long = Number(geolocation[1].trim());
+      dispatch(setTransaction([
+        {
+          id:new_transaction[0] + 1,
+          cust_id: curr_user.id,
+          mechanicId: null,   //update this
+          garageId: null,     //update this
+          roomTopic: new_transaction[0] + 1,
+          towingId: null,
+          fixId: null,
+          handle_type : vehicle,
+          trans_start_dt: new Date().toLocaleString(),
+          trans_end_dt: null,
+          pickup_latitude: lat,
+          pickup_longitude: long,
+          pickup_address: address,
+          service_cost: null,
+          customer_paid: null,
+          rating: null,
+        }, ...new_transaction]
       ))
       dispatch(setOrderCreated(true));
       navigation.navigate('CustomerMain');

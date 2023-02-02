@@ -10,10 +10,10 @@ import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
 import Style from '../../Styles/MechanicStyle/MechanicMain';
 import { useAppDispatch, useAppSelector } from '../../../redux';
-import { setCustMechanic } from '../../../redux/component/custMechanic';
 import { setMechAvailability } from '../../../redux/component/mechAvailability';
 import { setAcceptOrder } from '../../../redux/component/acceptOrder';
 import { setCancelOrder } from '../../../redux/component/cancelOrder';
+import { setTransaction } from '../../../redux/component/transaction';
 
 type MechanicMainType = StackNavigationProp<RootStackParamList, 'MechanicMain'>
 
@@ -56,18 +56,28 @@ export default function MechanicMain(){
   const cancelStatus = useAppSelector(state => state.cancelOrder);
   const doneStatus = useAppSelector(state => state.doneOrder);
   if(cancelStatus){
-    const RAW_DATA = useAppSelector(state => state.custMechanic);
-    RAW_DATA[0].trans_end_dt = Date()
-    dispatch(setCustMechanic(RAW_DATA));
+    const transaction = useAppSelector(state => state.transaction);
+    const new_transaction = transaction.map((item : any) => {return {...item}})
+    for(let i = 0 ; i<= new_transaction.length - 1; i++){
+      if(new_transaction[i].trans_end_dt == null){
+        new_transaction[i].trans_end_dt = new Date().toLocaleString();
+      }
+    }
+    dispatch(setTransaction(new_transaction));
   }
   
   if(doneStatus){
-    const RAW_DATA = useAppSelector(state => state.custMechanic);
-    RAW_DATA[0].trans_end_dt = Date()
-    dispatch(setCustMechanic(RAW_DATA));
+    const transaction = useAppSelector(state => state.transaction);
+    const new_transaction = transaction.map((item : any) => {return {...item}})
+    for(let i = 0 ; i<= new_transaction.length - 1; i++){
+      if(new_transaction[i].trans_end_dt == null){
+        new_transaction[i].trans_end_dt = new Date().toLocaleString();
+      }
+    }
+    dispatch(setTransaction(new_transaction));
   }
 
-  const RAW_DATA = useAppSelector(state => state.custMechanic); 
+  const RAW_DATA = useAppSelector(state => state.transaction); 
 
   let DATA : any[];
   DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)

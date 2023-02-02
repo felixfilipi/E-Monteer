@@ -28,6 +28,7 @@ type HomeType = StackNavigationProp<RootStackParamList, 'CustomerMain'>
 
 export default function CustomerMain(){
 
+  const [retry, setRetry] = React.useState<boolean>(false);
   const activeUser = useAppSelector(state => state.activeStatus);
   
   const orderFailState = useAppSelector(state => state.orderFail);
@@ -75,24 +76,20 @@ export default function CustomerMain(){
   React.useEffect(() =>{
     (async () => {
 
-      let tryAgain : boolean = false;
       let { status } = await Location.requestForegroundPermissionsAsync();
       if(status !== 'granted'){
         Alert.alert('Permission to access location was denied');
         return;
       }
-
       do{
-        const waiting = (ms : number) => new Promise(resolve => setTimeout(resolve, ms));
+        setTimeout(() => setRetry(true), 3000);
         const location = await Location.getCurrentPositionAsync({});
-        await waiting(1500);
         if(location != undefined){
-          dispatch(setCustLocation({ latitude: location['coords']['latitude'], longitude: location['coords']['longitude']}));
-          tryAgain = false;
+          dispatch(setCustLocation({latitude: location['coords']['latitude'], longitude: location['coords']['longitude']}));
         }else{
-          tryAgain = true;
-        };
-      }while(tryAgain);
+          setRetry(true);
+        }
+      }while(retry == true);
  
     })();
   },[]);

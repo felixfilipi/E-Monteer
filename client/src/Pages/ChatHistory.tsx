@@ -5,51 +5,62 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import Style from "../Styles/ChatHistoryStyle";
 import { RootStackParamList } from './RootStackParamList';
 import { BottomNav, TopBar } from '../Component/navBar';
-import { CustomText, ImportantText } from "../Component/CustomText";
+import { CustomText } from "../Component/CustomText";
 import { Avatar } from "react-native-paper";
+import { useAppDispatch, useAppSelector } from "../../redux";
+import _ from 'lodash';
+import { setChatTarget } from "../../redux/component/chatTarget";
 
 type HistoryDetailType = StackNavigationProp<RootStackParamList, 'HistoryDetail'>
 
-const DATA = [
-  {
-    id:1,
-    name: 'Rico Purwanto',
-    message: 'Baik, Mohon Ditunggu Kak',
-    date: '02/01/2023',
-    hour: '06.11',
-    photo: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE='
-  },
-  {
-    id:2,
-    name: 'Andi Wijaya',
-    message: 'Oke, Terima Kasih',
-    date: '29/12/2022',
-    hour: '16.46',
-    photo: 'https://media.istockphoto.com/id/1255422375/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=zvRIhHtt98k25vLNi4jzp-R5J1WTQOZPFJXg28hKfOo='
-  },
-  {
-    id:3,
-    name: 'Nauval Suteja',
-    message: 'Baik, segera ke sana',
-    date: '21/01/2022',
-    hour: '11.02',
-    photo: 'https://media.istockphoto.com/id/1255433065/id/foto/mekanik-mobil-bekerja-di-garasi-layanan-perbaikan.jpg?s=612x612&w=0&k=20&c=TE4eD2zPxLSWhWtTiMGbFqn7aDOdq5bkaxwmj9y3yws='
-  },
+function joinTables(left, right, leftKey, rightKey) {
 
-];
+    rightKey = rightKey || leftKey;
 
-const Item = ({ name, message, date, hour, photo, id }) => {
+    var lookupTable = {};
+    var resultTable = [];
+    var forEachLeftRecord = function (currentRecord) {
+        lookupTable[currentRecord[leftKey]] = currentRecord;
+    };
+
+    var forEachRightRecord = function (currentRecord) {
+        var joinedRecord = _.clone(lookupTable[currentRecord[rightKey]]); // using lodash clone
+        _.extend(joinedRecord, currentRecord); // using lodash extend
+        resultTable.push(joinedRecord);
+    };
+
+    left.forEach(forEachLeftRecord);
+    right.forEach(forEachRightRecord);
+
+    return resultTable;
+}
+
+
+const Item = ({ name, message, datetime, photo, targetId, roomTopic }) => {
 
   const navigation = useNavigation<HistoryDetailType>();
+  datetime = datetime.replace(' ', '');
+  const time = datetime.split(',');
+
+  let show_date : string, size : number;
+  if(time[0] == new Date().toLocaleDateString()){
+    show_date = time[1].slice(0, time[1].length - 3)
+    size = 15;
+  }else{
+    show_date = time[0];
+    size = 12;
+  }
+  const dispatch = useAppDispatch();
+
   return(
     <TouchableHighlight 
       underlayColor='white' 
-      onPress={() => navigation.navigate('Chat',{phone:id})}
+      onPress={() => {navigation.navigate('Chat'), dispatch(setChatTarget({roomTopic, targetId}))}}
       style={{borderRadius:10}}
     >
     <View style={Style.flatListStyle}>
       <View style={{flexDirection:'row'}}>
-        <View style={{flex:1, justifyContent:'center'}}>
+        <View style={{flex:1, marginRight:5, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
             <Avatar.Image
               size={50}
@@ -60,9 +71,9 @@ const Item = ({ name, message, date, hour, photo, id }) => {
           <Text style={Style.titleStyle}>{name}</Text>
           <Text style={Style.descriptionStyle}>{message}</Text>
         </View>
-        <View style={{flex:1, justifyContent:'center'}}>
+        <View style={{flex:2, justifyContent:'center'}}>
           <View style={Style.handleContainer}>
-            <Text>{hour}</Text>
+            <Text style={{fontSize:size, color:'#97a3b6'}}>{show_date}</Text>
           </View>
         </View>
       </View>
@@ -77,26 +88,33 @@ export default function ChatHistory(){
     return(
       <Item 
         name={item.name} 
-        message={item.message} 
-        date={item.date}
-        hour={item.hour}
-        id={item.id}
-        photo={item.photo}
+        message={item.lastMessage} 
+        datetime={item.last_date_time}
+        targetId={item.mech_id}
+        roomTopic={item.roomTopic}
+        photo={item.photoUrl}
         />
     )
   };
-  
+
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const all_user = useAppSelector(state => state.userAuth);
+  const activeUser_data = all_user.find((item) => item.id === activeUser.id);
+  const chatRoom = useAppSelector(state => state.chatRoom);
+  const curr_chatRoom = chatRoom.filter((item) => item.cust_id === activeUser.id);
+
+  var joinResult = joinTables(all_user, curr_chatRoom, 'id', 'mech_id');
+
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+    <TopBar photoUrl={activeUser_data.photoUrl}/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
-      <ImportantText title="Pesan yang tidak aktif dalam 1 Minggu kedepan akan otomatis terhapus"/>
     </View>
     <View style={{flex:1, marginBottom:65, marginTop:5}}>
     <SafeAreaView style={Style.listContainer}>
       <FlatList
-        data={DATA}
+        data={joinResult}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         nestedScrollEnabled
@@ -120,26 +138,33 @@ export function ChatHistoryMechanic(){
     return(
       <Item 
         name={item.name} 
-        message={item.message} 
-        date={item.date}
-        hour={item.hour}
-        id={item.id}
-        photo={item.photo}
+        message={item.lastMessage} 
+        datetime={item.last_date_time}
+        targetId={item.cust_id}
+        roomTopic={item.roomTopic}
+        photo={item.photoUrl}
         />
     )
   };
   
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const all_user = useAppSelector(state => state.userAuth);
+  const activeUser_data = all_user.find((item) => item.id === activeUser.id);
+  const chatRoom = useAppSelector(state => state.chatRoom);
+  const curr_chatRoom = chatRoom.filter((item) => item.mech_id === activeUser.id);
+
+  var joinResult = joinTables(all_user, curr_chatRoom, 'id', 'cust_id');
+  
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+    <TopBar photoUrl={activeUser_data.photoUrl}/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
-      <ImportantText title="Pesan yang tidak aktif dalam 1 Minggu kedepan akan otomatis terhapus"/>
     </View>
     <View style={{flex:1, marginBottom:65, marginTop:5}}>
     <SafeAreaView style={Style.listContainer}>
       <FlatList
-        data={DATA}
+        data={joinResult}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         nestedScrollEnabled

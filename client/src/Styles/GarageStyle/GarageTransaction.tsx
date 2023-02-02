@@ -103,7 +103,7 @@ export default React.StyleSheet.create({
     textAlign:'left'
   },
   modalListLayout:{
-    flex:7, 
+    flex:2, 
     margin:15, 
     borderWidth:0.4, 
     borderColor:'#9ca8ac', 
@@ -115,7 +115,6 @@ export default React.StyleSheet.create({
   },
   modalTotalLayout:{
     flexDirection:'row',
-    flex:2
   },
   modalButtonLayout:{
     flex:2, 

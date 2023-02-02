@@ -28,7 +28,7 @@ export const Location = (props: any) => {
   }
 
   const setNewLocation = () => {
-    props.setOutputState(`${addressLoc} ( ${custLocation.latitude}, ${custLocation.longitude} )`);
+    props.setOutputState(`${addressLoc} | ${custLocation.latitude}, ${custLocation.longitude}`);
     props.setVisibleModal(false);
   }
 

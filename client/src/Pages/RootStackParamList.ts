@@ -13,7 +13,7 @@ export type RootStackParamList = {
   HistoryMechanic: undefined;
   HistoryDetail: {id: number} | undefined;
   HistoryDetailMechanic: {id: number} | undefined;
-  Chat: {phone: number} | undefined;
+  Chat: undefined;
   ChatHistory: undefined;
   RegisterGarage: undefined;
   MechanicMain: undefined;

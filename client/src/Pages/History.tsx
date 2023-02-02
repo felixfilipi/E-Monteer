@@ -166,11 +166,11 @@ export function History(){
 };
 
 export function HistoryMechanic(){
-
+  
   const renderItem = ({ item }) => {
     return(
       <ItemMechanic 
-        id = {item.cust_id}
+        id = {item.id}
         name = {item.name} 
         location = {item.pickup_address}
         photoUrl = {item.photoUrl}
@@ -185,7 +185,7 @@ export function HistoryMechanic(){
   const raw_user = useAppSelector(state => state.userAuth);
   const mechanicData = raw_user.find((item) => {return item.id === activeUser.id});
   
-  var joinResult = joinTables(MechanicHistory, raw_user, 'cust_id', 'id');
+  var joinResult = joinTables(raw_user, MechanicHistory, 'id', 'cust_id');
 
   return(
     <View style={{flex:1}}>
@@ -219,24 +219,30 @@ export function HistoryMechanic(){
 
 export function HistoryGarage(){
 
-  const activeUser = useAppSelector(state => state.activeStatus);
-  const raw_GarageHistory = useAppSelector(state => state.transaction);
-  const GarageHistory = raw_GarageHistory.filter((item) => item.trans_end_dt != null && item.garageId == activeUser.id)
   
   const renderItem = ({ item }) => {
     return(
       <ItemGarage 
         id = {item.id}
         name = {item.name} 
-        location = {item.location}
+        location = {item.pickup_address}
         photoUrl = {item.photoUrl}
         />
     );
   };
 
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const raw_GarageHistory = useAppSelector(state => state.transaction);
+  const GarageHistory = raw_GarageHistory.filter((item) => item.trans_end_dt != null && item.garageId == activeUser.id)
+
+  const raw_user = useAppSelector(state => state.userAuth);
+  const owner_Data = raw_user.find((item) => {return item.id === activeUser.id});
+  
+  var joinResult = joinTables(raw_user, GarageHistory, 'id', 'cust_id');
+
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+      <TopBar photoUrl={owner_Data.photoUrl}/>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Riwayat Pesanan" color="white" size={20}
@@ -245,7 +251,7 @@ export function HistoryGarage(){
       </View>
       <View style= {[Style.listContainer, {backgroundColor: '#3a4447'}]}>
         <FlatList
-          data={GarageHistory}
+          data={joinResult}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

@@ -1,6 +1,6 @@
-import { StackNavigationProp } from "@react-navigation/stack";
+import { Header, StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ToastAndroid,  ScrollView, View,  FlatList, Modal, Alert } from "react-native";
+import { ToastAndroid,  View,  FlatList, Modal, Alert } from "react-native";
 import { RootStackParamList } from "../RootStackParamList";
 import Style from "../../Styles/GarageStyle/GarageTransaction";
 import { CustomButton } from "../../Component/CustomButton";
@@ -11,29 +11,49 @@ import { EditOrder } from "../../Component/EditOrder";
 import { AddPayment } from "../../Component/AddPayment";
 import { Confirmation } from "../../Component/Confirmation";
 import { Done } from "../../Component/Done";
+import { useAppDispatch, useAppSelector } from "../../../redux";
+import { setCostListApp } from "../../../redux/component/costListApp";
 
 type GarageTransactionType = StackNavigationProp<RootStackParamList, 'GarageTransaction'>;
 
-const Item = ({ description, quantity, price, onSubmit, 
+const Item = ({ id, description, quantity, price, onSubmit, 
   editItemModal, setEditItemModal, itemDescription, setItemDescription,
-  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemRendered}) => {
+  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemId, costList, setCostList}) => {
+
+  const onEdit = () => {
+    setItemDescription(description);
+    setItemQuantity(quantity);
+    setItemPrice(price);
+    setEditItemModal(true);
+    setItemId(id);
+  }
+
+  const onDelete = () => {
+    setCostList(costList.filter((item) => {return item.id !== id}));
+  }
 
   return(
     <View style={{flexDirection:'row', flex:1, paddingVertical:15, paddingLeft:15, alignItems:'center'}}>
-      <CustomText title={description} size={15} color='#919b9f' style={{flex:4, marginBottom:0, marginLeft:0, textAlign:'left'}}/>
+      <CustomText title={description} size={15} color='#919b9f' style={{flex:4, paddingHorizontal:7, marginBottom:0, marginLeft:0, textAlign:'left'}}/>
         <View style={{flex:2, flexDirection:'row'}}>
           <CustomText title={'Rp. ' + price} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
           <CustomText title={' x '} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
           <CustomText title={'('+ quantity + ')'} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
         </View>
       <CustomText title={'Rp. ' + price * quantity} size={15} color='#919b9f' style={{flex:4, marginLeft:0, marginBottom:0, textAlign:'right'}}/>
-      <Icon name="edit" 
+      <Icon 
+        name="edit" 
         size={20} 
         color='#919b9f' 
-        onPress={() => setEditItemModal(true)}
+        onPress={onEdit}
         style={{flex:1, marginLeft:8}}
         />
-      <Icon name="trash" size={20} color='#919b9f' style={{flex:1}}/>
+      <Icon 
+        name="trash" 
+        size={20} 
+        color='#919b9f' 
+        onPress={onDelete}
+        style={{flex:1}}/>
       <EditOrder 
         descTitle="Ganti Detail Perbaikan"
         submitTitle="Ganti Data"
@@ -46,41 +66,38 @@ const Item = ({ description, quantity, price, onSubmit,
         fixPrice={itemPrice}
         setFixPrice={setItemPrice}
         onSubmit={onSubmit}
-        onCloseState={setItemRendered}
         />
     </View>
   )
 }
 
-const DATA = {
-  mech_name:'Rico Purwanto',
-  location:'Plaza Araya, jl blimbing indah megah no 2, malang',
-  photoUrl: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE=',
-  cust_name: 'Alexander Wijaya'
-}
+export default function GarageTransaction(props : any){
 
-export default function GarageTransaction(){
-
-  let distance : number = 5.9;
+  const dispatch = useAppDispatch();
+  let curr_transaction_id = props.route.params.id;
   let service_cost : number = 0;
-  let CostList : any = [
-    {
-      id:1,
-      description:'Perjalanan',
-      quantity:distance,
-      price: 2000,
-    },
-    {
-      id:2,
-      description:'Isi Bensin',
-      quantity:2,
-      price: 12000,
-    },
-  ];
+  const transaction = useAppSelector(state => state.transaction);
+  const curr_transaction = transaction.find((item) => item.id == curr_transaction_id);
+  const all_user = useAppSelector(state => state.userAuth);
+  const curr_mechanic = all_user.find((item) => item.id == curr_transaction.mechanicId);
+  const curr_customer = all_user.find((item) => item.id == curr_transaction.cust_id);
 
-  const [fixNumber, setFixNumber] = React.useState<number>(0);
+  const HeaderData = {
+    mech_name: curr_mechanic.name,
+    location: curr_transaction.pickup_address,
+    photoUrl: curr_mechanic.photoUrl,
+    cust_name: curr_customer.name,
+  }
+
+  const CostList = useAppSelector(state => state.costListApp);
+  const curr_costList = CostList.find((item) => item.id === curr_transaction.fixId);
+  
+  // Convert Array Data to JSON type
+  const new_costList : any[] = [];
+
+  const [fixNumber, setFixNumber] = React.useState<number>(1);
   const [fixPrice, setFixPrice] = React.useState<string>('');
-  const [costList, setCostList] = React.useState<any[]>(CostList);
+  const [costList, setCostList] = React.useState<any>(new_costList);
   const [fixDescription, setFixDescription] = React.useState<string>('');
   const [serviceCost, setServiceCost] = React.useState<number>(service_cost);
   const [addEstModal, setAddEstModal] = React.useState<boolean>(false); 
@@ -89,9 +106,7 @@ export default function GarageTransaction(){
   const [itemDescription, setItemDescription] = React.useState<string>();
   const [itemQuantity, setItemQuantity] = React.useState<number>();
   const [itemPrice, setItemPrice] = React.useState<number>();
-  const [itemId, setItemId] = React.useState<number>(2);
-  const [currItemId, setCurrItemId] = React.useState<number>();
-  const [itemRendered, setItemRendered] = React.useState<boolean>(false);
+  const [itemId, setItemId] = React.useState<number>();
 
   const [paymentModal, setPaymentModal] = React.useState<boolean>(false);
   const [confModal, setConfModal] = React.useState<boolean>(false);
@@ -99,31 +114,39 @@ export default function GarageTransaction(){
   const [doneModal, setDoneModal] = React.useState<boolean>(false);
   const [paymentFailModal, setPaymentFailModal] = React.useState<boolean>(false);
   const [isFinished, setIsFinished] = React.useState<boolean>(false);
-
+  const [max_id, setMax_id] = React.useState<number>(curr_costList.description.length);
+ 
+  for(let i = 0 ; i <= max_id - 1 ; i ++){
+    new_costList.push(
+      {
+        id: i + 1,
+        description: curr_costList.description[i],
+        price: curr_costList.price[i],
+        quantity: curr_costList.quantity[i],
+      }
+    )
+  }
+  
   const changeData = () => {
-    for(let i = 0; i <= costList.length - 1; i++){
-      if(costList[i].id === currItemId){
-        costList[i].description = itemDescription;
-        costList[i].quantity = itemQuantity;
-        costList[i].price = itemPrice;
+    
+    const new_costList = costList.map((item : any) => {return {...item}});
+    for(let i = 0; i <= new_costList.length - 1; i++){
+      if(new_costList[i].id === itemId){
+        new_costList[i].description = itemDescription;
+        new_costList[i].quantity = itemQuantity;
+        new_costList[i].price = itemPrice;
       }
     }
-    setCostList(costList);
+
+    setCostList(new_costList);
     setEditItemModal(false);
     ToastAndroid.show('Item berhasil diganti', ToastAndroid.LONG)
   }
 
-  //problem edit data here
   const renderItem = ({ item }) => {
-    if(itemRendered === false){
-      setItemDescription(item.description)
-      setItemQuantity(item.quantity)
-      setItemPrice(item.price)
-      setCurrItemId(item.id)
-      setItemRendered(true)
-    } 
     return(
       <Item
+        id = {item.id}
         description = {item.description}
         quantity = {item.quantity}
         price = {item.price}
@@ -135,8 +158,10 @@ export default function GarageTransaction(){
         setItemQuantity = {setItemQuantity}
         itemPrice = {itemPrice}
         setItemPrice = {setItemPrice}
+        setItemId = {setItemId}
+        costList={costList}
+        setCostList={setCostList}
         onSubmit={changeData}
-        setItemRendered={setItemRendered}
         />
     )
   }
@@ -149,13 +174,13 @@ export default function GarageTransaction(){
   }, [costList])
 
   const addOrder = () => {
-    setItemId(itemId + 1);
     setCostList( prevCostList => [...prevCostList, {
-      id:itemId,
+      id: max_id,
       description:fixDescription,
       quantity: fixNumber,
       price: Number(fixPrice),
     }]);
+    setMax_id(max_id + 1);
     setFixDescription('');
     setFixPrice('');
     setFixNumber(0);
@@ -192,7 +217,7 @@ export default function GarageTransaction(){
 
   const DoneTransaction = () => {
     return(
-      <View style={{marginTop:-20}}>
+      <View style={{marginTop:20, flex:1}}>
         <View style={{flexDirection:'row', flex:1}}>
           <CustomText
             title="Jumlah Pembayaran"
@@ -225,25 +250,51 @@ export default function GarageTransaction(){
       </View>
     )
   }
+
+  const completeOrder = () => {
+    const new_costList = CostList.map((item : any) => {return {...item}});
+    const description : any[] = [], price : any[] = [], quantity : any[] = [];
+    for(let j = 0; j <= costList.length - 1; j++){
+      description.push(costList[j].description);
+      price.push(costList[j].price);
+      quantity.push(costList[j].quantity)
+    }
+
+    const new_Data = {
+      id:curr_costList.id,
+      description: description,
+      price: price,
+      quantity: quantity,
+    }
+
+    for(let i = 0; i <= new_costList.length - 1; i++){
+      if(new_costList[i].id == curr_transaction.fixId){
+        new_costList[i] = new_Data;
+      }
+    }
+    dispatch(setCostListApp(new_costList));
+    setConfModal(false), 
+    setIsFinished(true), 
+    setDoneModal(true)
+  }
    return(
     <View style={{flex:1, marginTop:20}}>
-      <ScrollView contentContainerStyle={{flexGrow:1}}>
         <View style={{ flex:1 }}>
           <View style={{padding:15, borderRadius:20, margin:15, backgroundColor:'#3a4447'}}>
             <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-              <Avatar.Image source={{uri:DATA.photoUrl}} size={50}/>
-              <CustomText title={DATA.mech_name} size={20} color="white" style={{marginLeft:15, marginBottom:0}}/>
+              <Avatar.Image source={{uri:HeaderData.photoUrl}} size={50}/>
+              <CustomText title={HeaderData.mech_name} size={20} color="white" style={{marginLeft:15, marginBottom:0}}/>
             </View>
             <View style={{backgroundColor:'#181a1d', padding:20, marginTop:20, borderRadius:20}}>   
               <View style={{flexDirection:'row'}}>
                 <CustomText title="Nama Pelanggan" size={15} color="white" style={{flex:2, textAlign:'left', marginLeft:0}}/>
                 <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
-                <CustomText title={DATA.cust_name} size={15} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
+                <CustomText title={HeaderData.cust_name} size={15} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
               </View>
               <View style={{flexDirection:'row'}}>
                 <CustomText title="Lokasi" size={15} color="white" style={{flex:2, textAlign:'left', marginLeft:0}}/>
                 <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
-                <CustomText title={DATA.location} size={15} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
+                <CustomText title={HeaderData.location} size={12} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
               </View>
             </View>
           </View>
@@ -275,7 +326,7 @@ export default function GarageTransaction(){
                   />
               </View>
               <View style={{flex:1}}>
-                {isFinished === true ? <DoneTransaction/> : <OnTransaction/>}
+                {(isFinished === true || curr_transaction.trans_end_dt != null) ? <DoneTransaction/> : <OnTransaction/>}
               </View>
             </View>
           </View>
@@ -292,7 +343,6 @@ export default function GarageTransaction(){
           fixPrice={fixPrice}
           setFixPrice={setFixPrice}
           onSubmit={addOrder}
-          onCloseState={setItemRendered}
         />
         <AddPayment
           descTitle="Konfirmasi Pembayaran"
@@ -308,11 +358,11 @@ export default function GarageTransaction(){
           visibleModal={confModal} 
           setVisibleModal={setConfModal} 
           title= "Apakah Pesanan Anda Dapat Diselesaikan?"
-          onTrue={() => {setConfModal(false), setIsFinished(true), setDoneModal(true)}}/>
+          onTrue={completeOrder}/>
         <Done
           visibleModal={doneModal} 
           setVisibleModal={setDoneModal} 
-          title= "Pesanan Berhasil Ditambahkan"
+          title= "Pesanan Berhasil Diselesaikan"
           onTrue={() => {setDoneModal(false), setPaymentModal(false)}}
           />
         <Done
@@ -321,7 +371,6 @@ export default function GarageTransaction(){
           title= "Pembayaran Tidak Dapat Lebih Rendah Dari Total Biaya"
           onTrue={() => {setPaymentFailModal(false)}}
           />
-      </ScrollView>
     </View>
    )
 }

@@ -8,15 +8,17 @@ import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
+import { useAppDispatch, useAppSelector } from '../../../redux';
+import { setGarageAvailability } from '../../../redux/component/garageAvailability';
 
-const DATA = [
-  {
-    id:1,
-    name: 'Alexander Wijaya',
-    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-  },
-]
+//const DATA = [
+//  {
+//    id:1,
+//    name: 'Alexander Wijaya',
+//    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
+//    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
+//  },
+//]
 type GarageMainType = StackNavigationProp<RootStackParamList, 'GarageMain'>
 
 const Item = ({id, name, location, photoUrl}) => {
@@ -35,8 +37,14 @@ const Item = ({id, name, location, photoUrl}) => {
 
 export default function GarageMain(){
   
-  const [available, setAvailable] = React.useState<boolean>(false);
   let title : string, color: string, icon: string;
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const available = useAppSelector(state => state.garageAvailability);
+  const all_user = useAppSelector(state => state.userAuth);
+  const curr_owner = all_user.find((item) => item.id == activeUser.id);
+  const transaction = useAppSelector(state => state.transaction);
+  const curr_transaction = transaction.filter((item) => {item.trans_end_dt === null && item.garageId === activeUser.id})
+  const dispatch = useAppDispatch();
   
   if(available === true){
     title = "Tersedia";
@@ -61,13 +69,13 @@ export default function GarageMain(){
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
+      <TopBar photoUrl={curr_owner.photoUrl}/>
       <View style={{margin:15, borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Status Bengkel Anda" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
-          <TouchableHighlight onPress={() => {(setAvailable(!available))}}>
+          <TouchableHighlight onPress={() => {(dispatch(setGarageAvailability(!available)))}}>
             <View style={{marginVertical:20}}>
               <Icon 
                 name={icon} 
@@ -90,7 +98,7 @@ export default function GarageMain(){
       </View>
       <View style={{ maxHeight:300 , marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
         <FlatList
-          data={DATA}
+          data={curr_transaction}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

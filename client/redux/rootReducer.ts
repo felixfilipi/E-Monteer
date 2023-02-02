@@ -8,7 +8,6 @@ import estimationConfirmation from './component/estimationConfirmation';
 import serviceCostApp from './component/serviceCostApp';
 import costListApp from './component/costListApp';
 import cancelOrder from './component/cancelOrder';
-import custMechanic from './component/custMechanic';
 import orderCreated from './component/orderCreated';
 import userAuth from './component/userAuth';
 import orderTimer from './component/orderTimer';
@@ -20,6 +19,10 @@ import activeStatus from './component/activeStatus';
 import transaction from './component/transaction';
 import mechAvailability from './component/mechAvailability';
 import acceptOrder from './component/acceptOrder';
+import chatRoom from './component/chatRoom';
+import chatTarget from './component/chatTarget';
+import chatMessage from './component/chatMessage';
+import garageAvailability from './component/garageAvailability';
 
 const rootReducer = combineReducers({
   drawer: drawerReducer,
@@ -33,7 +36,6 @@ const rootReducer = combineReducers({
   serviceCostApp: serviceCostApp,
   costListApp: costListApp,
   cancelOrder: cancelOrder,
-  custMechanic: custMechanic,
   orderCreated: orderCreated,
   userAuth: userAuth,
   orderTimer: orderTimer,
@@ -43,6 +45,10 @@ const rootReducer = combineReducers({
   transaction: transaction,
   mechAvailability: mechAvailability,
   acceptOrder: acceptOrder,
+  chatRoom: chatRoom,
+  chatTarget: chatTarget,
+  chatMessage: chatMessage,
+  garageAvailability: garageAvailability,
 })
 
 export default rootReducer

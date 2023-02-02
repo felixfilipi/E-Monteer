@@ -7,59 +7,7 @@ import { Avatar } from 'react-native-paper';
 import { AbsoluteButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
 import { Rating } from "react-native-ratings";
-import { useAppSelector } from '../../redux';
-import garageData from '../../redux/component/garageData';
-
-const USER = [
-  {
-    id:1,
-    title: 'Karunia Nyata Motor',
-    custName: 'Alexander Wijaya',
-    cust_location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
-    location: 'Jalan Borobudur Ruko A. Yani 17/B4-5 Malang',
-    image: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-    handleType: 'motorcycle',
-    date: '15/01/2023',
-    phone: '087892314322',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '5.9, 2',
-    price: '2000, 12000',
-    totalPaid: 100000,
-    rating: 5,
-  },
-  {
-    id:2,
-    title: 'Bengkel Borobudur',
-    custName:'Andi',
-    cust_location: 'Jalan Raya Singosari 16a, Malang',
-    location: 'Jalan Sudimoro 10a Malang',
-    handleType: 'motorcycle',
-    date: '29/12/2022',
-    phone: '0878123123123',
-    image: 'https://carro.id/blog/wp-content/uploads/2020/12/Foto-3-Bosch-Module.png',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
-    totalPaid: 100000,
-    rating: 1,
-  },
-  {
-    id:3,
-    title: 'Bengkel Otomotif "Mobil & Sepeda Motor"',
-    custName:'Tedjo',
-    cust_location: 'Jalan Raya Singosari 16a, Malang',
-    location: 'Jalan KH. Malik Malang',
-    handleType: 'car',
-    date: '21/12/2022',
-    phone: '0878932131232',
-    image: 'https://lh3.googleusercontent.com/proxy/d2WkPd-J9TOQ5vfgxe7MmElXs6cNhdKfgkZeU6WbT7Gd3f4rEYvRAhh-YJ2tcIHfBUVFyAyE3paL79LXpCmUdeB2CtNGf3_3nQ0b3DjhI02OTqggLEolRgkn0EXcmf4dWEQTbigfkjP_siJ7pBo7P82eA-sqfaLzUhjQFw=s1360-w1360-h1020',
-    detailRepair: 'Perjalanan, Ganti Oli, Isi Bensin',
-    repairTotal: '2.4, 1, 5',
-    price: '5000, 20000, 10000',
-    totalPaid: 100000,
-    rating: 5,
-  },
-];
+import { useAppDispatch, useAppSelector } from '../../redux';
 
 export function HistoryDetail(props : any){
 
@@ -78,7 +26,7 @@ export function HistoryDetail(props : any){
   const current_garage_data = garage_data.find((item) => item.id === currentTransaction.garageId);
   
   const [rating, setRating] = React.useState<number>(currentTransaction.rating);
-  const [rateState, setRateState] = React.useState<boolean>(currentTransaction.rating != 0 ? true : false);
+  const [rateState, setRateState] = React.useState<boolean>(currentTransaction.rating != null ? true : false);
 
   const args = {
     number: mechanicData.phone,
@@ -86,10 +34,20 @@ export function HistoryDetail(props : any){
     skipCanOpen: true
   }
 
+  const dispatch = useAppDispatch();
+  
   const processRate = (rating : number) => {
     if(rateState == false){
       setRating(rating);     
       setRateState(true);
+//      const newTrx = [...raw_transaction];
+//      for(let i = 0 ; i <= newTrx.length - 1; i++){
+//        if(newTrx[i].id == currentTransaction.id){
+//          newTrx[i].rating = rating;
+//          console.log('run');
+//        }
+//      }
+//      dispatch(setTransaction(newTrx));
     };
   };
 
@@ -268,39 +226,39 @@ export function HistoryDetail(props : any){
 
 export function HistoryDetailMechanic(props : any){
 
-  const DataID : number = props.route.params.id;
-  const [rating, setRating] = React.useState<number>(USER[props.route.params.id - 1].rating);
-  const [rateState, setRateState] = React.useState<boolean>(USER[props.route.params.id - 1].rating != 0 ? true : false);
+  const transactionID : number = props.route.params.id;
+  
+  const raw_transaction = useAppSelector(state => state.transaction);
+  const currentTransaction = raw_transaction.find((item) => item.id === transactionID)
+  
+  const user_data = useAppSelector(state => state.userAuth);
+  const customerData = user_data.find((item) => item.id === currentTransaction.cust_id);
 
+  const fix_detail = useAppSelector(state => state.costListApp);
+  const current_fix_detail = fix_detail.find((item) => item.id === currentTransaction.fixId);
+
+  const garage_data = useAppSelector(state => state.garageData);
+  const current_garage_data = garage_data.find((item) => item.id === currentTransaction.garageId);
+  
   const args = {
-    number: USER[DataID - 1].phone,
+    number: customerData.phone,
     prompt: false,
     skipCanOpen: true
   }
 
-  const processRate = (rating : number) => {
-    if(rateState == false){
-      setRating(rating);     
-      setRateState(true);
-    };
-  };
-
   let Content: any[] = [], repairList: string[], 
-  repairPrice: string[], repairTotal: string[],
+  repairPrice: number[], repairTotal: number[],
   Payment: any[] = [], PaymentDesc: string[], 
   PaymentPrice: string[], totalCost:number = 0, changeMoney: number;
   
-  repairList = USER[DataID - 1].detailRepair.split(',');
-  repairTotal = USER[DataID - 1].repairTotal.split(',');
-  repairPrice = USER[DataID - 1].price.split(',');
-  for(let i = 0; i <= repairList.length - 2; i++){
-    totalCost += Number(repairPrice[i]) * Number(repairTotal[i])
-  };
-  changeMoney = USER[DataID - 1].totalPaid - totalCost;
+  repairList = current_fix_detail.description;
+  repairTotal = current_fix_detail.quantity;
+  repairPrice = current_fix_detail.price;
+  changeMoney = currentTransaction.customer_paid - currentTransaction.service_cost;
   PaymentDesc = ['Biaya Total', 'Total Bayar', 'Kembalian']
   PaymentPrice = [ 
-    String(totalCost),
-    String(USER[DataID - 1].totalPaid), 
+    String(currentTransaction.service_cost),
+    String(currentTransaction.customer_paid),
     String(changeMoney)
   ]
   
@@ -371,26 +329,25 @@ export function HistoryDetailMechanic(props : any){
             size={20}/> 
           <Rating
             type='custom'
-            startingValue={rating}
+            startingValue={currentTransaction.rating}
             ratingBackgroundColor="#B1B5C1"
             imageSize={30}
             tintColor='white'
-            onFinishRating={(rating : number) => processRate(rating)}
-            readonly={rateState} 
+            readonly={true} 
             />
           <View style={Style.avatarContainer}>
             <View style={{flex:1}}>
               <Avatar.Image 
                 size={60}
-                source={{uri:USER[DataID - 1].image}}
+                source={{uri:customerData.photoUrl}}
                 />
             </View>
             <View style={{flexDirection:'column', flex:4}}>
               <CustomText 
-                title={USER[DataID - 1].custName}
+                title={customerData.name}
                 style={{textAlign:'left', fontWeight:'700'}}/>
               <CustomText 
-                title={USER[DataID - 1].phone}
+                title={customerData.phone}
                 style={{textAlign:'left'}}/>
             </View>
           </View>
@@ -410,7 +367,7 @@ export function HistoryDetailMechanic(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={USER[DataID - 1].location}
+                  title={current_garage_data.address}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>
@@ -427,7 +384,7 @@ export function HistoryDetailMechanic(props : any){
                   color="#c5c2c0"
                   style={{textAlign:'left', fontWeight:'700'}}/>
                 <CustomText 
-                  title={USER[DataID - 1].cust_location}
+                  title={currentTransaction.pickup_address}
                   color="black"
                   size={15}
                   style={{textAlign:'left', fontWeight:'600'}}/>
