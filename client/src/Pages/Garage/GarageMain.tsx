@@ -10,15 +10,8 @@ import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
 import { useAppDispatch, useAppSelector } from '../../../redux';
 import { setGarageAvailability } from '../../../redux/component/garageAvailability';
+import _ from 'lodash';
 
-//const DATA = [
-//  {
-//    id:1,
-//    name: 'Alexander Wijaya',
-//    location: 'Plaza Araya, jl blimbing indah megah no 2, malang',
-//    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-//  },
-//]
 type GarageMainType = StackNavigationProp<RootStackParamList, 'GarageMain'>
 
 const Item = ({id, name, location, photoUrl}) => {
@@ -35,6 +28,28 @@ const Item = ({id, name, location, photoUrl}) => {
   )
 }
 
+function joinTables(left, right, leftKey, rightKey) {
+
+    rightKey = rightKey || leftKey;
+
+    var lookupTable = {};
+    var resultTable = [];
+    var forEachLeftRecord = function (currentRecord) {
+        lookupTable[currentRecord[leftKey]] = currentRecord;
+    };
+
+    var forEachRightRecord = function (currentRecord) {
+        var joinedRecord = _.clone(lookupTable[currentRecord[rightKey]]); // using lodash clone
+        _.extend(joinedRecord, currentRecord); // using lodash extend
+        resultTable.push(joinedRecord);
+    };
+
+    left.forEach(forEachLeftRecord);
+    right.forEach(forEachRightRecord);
+
+    return resultTable;
+}
+
 export default function GarageMain(){
   
   let title : string, color: string, icon: string;
@@ -43,9 +58,11 @@ export default function GarageMain(){
   const all_user = useAppSelector(state => state.userAuth);
   const curr_owner = all_user.find((item) => item.id == activeUser.id);
   const transaction = useAppSelector(state => state.transaction);
-  const curr_transaction = transaction.filter((item) => {item.trans_end_dt === null && item.garageId === activeUser.id})
+  const curr_transaction = transaction.filter((item) => item.customer_paid === null && item.garageId == curr_owner.garageId)
   const dispatch = useAppDispatch();
   
+  var joinResult = joinTables(all_user, curr_transaction, 'id', 'cust_id');
+
   if(available === true){
     title = "Tersedia";
     color = "#78de56";
@@ -61,7 +78,7 @@ export default function GarageMain(){
       <Item 
         id = {item.id}
         name = {item.name} 
-        location = {item.location}
+        location = {item.pickup_address}
         photoUrl = {item.photoUrl}
         />
     );
@@ -69,7 +86,7 @@ export default function GarageMain(){
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl={curr_owner.photoUrl}/>
+      <TopBar id={activeUser.id} photoUrl={curr_owner.photoUrl}/>
       <View style={{margin:15, borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Status Bengkel Anda" color="white" size={20}
@@ -92,13 +109,13 @@ export default function GarageMain(){
       </View>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
-          <CustomText title="Pesanan Saat Ini" color="white" size={20}
+          <CustomText title="Menunggu Bukti Pembayaran" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       </View>
       <View style={{ maxHeight:300 , marginHorizontal:15, borderBottomEndRadius:10, borderBottomStartRadius:10, backgroundColor: '#3a4447'}}>
         <FlatList
-          data={curr_transaction}
+          data={joinResult}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

@@ -10,16 +10,26 @@ import { Avatar } from 'react-native-paper';
 import { CustomButton } from '../../Component/CustomButton';
 import Style from '../../Styles/MechanicStyle/MechanicMain';
 import { useAppDispatch, useAppSelector } from '../../../redux';
-import { setMechAvailability } from '../../../redux/component/mechAvailability';
 import { setAcceptOrder } from '../../../redux/component/acceptOrder';
 import { setCancelOrder } from '../../../redux/component/cancelOrder';
 import { setTransaction } from '../../../redux/component/transaction';
+import _ from 'lodash';
+import { setUserAuth } from '../../../redux/component/userAuth';
+import { setOrderTimer } from '../../../redux/component/orderTimer';
 
 type MechanicMainType = StackNavigationProp<RootStackParamList, 'MechanicMain'>
 
-const Item = ({name, location, photoUrl}) => {
+const Item = ({id, name, location, photoUrl}) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicMainType>();
+  
+  const onCheck = () => {
+    navigation.navigate('MechanicOrder', {id: id});
+    dispatch(setAcceptOrder({acceptOrder:true, id:id})); 
+    dispatch(setCancelOrder(false));
+    dispatch(setOrderTimer({stop:true, time: 120}))
+  }
+
   return(
     <View style={Style.listContainer}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
@@ -29,21 +39,42 @@ const Item = ({name, location, photoUrl}) => {
       </View>
         <CustomButton title={"Periksa"} 
           style={{borderRadius:20}} 
-          onPress={() => {navigation.navigate('MechanicOrder'), dispatch(setAcceptOrder(true)), dispatch(setCancelOrder(false))}}/>
+          onPress={onCheck}/>
     </View>
   )
+}
+
+function joinTables(left, right, leftKey, rightKey) {
+
+    rightKey = rightKey || leftKey;
+
+    var lookupTable = {};
+    var resultTable = [];
+    var forEachLeftRecord = function (currentRecord) {
+        lookupTable[currentRecord[leftKey]] = currentRecord;
+    };
+
+    var forEachRightRecord = function (currentRecord) {
+        var joinedRecord = _.clone(lookupTable[currentRecord[rightKey]]); // using lodash clone
+        _.extend(joinedRecord, currentRecord); // using lodash extend
+        resultTable.push(joinedRecord);
+    };
+
+    left.forEach(forEachLeftRecord);
+    right.forEach(forEachRightRecord);
+
+    return resultTable;
 }
 
 export default function MechanicMain(){
 
   const activeUser = useAppSelector(state => state.activeStatus);
-  const raw_mechData = useAppSelector(state => state.userAuth);
-  const curr_mech = raw_mechData.find((item) => item.id == activeUser.id);
-  const available = useAppSelector(state => state.mechAvailability);
+  const all_user = useAppSelector(state => state.userAuth);
+  const curr_mech = all_user.find((item) => item.id == activeUser.id);
   let title : string, color: string, icon: string;
   const dispatch = useAppDispatch();
   
-  if(available === true){
+  if(curr_mech.isAvailable === true){
     title = "Tersedia";
     color = "#78de56";
     icon = "checkcircle";
@@ -54,7 +85,7 @@ export default function MechanicMain(){
   }
 
   const cancelStatus = useAppSelector(state => state.cancelOrder);
-  const doneStatus = useAppSelector(state => state.doneOrder);
+  
   if(cancelStatus){
     const transaction = useAppSelector(state => state.transaction);
     const new_transaction = transaction.map((item : any) => {return {...item}})
@@ -66,45 +97,42 @@ export default function MechanicMain(){
     dispatch(setTransaction(new_transaction));
   }
   
-  if(doneStatus){
-    const transaction = useAppSelector(state => state.transaction);
-    const new_transaction = transaction.map((item : any) => {return {...item}})
-    for(let i = 0 ; i<= new_transaction.length - 1; i++){
-      if(new_transaction[i].trans_end_dt == null){
-        new_transaction[i].trans_end_dt = new Date().toLocaleString();
-      }
-    }
-    dispatch(setTransaction(new_transaction));
-  }
-
-  const RAW_DATA = useAppSelector(state => state.transaction); 
-
-  let DATA : any[];
-  DATA = RAW_DATA.filter((val) => val.trans_end_dt === null)
+  const transaction = useAppSelector(state => state.transaction); 
+  let curr_transaction = transaction.filter((item) => item.trans_end_dt === null)
   
-  if(available == false){
-    DATA = null;
-  }
-
+  var joinResult = joinTables(all_user, curr_transaction, 'id', 'cust_id');
+  
   const renderItem = ({ item }) => {
+  
     return(
       <Item 
+        id = {item.id}
         name = {item.name} 
-        location = {item.location}
+        location = {item.pickup_address}
         photoUrl = {item.photoUrl}
         />
     );
   };
 
+  const mechAvail = () => {
+    const new_all_user = all_user.map((item : any) => {return {...item}})
+    for(let i = 0 ; i <= new_all_user.length - 1; i++){
+      if(new_all_user[i].id == activeUser.id){
+        new_all_user[i].isAvailable = !new_all_user[i].isAvailable;
+      }
+    }
+    dispatch(setUserAuth(new_all_user));
+  }
+
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl={curr_mech.photoUrl}/>
+      <TopBar id={activeUser.id} photoUrl={curr_mech.photoUrl}/>
         <View style={Style.cardHeader}>
           <CustomText title="Status Anda" color="white" size={20}
             style={{textAlign:'left'}}/>
         </View>
       <View style={Style.cardDetail}>
-        <TouchableHighlight onPress={() => {(dispatch(setMechAvailability(!available)))}}>
+        <TouchableHighlight onPress={mechAvail}>
           <View style={{marginVertical:20}}>
             <Icon 
               name={icon} 
@@ -125,7 +153,7 @@ export default function MechanicMain(){
         </View>
       <View style={Style.cardDetail}>
         <FlatList
-          data={DATA}
+          data={joinResult}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           nestedScrollEnabled

@@ -11,19 +11,26 @@ import { RootStackParamList } from "./RootStackParamList";
 import { useComponentDidMount } from '../Component/customHooks';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from "expo-image-picker";
+import { useAppSelector } from "../../redux";
+import { AccessPhoto } from "../Component/AccessPhoto";
 
 LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
 
 type EditProfileType = StackNavigationProp<RootStackParamList, 'EditProfile'>
 
-export default function EditProfile(){
+export default function EditProfile(props: any){
+
+  const id = props.route.params.id;
+  const all_user = useAppSelector(state => state.userAuth);
+  const curr_user = all_user.find((item) => item.id == id);
 
   const navigation = useNavigation<EditProfileType>();
 
   let placeholder_list:string[], icon_list:string[], 
   autocomplete_list:any[], inputType:any[], maxLength:number[],
-  Content:any[] = [], fields:any[], title: string[], key: string[];
+  Content:any[] = [], fields:any[], title: string[], 
+  value_mechanic: string[], value: any[], fields_mechanic : any[];
   
   placeholder_list = ['Input Your Name Here','Input Your Email Here',
     'Input Your Phone Number Here', 'Input Your Address Here', 
@@ -35,80 +42,158 @@ export default function EditProfile(){
   maxLength = [30, 40, 13, 100, 20, 20]
   title = ['Name', 'Email', 'Phone', 'Address', 'Password', 'Confirm Password']
 
-  const [SName, setName] = React.useState<string>('');
-  const [SEmail, setEmail] = React.useState<string>('');
-  const [SPhone, setPhone] = React.useState<number>(0);
-  const [SAddress, setAddress] = React.useState<string>('');
-  const [SPassword, setPassword] = React.useState<string>('');
-  const [SPasswordValid, setPasswordValid] = React.useState<string>('');
+  const [SName, setName] = React.useState<string>(curr_user.name);
+  const [SEmail, setEmail] = React.useState<string>(curr_user.email);
+  const [SPhone, setPhone] = React.useState<string>(curr_user.phone);
+  const [SAddress, setAddress] = React.useState<string>(curr_user.address);
+  const [SPassword, setPassword] = React.useState<string>(curr_user.password);
+  const [SPasswordValid, setPasswordValid] = React.useState<string>(curr_user.password);
   const [SButton, setButton] = React.useState<boolean>(false);
-  const [SImage, setImage] = React.useState<string>('https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg');
+  const [SImage, setImage] = React.useState<string>(curr_user.photoUrl);
   const [SModal, setModal] = React.useState<boolean>(false);
+  const [SIDCard, setIDCard] = React.useState<string>(curr_user.idCard);
+  const [ImageUpload, setImageUpload] = React.useState<boolean>(true);
 
   const isComponentMounted = useComponentDidMount();
   
+
   React.useEffect(() => {
     if(isComponentMounted){
-      setButton(SName !== '' && SEmail !== '' && SPhone !== 0 && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
+      setButton(SName !== '' && SEmail !== '' && SPhone !== '' && SAddress !== '' && SPassword !== '' && SPasswordValid !== '')
     }
   },[SName, SEmail, SPhone, SAddress, SPassword, SPasswordValid])
 
+  value_mechanic = [SName, SEmail, SPhone, SAddress, SPassword, SPassword, SIDCard];
+  value = [SName, SEmail, SPhone, SAddress, SPassword, SPassword];
   fields = [setName, setEmail, setPhone, setAddress, 
     setPassword, setPasswordValid]
+  fields_mechanic = [setName, setEmail, setPhone, setAddress, 
+    setPassword, setPasswordValid, setIDCard]
 
-  for(let i = 0; i <= icon_list.length - 1; i++){
-    if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
-      Content.push(
-        <>
-          <View style={Style.flexHorizontal} key={"View" + i}>
-            <Icon 
-              name={icon_list[i]} 
-              size={30} 
-              style={Style.iconStyle}
-              color="#fff"
-              key={"icon" + i}
-              />
-            <Text style={Style.inputTitle}>{title[i]}</Text>
-          </View>
-            <TextInput 
-              autoComplete={autocomplete_list[i]}
-              maxLength={maxLength[i]}
-              placeholder={placeholder_list[i]}
-              placeholderTextColor="#fff"
-              autoCapitalize='none'
-              secureTextEntry={true}
-              keyboardType={inputType[i]}
-              onChangeText={(value) => fields[i](value)}
-              key={"input" + i}
-              style={Style.textInp}
-              />
+  if(curr_user.role == 'Customer'){
+    for(let i = 0; i <= icon_list.length - 1; i++){
+      if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
+        Content.push(
+          <>
+            <View style={Style.flexHorizontal} key={"View" + i}>
+              <Icon 
+                name={icon_list[i]} 
+                size={30} 
+                style={Style.iconStyle}
+                color="#fff"
+                key={"icon" + i}
+                />
+              <Text style={Style.inputTitle}>{title[i]}</Text>
+            </View>
+              <TextInput 
+                autoComplete={autocomplete_list[i]}
+                maxLength={maxLength[i]}
+                placeholder={placeholder_list[i]}
+                placeholderTextColor="#fff"
+                autoCapitalize='none'
+                value={value[i]}
+                secureTextEntry={true}
+                keyboardType={inputType[i]}
+                onChangeText={(value) => fields[i](value)}
+                key={"input" + i}
+                style={Style.textInp}
+                />
+            </>
+        )
+      }else{
+        Content.push(
+          <>
+            <View style={Style.flexHorizontal} key={"View" + i}>
+              <Icon 
+                name={icon_list[i]} 
+                size={30} 
+                style={Style.iconStyle}
+                color="#fff"
+                key={"Icon" + i}/>
+              <Text style={Style.inputTitle}>{title[i]}</Text>
+            </View>
+              <TextInput 
+                autoComplete={autocomplete_list[i]}
+                maxLength={maxLength[i]}
+                value={value[i]}
+                placeholder={placeholder_list[i]}
+                placeholderTextColor="#fff"
+                keyboardType={inputType[i]}
+                onChangeText={(value) => fields[i](value)}
+                style={Style.textInp}
+                key={"Input" + i}/>
           </>
-      )
-    }else{
-      Content.push(
-        <>
-          <View style={Style.flexHorizontal} key={"View" + i}>
-            <Icon 
-              name={icon_list[i]} 
-              size={30} 
-              style={Style.iconStyle}
-              color="#fff"
-              key={"Icon" + i}/>
-            <Text style={Style.inputTitle}>{title[i]}</Text>
-          </View>
-            <TextInput 
-              autoComplete={autocomplete_list[i]}
-              maxLength={maxLength[i]}
-              placeholder={placeholder_list[i]}
-              placeholderTextColor="#fff"
-              keyboardType={inputType[i]}
-              onChangeText={(value) => fields[i](value)}
-              style={Style.textInp}
-              key={"Input" + i}/>
-        </>
-      )
-    }
-  };
+        )
+      }
+    };
+  }else{
+    for(let i = 0; i <= value_mechanic.length - 1; i++){
+      if(icon_list[i] == 'key' || icon_list[i] == 'shield'){
+        Content.push(
+          <>
+            <View style={Style.flexHorizontal} key={"View" + i}>
+              <Icon 
+                name={icon_list[i]} 
+                size={30} 
+                style={Style.iconStyle}
+                color="#fff"
+                key={"icon" + i}
+                />
+              <Text style={Style.inputTitle}>{title[i]}</Text>
+            </View>
+              <TextInput 
+                autoComplete={autocomplete_list[i]}
+                maxLength={maxLength[i]}
+                placeholder={placeholder_list[i]}
+                placeholderTextColor="#fff"
+                autoCapitalize='none'
+                value={value[i]}
+                secureTextEntry={true}
+                keyboardType={inputType[i]}
+                onChangeText={(value) => fields_mechanic[i](value)}
+                key={"input" + i}
+                style={Style.textInp}
+                />
+            </>
+        )
+      }else if(SIDCard == value_mechanic[i]){
+        Content.push(
+          <AccessPhoto
+            photoState={SIDCard}
+            setPhotoState={setIDCard}
+            setImageUploaded={setImageUpload}
+            visibleModal={SModal}
+            setVisibleModal={setModal}
+            title="Masukkan Foto KTP Anda"
+          />
+        )
+      }else{
+        Content.push(
+          <>
+            <View style={Style.flexHorizontal} key={"View" + i}>
+              <Icon 
+                name={icon_list[i]} 
+                size={30} 
+                style={Style.iconStyle}
+                color="#fff"
+                key={"Icon" + i}/>
+              <Text style={Style.inputTitle}>{title[i]}</Text>
+            </View>
+              <TextInput 
+                autoComplete={autocomplete_list[i]}
+                maxLength={maxLength[i]}
+                value={value[i]}
+                placeholder={placeholder_list[i]}
+                placeholderTextColor="#fff"
+                keyboardType={inputType[i]}
+                onChangeText={(value) => fields[i](value)}
+                style={Style.textInp}
+                key={"Input" + i}/>
+          </>
+        )
+      }
+    };
+  }
 
   const checkInput = () => {
     if(SPassword?.length! < 8){

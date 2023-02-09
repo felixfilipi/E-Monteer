@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const acceptOrderSlice = createSlice({
   name: 'acceptOrder',
-  initialState: false,
+  initialState: {acceptOrder: false, id:null},
   reducers: {
-    setAcceptOrder: (state, action: PayloadAction<boolean>) => action.payload
+    setAcceptOrder: (state, action: PayloadAction<{acceptOrder: boolean, id: number}>) => action.payload
   },
 })
 

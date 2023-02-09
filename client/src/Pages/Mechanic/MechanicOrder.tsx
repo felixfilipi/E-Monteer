@@ -20,30 +20,33 @@ import { Confirmation } from '../../Component/Confirmation';
 import { setCancelOrder } from '../../../redux/component/cancelOrder';
 import { EditOrder } from '../../Component/EditOrder';
 import { CallTowing } from '../../Component/CallTowing';
-import { setDoneOrder } from '../../../redux/component/doneOrder';
 import { setMechLocation } from '../../../redux/component/mechLocation';
+import haversineDistance from 'haversine-distance';
+import { setChatTarget } from '../../../redux/component/chatTarget';
+import { setTransaction } from '../../../redux/component/transaction';
+import { setChatRoom } from '../../../redux/component/chatRoom';
+import { setOrderCreated } from '../../../redux/component/orderCreated';
 
 type MechanicOrderType = StackNavigationProp<RootStackParamList, 'MechanicOrder'>
 
-const DATA = [
-  {
-    id:1,
-    MechanicName: 'Alexander Wijaya',
-    Garage: 'Karunia Nyata Motor',
-    photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
-    latitude: -6.17524,
-    longitude: 106.82715,
-    CustomerPhone: '087892314322',
-  },
-]
+const Item = ({ id, description, quantity, price, onSubmit, 
+  editItemModal, setEditItemModal, itemDescription, setItemDescription,
+  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemId, 
+  costList, setCostList}) => {
+  
+  const onEdit = () => {
+    setItemDescription(description);
+    setItemQuantity(quantity);
+    setItemPrice(price);
+    setEditItemModal(true);
+    setItemId(id);
+  }
 
-const args = {
-  number: DATA[0].CustomerPhone,
-  prompt: false,
-  skipCanOpen: true
-}
+  const onDelete = () => {
+    console.log(id);
+    setCostList(costList.filter((item) => {return item.id !== id}));
+  }
 
-const Item = ({description, quantity, price}) => {
   return(
     <View style={{flexDirection:'row', flex:1, paddingVertical:15, paddingLeft:15, alignItems:'center'}}>
       <CustomText title={description} size={15} color='#919b9f' style={{flex:4, marginBottom:0, marginLeft:0, textAlign:'left'}}/>
@@ -53,27 +56,54 @@ const Item = ({description, quantity, price}) => {
           <CustomText title={'('+ quantity + ')'} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
         </View>
       <CustomText title={'Rp. ' + price * quantity} size={15} color='#919b9f' style={{flex:4, marginLeft:0, marginBottom:0, textAlign:'right'}}/>
-      <Icon name="edit" size={20} color='#919b9f' style={{flex:1, marginLeft:8}}/>
-      <Icon name="trash" size={20} color='#919b9f' style={{flex:1}}/>
+      <Icon name="edit" size={20} color='#919b9f' onPress={onEdit} style={{flex:1, marginLeft:8}}/>
+      <Icon name="trash" size={20} color='#919b9f' onPress={onDelete} style={{flex:1}}/>
+      <EditOrder 
+        descTitle="Ganti Detail Perbaikan"
+        submitTitle="Ganti Data"
+        visibleModal={editItemModal}
+        setVisibleModal={setEditItemModal}
+        fixDescription={itemDescription}
+        setFixDescription={setItemDescription}
+        fixNumber={itemQuantity}
+        setFixNumber={setItemQuantity}
+        fixPrice={itemPrice}
+        setFixPrice={setItemPrice}
+        onSubmit={onSubmit}
+        />
     </View>
   )
 }
 
-export default function MechanicOrder(){
+export default function MechanicOrder(props: any){
 
-  let distance : number = 5.9;
-  let service_cost : number = 0;
-  let CostList : any = [
-    {
-      description:'Perjalanan',
-      quantity:distance,
-      price: 2000,
-    },
-  ];
+  const curr_transaction_id = props.route.params.id;
+  const all_user = useAppSelector(state => state.userAuth);
+  const transaction = useAppSelector(state => state.transaction);
+  const all_costList = useAppSelector(state => state.costListApp);
 
+  const curr_transaction = transaction.find((item) => item.id == curr_transaction_id);
+  const curr_customer = all_user.find((item) => item.id == curr_transaction.cust_id);
+  const curr_mechanic = all_user.find((item) => item.id == curr_transaction.mechanicId);
+  
   const mechLocation = useAppSelector(state => state.mechLocation);
+
   const dispatch = useAppDispatch();
   const navigation = useNavigation<MechanicOrderType>();
+
+  let distance = Math.round(haversineDistance({latitude: curr_transaction.pickup_latitude, longitude:curr_transaction.pickup_longitude}, mechLocation) / 1000 * 100) / 100;
+  const [Sdistance, setDistance] = React.useState<number>(distance);
+  
+  const new_costList : any[] = [];
+    new_costList.push(
+      {
+        id: 1,
+        description: 'Perjalanan',
+        price: 8000,
+        quantity: Sdistance,
+      }
+  )
+
   const [retry, setRetry] = React.useState<boolean>(false);
   const [estConfirmModal, setEstConfirmModal] = React.useState<boolean>(false);
   const [estimationModal, setEstimationModal] = React.useState<boolean>(false);
@@ -82,28 +112,82 @@ export default function MechanicOrder(){
   const [fixDescription, setFixDescription] = React.useState<string>();
   const [fixNumber, setFixNumber] = React.useState<number>(0);
   const [fixPrice, setFixPrice] = React.useState<string>('');
-  const [costList, setCostList] = React.useState<any[]>(CostList);
-  const [serviceCost, setServiceCost] = React.useState<number>(service_cost);
-  const [componentMount, setComponentMount] = React.useState<boolean>(false);
+  const [costList, setCostList] = React.useState<any[]>(new_costList);
+  const [serviceCost, setServiceCost] = React.useState<number>(curr_transaction.service_cost);
   const [towingModal, setTowingModal] = React.useState<boolean>(false);
   const [buttonTitle, setButtonTitle] = React.useState<string>('Buat Estimasi Pembayaran');
   const [doneModal, setDoneModal] = React.useState<boolean>(false);
+  const [maxId, setMaxId] = React.useState<number>(1);
+  
+  const [editItemModal, setEditItemModal] = React.useState<boolean>(false);
+  const [itemDescription, setItemDescription] = React.useState<string>();
+  const [itemQuantity, setItemQuantity] = React.useState<number>();
+  const [itemPrice, setItemPrice] = React.useState<number>();
+  const [itemId, setItemId] = React.useState<number>();
+  
+  const costListConfirm = useAppSelector(state => state.acceptCostList);
+  const towingConfirm = useAppSelector(state => state.towConfirm);
+  const chatHistory = useAppSelector(state => state.chatRoom);
+
+  React.useEffect(() => {
+    if(costListConfirm.acceptCostList == true){
+      setButtonTitle('Selesaikan Pesanan');
+    };
+  }, [buttonTitle])
+
+  const args = {
+    number: curr_customer.phone,
+    prompt: false,
+    skipCanOpen: true
+  }
+
+  const changeData = () => {
+    
+    const new_costList = costList.map((item : any) => {return {...item}});
+    for(let i = 0; i <= new_costList.length - 1; i++){
+      if(new_costList[i].id === itemId){
+        new_costList[i].description = itemDescription;
+        new_costList[i].quantity = itemQuantity;
+        new_costList[i].price = itemPrice;
+      }
+    }
+
+    setCostList(new_costList);
+    setEditItemModal(false);
+    ToastAndroid.show('Item berhasil diganti', ToastAndroid.LONG)
+  }
 
   const renderItem = ({ item }) => {
     return(
       <Item
+        id = {item.id}
         description = {item.description}
         quantity = {item.quantity}
-        price = {item.price}/>
+        price = {item.price}
+        editItemModal = {editItemModal}
+        setEditItemModal = {setEditItemModal}
+        itemDescription = {itemDescription}
+        setItemDescription = {setItemDescription}
+        itemQuantity = {itemQuantity}
+        setItemQuantity = {setItemQuantity}
+        itemPrice = {itemPrice}
+        setItemPrice = {setItemPrice}
+        setItemId = {setItemId}
+        costList={costList}
+        setCostList={setCostList}
+        onSubmit={changeData}
+        />
     )
   }
 
   const addOrder = () => {
-    setCostList( prevCostList => [...prevCostList, {
+    setCostList( prevCostList => [ ...prevCostList,{
+      id: maxId + 1,
       description:fixDescription,
       quantity: fixNumber,
       price: Number(fixPrice),
     }]);
+    setMaxId(maxId + 1);
     setFixDescription('');
     setFixPrice('');
     setFixNumber(0);
@@ -112,12 +196,30 @@ export default function MechanicOrder(){
   }
 
   const confirmOrder = () => {
-    dispatch(setCostListApp(costList))
+    const description = [], quantity = [], price = [];
+    for(let i = 0 ; i <= costList.length - 1; i++){
+      description.push(costList[i].description);
+      quantity.push(costList[i].quantity);
+      price.push(costList[i].price);
+    }
+    dispatch(setCostListApp([
+      {
+        id: all_costList[0].id + 1,
+        description: description,
+        price: price,
+        quantity: quantity,
+      }, ...all_costList ]))
+    const new_transaction = transaction.map((item) => {return {...item}})
+    for(let j = 0; j <= new_transaction.length - 1; j++){
+      if(new_transaction[j].id === curr_transaction.id){
+        new_transaction[j].fixId = all_costList[0].id + 1;
+      }
+    }
+    dispatch(setTransaction(new_transaction));
     dispatch(setServiceCostApp(serviceCost))
     dispatch(setEstimationConfirmation(true))
     setEstConfirmModal(false);
     setEstimationModal(false);
-    setButtonTitle('Selesaikan Pesanan');
     ToastAndroid.show('Konfirmasi Estimasi Perbaikan Telah Dikirimkan', ToastAndroid.LONG);
   }
 
@@ -127,8 +229,23 @@ export default function MechanicOrder(){
     ToastAndroid.show('Anda Telah Membatalkan Pesanan', ToastAndroid.LONG);
   }
 
+  const onTow = () => {
+    if(towingConfirm.receiveConfirm == true){
+      call(args).catch(console.error)
+    }else{
+      setTowingModal(true)
+    }
+  }
+
   const doneOrder = () => {
-    dispatch(setDoneOrder(true));
+    const new_transaction = transaction.map((item : any) => {return {...item}})
+    for(let i = 0 ; i<= new_transaction.length - 1; i++){
+      if(new_transaction[i].trans_end_dt == null){
+        new_transaction[i].trans_end_dt = new Date().toLocaleDateString() + ', ' +  new Date().toLocaleTimeString();
+      }
+    }
+    dispatch(setOrderCreated(false));
+    dispatch(setTransaction(new_transaction));
     navigation.navigate('MechanicMain');
     ToastAndroid.show('Anda Telah Menyelesaikan Pesanan', ToastAndroid.LONG);
   }
@@ -142,6 +259,7 @@ export default function MechanicOrder(){
   }
 
   React.useEffect(() => {
+    let service_cost : number = 0;
     for(let i = 0; i <= costList.length - 1; i++){
       service_cost += costList[i].quantity * costList[i].price;
     };
@@ -172,7 +290,34 @@ export default function MechanicOrder(){
   let _map: any;
 
   const fitCamera = () => {
-    _map.fitToCoordinates([mechLocation,{latitude:DATA[0].latitude, longitude:DATA[0].longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true})
+    _map.fitToCoordinates([mechLocation,{latitude:curr_transaction.pickup_latitude, longitude:curr_transaction.pickup_longitude}], {edgePadding: {top:50, right:50, left:50, bottom:50}, animated: true})
+  }
+
+  const onAddOrder = () => {
+    setEstimationModal(false);
+    setAddEstModal(true);
+  }
+
+  const FailWait = () =>{
+    setTimeout(() => setRetry(true), 3000);
+    return null;
+  }
+
+  const onChat = () => {
+    if(chatHistory[0].roomTopic != curr_transaction.roomTopic){
+      dispatch(setChatRoom([
+      {
+        roomTopic: chatHistory[0].roomTopic + 1,
+        cust_id: curr_transaction.cust_id,
+        mech_id: curr_transaction.mechanicId,
+        lastMessage: '',
+        last_date_time: new Date().toLocaleDateString() + ', ' +  new Date().toLocaleTimeString(),
+        signal_customer: 0,
+      }, ...chatHistory
+      ]))
+    }
+    dispatch(setChatTarget({roomTopic: curr_transaction.roomTopic, targetId: curr_transaction.cust_id})); 
+    navigation.navigate('Chat')
   }
 
     if(mechLocation.latitude && mechLocation.longitude){
@@ -181,8 +326,8 @@ export default function MechanicOrder(){
         <View style={{flex:2}}>
           <MapView
             initialRegion={{
-            latitude:  (mechLocation.latitude + DATA[0].latitude) / 2,
-            longitude: (mechLocation.longitude + DATA[0].longitude) / 2, 
+            latitude:  (mechLocation.latitude + curr_transaction.pickup_latitude) / 2,
+            longitude: (mechLocation.longitude + curr_transaction.pickup_longitude) / 2, 
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
             }}
@@ -198,12 +343,12 @@ export default function MechanicOrder(){
               <View style={Style.avatarMarker}>
                 <Avatar.Image 
                   size={30} 
-                  source={{uri: DATA[0].photoUrl}}/>
+                  source={{uri: curr_mechanic.photoUrl}}/>
               </View>
             </Marker>
             <Marker
               draggable
-             coordinate={{ latitude: DATA[0].latitude, longitude: DATA[0].longitude }}
+             coordinate={{ latitude: curr_transaction.pickup_latitude, longitude: curr_transaction.pickup_longitude }}
              title={'Lokasi Kejadian'} 
             >
             <Icon name={'location-pin'} size={50} color={'#ff522b'}/>
@@ -228,15 +373,17 @@ export default function MechanicOrder(){
         </View>
         <View style={Style.commandContainer}>
           <View style={Style.contactContainer}>
-            <Avatar.Image size={60} source={{uri: DATA[0].photoUrl}}/>
+            <Avatar.Image size={60} source={{uri: curr_customer.photoUrl}}/>
             <View style={Style.contactLayout}>
-              <CustomText title={DATA[0].MechanicName} size={17} color="black" style={Style.contactText}/>
-              <CustomText title={DATA[0].Garage} size={12} color="#85898f" style={[Style.contactText]}/>
+              <CustomText title={curr_customer.name} size={17} color="black" style={Style.contactText}/>
+              <CustomText title={curr_transaction.pickup_address} size={12} color="#85898f" style={[Style.contactText]}/>
             </View>
             <TouchableOpacity activeOpacity={0.7} onPress={() => call(args).catch(console.error)}>
               <Icon name='phone' size={25} color="#fefefe" style={Style.contactIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7} onPress={() => {navigation.navigate('Chat')}}>
+            <TouchableOpacity 
+              activeOpacity={0.7} 
+              onPress={onChat}>
               <Icon name='chat' size={25} color="#fefefe" style={[Style.contactIcon, {marginLeft:5}]}/>
             </TouchableOpacity>
           </View>
@@ -253,7 +400,7 @@ export default function MechanicOrder(){
                   title="Panggil Derek"
                   style={{borderRadius:30}}
                   textStyle={{fontWeight:'700'}}
-                  onPress={() => setTowingModal(true)}/>
+                  onPress={onTow}/>
                 <CustomButton 
                   title="Batalkan Pesanan"
                   style={{borderRadius:30, backgroundColor:'#b41d12'}}
@@ -330,7 +477,7 @@ export default function MechanicOrder(){
                         title="Tambah Pesanan" 
                         style={{flex:1}} 
                         textStyle={Style.modalButtonText}
-                        onPress={() => {setEstimationModal(false), setAddEstModal(true)}}
+                        onPress={onAddOrder}
                       />
                       <CustomButton 
                         title="Konfirmasi Pesanan" 
@@ -356,7 +503,6 @@ export default function MechanicOrder(){
           fixNumber={fixNumber}
           setFixNumber={setFixNumber}
           onSubmit={addOrder}
-          onCloseState={setComponentMount}
         />
       <CallTowing
         visibleModal={towingModal}
@@ -369,6 +515,7 @@ export default function MechanicOrder(){
     }else{
     return(
       <View style={Style.loading}>
+        <FailWait/>
         <CustomText 
           title="Sedang Memuat"
           color={'white'}

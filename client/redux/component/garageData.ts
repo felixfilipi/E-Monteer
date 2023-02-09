@@ -16,6 +16,7 @@ const garageDataSlice = createSlice({
       speciality:'Mobil',
       rating:4.6,
       total_rating:72,
+      isAvailable: false,
     },
     {
       id:2,
@@ -30,6 +31,7 @@ const garageDataSlice = createSlice({
       speciality:'Motor',
       rating:4.5,
       total_rating:427,
+      isAvailable: true,
     },
     {
       id:3,
@@ -44,6 +46,7 @@ const garageDataSlice = createSlice({
       speciality:'Mobil-Motor',
       rating:5,
       total_rating:1,
+      isAvailable: true,
     },
     {
       id:4,
@@ -58,6 +61,7 @@ const garageDataSlice = createSlice({
       speciality:'Mobil',
       rating:4.6,
       total_rating:275,
+      isAvailable: true,
     },
     {
       id:5,
@@ -72,12 +76,13 @@ const garageDataSlice = createSlice({
       speciality:'Mobil',
       rating:5,
       total_rating:20,
+      isAvailable: true,
     },
     {
       id:6,
       name: 'Bengkel Panggilan Motor 24 Jam',
       address:'Jalan Raya Cemorokandang 26 Malang, Jawa Timur',
-      photoUrl:'https://images.autofun.co.id/file1/7d6197ada81840279d68af0785d4f591_678x380.jpg',
+      photoUrl:'https://images.autofun.co.id/file1/a8b369e5cb5045ae9b1a9e3a75949490_678x380.jpg',
       openHour:'24 Jam',
       openDay:'Setiap Hari',
       site:'-',
@@ -86,6 +91,7 @@ const garageDataSlice = createSlice({
       speciality:'Motor',
       rating:4.4,
       total_rating:27,
+      isAvailable: true,
     },
     {
       id:7,
@@ -100,6 +106,7 @@ const garageDataSlice = createSlice({
       speciality:'Motor',
       rating:4.6,
       total_rating:464,
+      isAvailable: true,
     },
   ],
   reducers: {

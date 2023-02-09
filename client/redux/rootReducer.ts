@@ -23,6 +23,8 @@ import chatRoom from './component/chatRoom';
 import chatTarget from './component/chatTarget';
 import chatMessage from './component/chatMessage';
 import garageAvailability from './component/garageAvailability';
+import towConfirm from './component/towConfirm';
+import acceptCostList from './component/acceptCostList';
 
 const rootReducer = combineReducers({
   drawer: drawerReducer,
@@ -49,6 +51,8 @@ const rootReducer = combineReducers({
   chatTarget: chatTarget,
   chatMessage: chatMessage,
   garageAvailability: garageAvailability,
+  towConfirm: towConfirm,
+  acceptCostList: acceptCostList,
 })
 
 export default rootReducer

@@ -1,11 +1,13 @@
 import React from "react";
 import { Modal, KeyboardAvoidingView, TouchableWithoutFeedback, 
-  TouchableOpacity, View } from "react-native";
+  TouchableOpacity, View, ToastAndroid } from "react-native";
 import Style from "../Styles/ComponentStyle/EditOrder";
 import { CustomButton } from "./CustomButton";
 import { CustomText } from "./CustomText";
 import Icon from "react-native-vector-icons/Entypo";
 import call from 'react-native-phone-call';
+import { useAppDispatch, useAppSelector } from "../../redux";
+import { setTowConfirm } from "../../redux/component/towConfirm";
 
 
 /* Props List:
@@ -43,7 +45,10 @@ const DATA = [
   },
 ]
 export function CallTowing(props : any) {
+
   let nearest : number = 1;
+  const dispatch = useAppDispatch();
+
   for(let i = 0; i <= DATA.length - 1; i++){
     if(DATA[i].distance < DATA[nearest].distance){
       nearest = i;
@@ -55,6 +60,18 @@ export function CallTowing(props : any) {
     prompt: false,
     skipCanOpen: true
   }
+
+  const towStatus = useAppSelector(state => state.towConfirm);
+
+  const callTow = () => {
+    if(towStatus.receiveConfirm != null && towStatus.receiveConfirm == true){
+      call(args).catch(console.error)
+    }else{
+      dispatch(setTowConfirm({sendConfirm:true, receiveConfirm:null}))
+      ToastAndroid.show('Mengirimkan konfirmasi kepada pengguna', ToastAndroid.LONG)
+    }
+  }
+
   return(
     <Modal
       animationType="fade"
@@ -100,7 +117,7 @@ export function CallTowing(props : any) {
                   title={props.submitTitle} 
                   style={{flex:1}} 
                   textStyle={Style.modalButtonText}
-                  onPress={() => call(args).catch(console.error)}/>
+                  onPress={callTow}/>
               </View>
             </View>
           </View>

@@ -13,6 +13,7 @@ import { RootStackParamList } from '../RootStackParamList';
 import { CustomText } from "../../Component/CustomText";
 import { View, KeyboardAvoidingView, Alert,
   Text, ScrollView, TouchableOpacity, Dimensions, TouchableWithoutFeedback} from "react-native";
+import _ from 'lodash';
 import { setNavbar } from "../../../redux/component/navbar";
 import { useAppDispatch, useAppSelector } from '../../../redux';
 import { setCustLocation } from "../../../redux/component/custLocation";
@@ -25,6 +26,28 @@ import { setOrderTimer } from "../../../redux/component/orderTimer";
 import { setTransaction } from "../../../redux/component/transaction";
 
 type HomeType = StackNavigationProp<RootStackParamList, 'CustomerMain'>
+
+function joinTables(left, right, leftKey, rightKey) {
+
+    rightKey = rightKey || leftKey;
+
+    var lookupTable = {};
+    var resultTable = [];
+    var forEachLeftRecord = function (currentRecord) {
+        lookupTable[currentRecord[leftKey]] = currentRecord;
+    };
+
+    var forEachRightRecord = function (currentRecord) {
+        var joinedRecord = _.clone(lookupTable[currentRecord[rightKey]]); // using lodash clone
+        _.extend(joinedRecord, currentRecord); // using lodash extend
+        resultTable.push(joinedRecord);
+    };
+
+    left.forEach(forEachLeftRecord);
+    right.forEach(forEachRightRecord);
+
+    return resultTable;
+}
 
 export default function CustomerMain(){
 
@@ -45,14 +68,12 @@ export default function CustomerMain(){
   const garageData = useAppSelector(state => state.garageData);
   const historyData = raw_userData.filter((item) => {return item.trans_end_dt !== null && item.cust_id == activeUser.id }).slice(0,3);
 
-  const acceptOrder = useAppSelector(state => state.acceptOrder);
+  var joinResult = joinTables(garageData, historyData,'id', 'garageId');
+  
+  const statusOrder = useAppSelector(state => state.acceptOrder);
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation<HomeType>();
-
-  if(acceptOrder){
-    navigation.navigate('MechanicOrder');
-  }
 
   const [activeButton, setActiveButton] = React.useState<number>(100);
   React.useEffect(() => {
@@ -125,10 +146,8 @@ export default function CustomerMain(){
       skipCanOpen: true
     };
 
-    const curr_garage_data = garageData.find(item => item.id == historyData[i].id); 
-
     var onRating = (rate : number) => {
-      const prevData = [...raw_userData];
+      const prevData = raw_userData.map((item) => {return {...item}});
       for(let j = 0; j <= prevData.length - 1; j++){
         if(prevData[j].id == historyData[i].id){
           prevData[j].rating = rate;
@@ -137,12 +156,11 @@ export default function CustomerMain(){
       dispatch(setTransaction(prevData));
     }
 
-  
     Cards.push(
       <Card style={[Style.cardStyle, {width:380}]} key={"Card" + i}>
         <Card.Content>
-          <Title style={{marginLeft: -5}}> {curr_garage_data.name} </Title>
-          <Paragraph>{curr_garage_data.address}</Paragraph>
+          <Title style={{marginLeft: -5}}> {joinResult[i].name} </Title>
+          <Paragraph>{joinResult[i].address}</Paragraph>
           <View style={{flexDirection:'row', marginTop:10}}>
             <Icon 
               name={"stopwatch"} 
@@ -180,7 +198,7 @@ export default function CustomerMain(){
 
   const Waiting = () => {
     const time = useAppSelector(state => state.orderTimer);
-    const timerRef = React.useRef(time);
+    const timerRef = React.useRef(time.time);
 
     React.useEffect(() => {
       const timerId = setInterval(() => {
@@ -189,9 +207,13 @@ export default function CustomerMain(){
           clearInterval(timerId);
           dispatch(setOrderFail(true));
           dispatch(setOrderCreated(false));
-          dispatch(setOrderTimer(120));
+          dispatch(setOrderTimer({stop:false, time:120}));
         }else{
-          dispatch(setOrderTimer(timerRef.current));
+          if(time.stop == true){
+            clearInterval(timerId)
+          }else{
+            dispatch(setOrderTimer({stop:false, time:timerRef.current}));
+          }
         }
       }, 1000);
       return () => {
@@ -203,33 +225,59 @@ export default function CustomerMain(){
       dispatch(setOrderFail(true));
       dispatch(setOrderCreated(false));
     };
-    
-    return(
-      <View style={Style.waitingContainer}>
-        <View style={Style.waitingTextLayout}>
-          <CustomText title="Menunggu Konfirmasi Bengkel Terdekat" size={15} color="black" style={{textAlign:'left'}}/>
-          <CustomText title={"Mohon Tunggu Sebentar (" + time + "s)"} size={10} color="black" style={{textAlign:'left'}}/>
+   
+    if(orderCreatedState == true && time.stop == false){
+      return(
+        <View style={Style.waitingContainer}>
+          <View style={Style.waitingTextLayout}>
+            <CustomText title="Menunggu Konfirmasi Bengkel Terdekat" size={15} color="black" style={{textAlign:'left'}}/>
+            <CustomText title={"Mohon Tunggu Sebentar (" + time.time + "s)"} size={10} color="black" style={{textAlign:'left'}}/>
+          </View>
+          <TouchableOpacity 
+            style={Style.waitingCancelButton} 
+            activeOpacity={0.7} 
+            onPress={() => cancelOrder()}>
+            <View>
+              <Icon name="cross" size={30} color="black"/>
+            </View>
+          </TouchableOpacity>
         </View>
+      )
+    }else if(orderCreatedState == true && time.stop == true){
+      return(
         <TouchableOpacity 
-          style={Style.waitingCancelButton} 
-          activeOpacity={0.7} 
-          onPress={() => cancelOrder()}>
-          <View>
-            <Icon name="cross" size={30} color="black"/>
+            onPress={() => {
+              navigation.navigate('CustomerOrder', {id: statusOrder.id});
+            }}
+            activeOpacity={0.7}
+        >
+          <View style={Style.waitingContainer}>
+              <View style={Style.waitingTextLayout}>
+                <CustomText title="Montir Anda Sedang dalam Perjalanan" size={15} color="black" style={{textAlign:'left'}}/>
+                <CustomText title={"Tekan Disini untuk Melihat dimana Montir Anda"} size={10} color="black" style={{textAlign:'left'}}/>
+              </View>
+              <View style={[Style.waitingCancelButton, {backgroundColor:'#b99504'}]}>
+                <Icon name="hour-glass" size={30} color="black"/>
+              </View>
           </View>
         </TouchableOpacity>
-      </View>
-    )
+      )
+    }
   }
 
   const dragableMarker = (e : any) => {
     dispatch(setCustLocation({latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude}));
   }
 
+  const FailWait = () =>{
+    setTimeout(() => setRetry(true), 3000);
+    return null;
+  }
+
   if(custLocation.latitude && custLocation.longitude){
     return(
     <View style={{flex:1}}>
-      <TopBar photoUrl={customerData.photoUrl}/>
+      <TopBar id={activeUser.id} photoUrl={customerData.photoUrl}/>
       <ScrollView contentContainerStyle={{flexGrow:1}}>
       {orderCreatedState === true ? <Waiting/> : null}
         <View style={{ alignItems: 'center', flex:1 }}>
@@ -317,6 +365,7 @@ export default function CustomerMain(){
   }else{
     return(
       <View style={Style.loading}>
+        <FailWait/>
         <CustomText 
           title="Sedang memuat" 
           color={'white'}

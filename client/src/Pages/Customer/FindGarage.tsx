@@ -11,7 +11,6 @@ import { MultipleButton } from '../../Component/CustomButton';
 import { useAppSelector } from '../../../redux';
 import { CustomText } from "../../Component/CustomText";
 import haversineDistance from "haversine-distance";
-import garageData from "../../../redux/component/garageData";
 
 type FindGarageType = StackNavigationProp<RootStackParamList, 'FindGarage'>
 
@@ -142,7 +141,7 @@ export default function Find(){
 
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl={customerData.photoUrl}/>
+    <TopBar id={activeUser.id} photoUrl={customerData.photoUrl}/>
     <CustomText title="Cari Bengkel" style={Style.titleText}/> 
     <View style={{alignItems:'center'}}>
       <View style={[Style.searchLayout, {marginTop:10}]}>

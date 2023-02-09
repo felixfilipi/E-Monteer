@@ -105,9 +105,10 @@ export default function ChatHistory(){
 
   var joinResult = joinTables(all_user, curr_chatRoom, 'id', 'mech_id');
 
+  console.log(curr_chatRoom)
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl={activeUser_data.photoUrl}/>
+    <TopBar id={activeUser.id} photoUrl={activeUser_data.photoUrl}/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
     </View>
@@ -157,7 +158,7 @@ export function ChatHistoryMechanic(){
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl={activeUser_data.photoUrl}/>
+    <TopBar id={activeUser.id} photoUrl={activeUser_data.photoUrl}/>
     <View style={Style.titleContainer}>
       <CustomText title="Pesan Anda" style={Style.titleText}/>    
     </View>

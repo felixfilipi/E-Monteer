@@ -64,7 +64,7 @@ export const BottomNav = (props : any) => {
 type EditProfileType = StackNavigationProp<RootStackParamList, 'EditProfile'>
 
 const DrawerComponent = (props: any) => {
-  
+ 
   const drawerState = useAppSelector(state => state.drawer)
   const dispatch = useAppDispatch();
 
@@ -74,7 +74,7 @@ const DrawerComponent = (props: any) => {
 
   React.useEffect(() => {
     if(drawerState == true && drawerActive == 'edit'){
-      navigation.navigate('EditProfile');
+      navigation.navigate('EditProfile', {id: props.id});
       dispatch(setDrawer(false));
     }else if(drawerState == true && drawerActive == 'out'){
       props.setActiveModal(true);
@@ -133,7 +133,7 @@ export const TopBar = (props : any) => {
       </View>
     </View>
       <View style={{marginBottom:82}}/>
-        {drawerState == true ? <DrawerComponent setActiveModal={setLogoutModal}/> : null }
+        {drawerState == true ? <DrawerComponent id={props.id} setActiveModal={setLogoutModal}/> : null }
     <Confirmation
       visibleModal = {logoutModal}
       setVisibleModal = {setLogoutModal}

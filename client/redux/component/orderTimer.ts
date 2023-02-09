@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const orderTimerSlice = createSlice({
   name: 'orderTimer',
-  initialState: 120,
+  initialState: {stop: false, time:120},
   reducers: {
-    setOrderTimer: (state, action: PayloadAction<number>) => action.payload
+    setOrderTimer: (state, action: PayloadAction<{stop: boolean, time:number}>) => action.payload
   },
 })
 

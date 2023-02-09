@@ -13,7 +13,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://i1.rgstatic.net/ii/profile.image/1070144784711680-1632153807475_Q512/Felix-Filipi.jpg',
       idCard: null,
       phone: '087892314322',
-      role:'Customer'
+      role:'Customer',
+      isAvailable: null,
     },
     {
       id:12,
@@ -25,7 +26,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087899887729',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:11,
@@ -37,7 +39,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '08777722112',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:10,
@@ -49,7 +52,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087876567872',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:9,
@@ -61,7 +65,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087777665522',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:8,
@@ -73,7 +78,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087812343211',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:7,
@@ -85,7 +91,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087987678908',
-      role:'Owner'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:6,
@@ -97,7 +104,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://imgx.gridoto.com/crop/37x13:939x635/700x465/photo/2020/10/22/525870346.jpg',
       idCard: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrXDah1BTilOy4DOplE2ICBKv11tanHZXN3g&usqp=CAU',
       phone: '087855332121',
-      role:'Mechanic'
+      role:'Mechanic',
+      isAvailable: false,
     },
     {
       id:5,
@@ -109,7 +117,8 @@ const userAuthSlice = createSlice({
       photoUrl:'http://smanegeri1dayeuhluhur.sch.id/media_library/students/fe689269feb2ef5e13533da06f73711a.jpg',
       idCard: 'https://cdn.pixabay.com/photo/2016/12/13/17/48/master-1904748__480.jpg',
       phone: '087872728899',
-      role:'Mechanic'
+      role:'Mechanic',
+      isAvailable: false,
     },
     {
       id:4,
@@ -121,7 +130,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://www.superprof.co.id/gambar/guru/rumah-guru-saya-orang-indonesia-asli-menawarkan-belajar-bahasa-indonesia-simple-untuk-orang-asing.jpg',
       idCard: 'https://media.istockphoto.com/id/1255420917/id/foto/teknisi-mobil-pengecekan-otomotif-di-garasi.jpg?s=612x612&w=0&k=20&c=MMwKFYfoyo2fm6hkqaRZz10VuQV8VAIGMiqn12zvYdE=',
       phone: '087855332121',
-      role:'Mechanic'
+      role:'Mechanic',
+      isAvailable: false,
     },
     {
       id:3,
@@ -133,11 +143,12 @@ const userAuthSlice = createSlice({
       photoUrl:'https://binus.ac.id/wp-content/uploads/2020/06/2-1.jpg',
       idCard: null,
       phone: '087892314322',
-      role:'Garage'
+      role:'Owner',
+      isAvailable: null,
     },
     {
       id:2,
-      garageId: 1,
+      garageId: 8,
       name: 'admin_mechanic',
       email: 'admin_mechanic@gmail.com',
       password:'admin',
@@ -145,11 +156,12 @@ const userAuthSlice = createSlice({
       photoUrl:'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
       idCard: null,
       phone: '087892314322',
-      role:'Mechanic'
+      role:'Mechanic',
+      isAvailable: false,
     },
     {
       id:1,
-      garageId: null,
+      garageId: 1,
       name: 'admin_customer',
       email: 'admin_customer@gmail.com',
       password:'admin',
@@ -157,7 +169,8 @@ const userAuthSlice = createSlice({
       photoUrl:'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
       idCard: null,
       phone: '087892314300',
-      role:'Customer'
+      role:'Customer',
+      isAvailable: null,
     },
   ],
   reducers: {

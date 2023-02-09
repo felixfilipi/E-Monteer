@@ -4,11 +4,11 @@ const chatRoomSlice = createSlice({
   name: 'chatRoom',
   initialState: [
     {
-      roomTopic: 1,
+      roomTopic: 3,
       cust_id: 13,
-      mech_id:4,
-      lastMessage: 'Baik, saya menuju kesana sekarang',
-      last_date_time: '1/23/2023, 11:31:02 AM',
+      mech_id:6,
+      lastMessage: 'Saya segera kesana mas',
+      last_date_time: '1/18/2023, 17:10:39 PM',
       signal_customer: 0,
     },
     {
@@ -20,11 +20,11 @@ const chatRoomSlice = createSlice({
       signal_customer: 1,
     },
     {
-      roomTopic: 3,
+      roomTopic: 1,
       cust_id: 13,
-      mech_id:6,
-      lastMessage: 'Saya segera kesana mas',
-      last_date_time: '1/18/2023, 17:10:39 PM',
+      mech_id:4,
+      lastMessage: 'Baik, saya menuju kesana sekarang',
+      last_date_time: '1/23/2023, 11:31:02 AM',
       signal_customer: 0,
     },
   ],

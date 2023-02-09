@@ -257,9 +257,9 @@ export function HistoryDetailMechanic(props : any){
   changeMoney = currentTransaction.customer_paid - currentTransaction.service_cost;
   PaymentDesc = ['Biaya Total', 'Total Bayar', 'Kembalian']
   PaymentPrice = [ 
-    String(currentTransaction.service_cost),
-    String(currentTransaction.customer_paid),
-    String(changeMoney)
+    currentTransaction.service_cost == null ? 'Proses' : String(currentTransaction.service_cost),
+    currentTransaction.customer_paid == null ? 'Proses' : String(currentTransaction.customer_paid),
+    changeMoney == null ? 'Proses' : String(changeMoney)
   ]
   
   for(let i = 0; i <= repairTotal.length - 1;i++){

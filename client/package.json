@@ -18,6 +18,7 @@
     "axios-auth-refresh": "^3.3.4",
     "expo": "^47.0.8",
     "expo-app-loading": "^2.1.1",
+    "expo-dev-client": "~2.0.1",
     "expo-image-picker": "^14.0.2",
     "expo-linking": "^3.2.3",
     "expo-location": "^15.0.1",
@@ -46,8 +47,7 @@
     "react-redux": "^8.0.5",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
-    "yarn": "^1.22.19",
-    "expo-dev-client": "~2.0.1"
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -24,6 +24,7 @@ import OrderGarage from './src/Pages/Customer/OrderGarage';
 import MechanicOrder from './src/Pages/Mechanic/MechanicOrder';
 import GarageTransaction from './src/Pages/Garage/GarageTransaction';
 import { History, HistoryMechanic, HistoryGarage } from './src/Pages/History';
+import CustomerOrder from './src/Pages/Customer/CustomerOrder';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -89,6 +90,9 @@ export default function App() {
                 options={{headerShown:false}}/>
               <Stack.Screen
                 name='MechanicOrder' component={MechanicOrder}
+                options={{headerShown: false}}/>
+              <Stack.Screen
+                name='CustomerOrder' component={CustomerOrder}
                 options={{headerShown: false}}/>
               <Stack.Screen
                 name='GarageMain' component={GarageMain}

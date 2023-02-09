@@ -130,7 +130,7 @@ export function History(){
   
   return(
   <View style={{flex:1, paddingHorizontal: 5}}>
-    <TopBar photoUrl={customerData.photoUrl}/>
+    <TopBar id={activeUser.id} photoUrl={customerData.photoUrl}/>
     <CustomText title="Riwayat Anda" style={Style.titleText}/>    
     <MultipleButton 
       size={3} 
@@ -189,7 +189,7 @@ export function HistoryMechanic(){
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl={mechanicData.photoUrl}/>
+      <TopBar id={activeUser.id} photoUrl={mechanicData.photoUrl}/>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Riwayat Pesanan" color="white" size={20}
@@ -219,7 +219,6 @@ export function HistoryMechanic(){
 
 export function HistoryGarage(){
 
-  
   const renderItem = ({ item }) => {
     return(
       <ItemGarage 
@@ -232,17 +231,16 @@ export function HistoryGarage(){
   };
 
   const activeUser = useAppSelector(state => state.activeStatus);
-  const raw_GarageHistory = useAppSelector(state => state.transaction);
-  const GarageHistory = raw_GarageHistory.filter((item) => item.trans_end_dt != null && item.garageId == activeUser.id)
-
   const raw_user = useAppSelector(state => state.userAuth);
   const owner_Data = raw_user.find((item) => {return item.id === activeUser.id});
+  const raw_GarageHistory = useAppSelector(state => state.transaction);
+  const GarageHistory = raw_GarageHistory.filter((item) => item.customer_paid != null && item.garageId == owner_Data.garageId)
   
   var joinResult = joinTables(raw_user, GarageHistory, 'id', 'cust_id');
 
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl={owner_Data.photoUrl}/>
+      <TopBar id={activeUser.id} photoUrl={owner_Data.photoUrl}/>
       <View style={{marginTop:15, marginHorizontal:15 , borderRadius:10, backgroundColor: '#3a4447'}}>
         <View style={{backgroundColor:'#2e3638', paddingTop: 25, borderTopStartRadius:10, borderTopEndRadius:10}}>
           <CustomText title="Riwayat Pesanan" color="white" size={20}

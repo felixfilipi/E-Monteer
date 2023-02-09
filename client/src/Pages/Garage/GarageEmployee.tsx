@@ -13,16 +13,16 @@ import { useAppSelector } from '../../../redux';
 type GarageEmployeeType = StackNavigationProp<RootStackParamList, 'GarageEmployee'>
 let DATA : any[] = [];
 
-const Item = ({name, location, photoUrl}) => {
+const Item = ({id, name, phone, photoUrl}) => {
   const navigation = useNavigation<GarageEmployeeType>();
   return(
     <View style={{flexDirection:'row', padding: 15, flex: 4, alignItems:'center'}}>
       <Avatar.Image size={60} source={{uri: photoUrl}}/>
       <View style={{flexDirection: 'column', flex:3, paddingHorizontal:5}}>
         <CustomText title={name} size={17} color="white" style={{textAlign:'left'}}/>
-        <CustomText title={location} size={12} color="#85898f" style={{textAlign:'left'}}/>
+        <CustomText title={phone} size={12} color="#85898f" style={{textAlign:'left'}}/>
       </View>
-        <CustomButton onPress={() => navigation.navigate('RegisterMechanic')} title={"Update"} style={{borderRadius:20}}/>
+        <CustomButton onPress={() => navigation.navigate('EditProfile', {id: id})} title={"Update"} style={{borderRadius:20}}/>
     </View>
   )
 }
@@ -32,26 +32,26 @@ export default function GarageEmployee(){
   const navigation = useNavigation<GarageEmployeeType>();
   const renderItem = ({ item }) => {
     return(
-      <Item 
+      <Item
+        id = {item.id}
         name = {item.name} 
-        location = {item.location}
+        phone = {item.phone}
         photoUrl = {item.photoUrl}
         />
     );
   };
 
-  const raw = useAppSelector(state => state.userAuth);
-  const activeStatus = useAppSelector(state => state.activeStatus);
+  const all_user = useAppSelector(state => state.userAuth);
+  const activeUser = useAppSelector(state => state.activeStatus);
+  const curr_owner = all_user.find((item : any) => {return item.id == activeUser.id});
   
-  if(activeStatus != null){
-    DATA = raw.filter((item) => {item.role == 'Mechanic' && item.garageId == activeStatus.id});
-  }else{
-    navigation.navigate('Login');
-  };
+  const DATA = all_user.filter((item) => {return item.role == 'Mechanic' && item.garageId == curr_owner.garageId});
+  console.log(DATA)
+  
   return(
     <View style={{flex:1}}>
-      <TopBar photoUrl='https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg'/>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic', {garageId: activeStatus.id})}>
+      <TopBar id={activeUser.id} photoUrl={curr_owner.photoUrl}/>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('RegisterMechanic', {garageId: activeUser.id})}>
           <View style={{flexDirection:'row'}}>
             <View style={{flex:1}}/>
             <View style={{backgroundColor:'#b99504',flexDirection:'row', justifyContent:'center', alignContent:'center', padding:15, flex:2, borderRadius:20, marginTop:15}}>

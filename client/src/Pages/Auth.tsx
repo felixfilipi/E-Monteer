@@ -268,6 +268,7 @@ export function RegisterOwner(){
         idCard: idCard,
         phone:phone,
         role:role,
+        isAvailable:null,
       }
     ]))
   }
@@ -428,6 +429,7 @@ export function RegisterMechanic(props : any){
         phone:phone,
         photoUrl: 'https://img.favpng.com/12/24/20/user-profile-get-em-cardiovascular-disease-zingah-png-favpng-9ctaweJEAek2WaHBszecKjXHd.jpg',
         role:role,
+        isAvailable:false,
       }
     ]))
   }
@@ -776,6 +778,7 @@ export function RegisterGarage(){
         speciality: speciality,
         rating: 0,
         total_rating: 0,
+        isAvailable:false,
       }
     ]))
   };
@@ -892,12 +895,15 @@ export function Login(){
       if(isExist){
         if(isExist.role === 'Customer'){
           dispatch(setActiveStatus({role:'Customer', id:isExist.id}));
+          setDisplay(false);
           navigation.navigate('CustomerMain');
         }else if(isExist.role === 'Mechanic'){
           dispatch(setActiveStatus({role:'Mechanic', id:isExist.id}));
+          setDisplay(false);
           navigation.navigate('MechanicMain');
-        }else if(isExist.role === 'Garage'){
+        }else if(isExist.role === 'Owner'){
           dispatch(setActiveStatus({role:'Garage', id:isExist.id}));
+          setDisplay(false);
           navigation.navigate('GarageMain');
         }
       }else{

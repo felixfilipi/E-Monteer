@@ -3,7 +3,7 @@ export type RootStackParamList = {
   RegisterMechanic: {garageId: number} | undefined;
   Login: undefined;
   CustomerMain:  undefined;
-  EditProfile: undefined;
+  EditProfile: {id: number} | undefined;
   OrderGarage: {id: number, handleType: string} | undefined;
   Waiting: undefined;
   FindGarage: {prevScreen: boolean} |undefined;
@@ -17,8 +17,8 @@ export type RootStackParamList = {
   ChatHistory: undefined;
   RegisterGarage: undefined;
   MechanicMain: undefined;
-  MechanicOrder: undefined;
-  CustomerOrder: undefined;
+  MechanicOrder: {id: number} | undefined;
+  CustomerOrder: {id: number} | undefined;
   RegisterOwner: undefined;
   GarageMain: undefined;
   GarageTransaction: {id: number} | undefined;

@@ -1,7 +1,5 @@
-import { Header, StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ToastAndroid,  View,  FlatList, Modal, Alert } from "react-native";
-import { RootStackParamList } from "../RootStackParamList";
+import { ToastAndroid,  View,  FlatList } from "react-native";
 import Style from "../../Styles/GarageStyle/GarageTransaction";
 import { CustomButton } from "../../Component/CustomButton";
 import { CustomText } from "../../Component/CustomText";
@@ -13,12 +11,13 @@ import { Confirmation } from "../../Component/Confirmation";
 import { Done } from "../../Component/Done";
 import { useAppDispatch, useAppSelector } from "../../../redux";
 import { setCostListApp } from "../../../redux/component/costListApp";
-
-type GarageTransactionType = StackNavigationProp<RootStackParamList, 'GarageTransaction'>;
+import { setTransaction } from "../../../redux/component/transaction";
+import { setOrderCreated } from "../../../redux/component/orderCreated";
 
 const Item = ({ id, description, quantity, price, onSubmit, 
   editItemModal, setEditItemModal, itemDescription, setItemDescription,
-  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemId, costList, setCostList}) => {
+  itemQuantity, setItemQuantity, itemPrice, setItemPrice, setItemId, 
+  costList, setCostList, onProgress}) => {
 
   const onEdit = () => {
     setItemDescription(description);
@@ -41,6 +40,8 @@ const Item = ({ id, description, quantity, price, onSubmit,
           <CustomText title={'('+ quantity + ')'} size={10} color='#919b9f' style={{marginLeft:0, marginBottom:0, textAlign:'left'}}/>
         </View>
       <CustomText title={'Rp. ' + price * quantity} size={15} color='#919b9f' style={{flex:4, marginLeft:0, marginBottom:0, textAlign:'right'}}/>
+      {onProgress == true ? (
+      <>
       <Icon 
         name="edit" 
         size={20} 
@@ -54,6 +55,8 @@ const Item = ({ id, description, quantity, price, onSubmit,
         color='#919b9f' 
         onPress={onDelete}
         style={{flex:1}}/>
+      </>
+      ) : <View style={{flex:1}}/>}
       <EditOrder 
         descTitle="Ganti Detail Perbaikan"
         submitTitle="Ganti Data"
@@ -83,6 +86,7 @@ export default function GarageTransaction(props : any){
   const curr_customer = all_user.find((item) => item.id == curr_transaction.cust_id);
 
   const HeaderData = {
+    date: curr_transaction.trans_start_dt,
     mech_name: curr_mechanic.name,
     location: curr_transaction.pickup_address,
     photoUrl: curr_mechanic.photoUrl,
@@ -114,6 +118,8 @@ export default function GarageTransaction(props : any){
   const [doneModal, setDoneModal] = React.useState<boolean>(false);
   const [paymentFailModal, setPaymentFailModal] = React.useState<boolean>(false);
   const [isFinished, setIsFinished] = React.useState<boolean>(false);
+  
+  const [onProgress, setOnProgress] = React.useState<boolean>(curr_transaction.service_cost == null && isFinished == false);
   const [max_id, setMax_id] = React.useState<number>(curr_costList.description.length);
  
   for(let i = 0 ; i <= max_id - 1 ; i ++){
@@ -161,6 +167,7 @@ export default function GarageTransaction(props : any){
         setItemId = {setItemId}
         costList={costList}
         setCostList={setCostList}
+        onProgress={onProgress}
         onSubmit={changeData}
         />
     )
@@ -226,7 +233,7 @@ export default function GarageTransaction(props : any){
             style={{flex:1, textAlign:'left'}} 
           />
           <CustomText
-            title={'Rp. ' + totalPayment}
+            title={'Rp. ' + curr_transaction.customer_paid}
             color="black"
             size={15}
             style={{flex:1, textAlign:'right'}} 
@@ -241,7 +248,7 @@ export default function GarageTransaction(props : any){
             style={{flex:1, textAlign:'left'}} 
           />
           <CustomText
-            title={'Rp. ' + (totalPayment - serviceCost)}
+            title={'Rp. ' + (curr_transaction.customer_paid - curr_transaction.service_cost)}
             color="black"
             size={15}
             style={{flex:1, textAlign:'right'}} 
@@ -252,7 +259,18 @@ export default function GarageTransaction(props : any){
   }
 
   const completeOrder = () => {
+    
     const new_costList = CostList.map((item : any) => {return {...item}});
+    const new_transaction = transaction.map((item : any) => {return {...item}});
+
+    for(let x = 0; x <= new_transaction.length - 1 ; x++){
+      if(new_transaction[x].id === curr_transaction.id){
+        new_transaction[x].service_cost = serviceCost;
+        new_transaction[x].customer_paid = totalPayment;
+        new_transaction[x].trans_end_dt = new Date().toLocaleString();
+      }
+    }
+
     const description : any[] = [], price : any[] = [], quantity : any[] = [];
     for(let j = 0; j <= costList.length - 1; j++){
       description.push(costList[j].description);
@@ -272,15 +290,20 @@ export default function GarageTransaction(props : any){
         new_costList[i] = new_Data;
       }
     }
+
+    dispatch(setOrderCreated(false))
     dispatch(setCostListApp(new_costList));
-    setConfModal(false), 
-    setIsFinished(true), 
-    setDoneModal(true)
+    dispatch(setTransaction(new_transaction));
+    setConfModal(false); 
+    setIsFinished(true); 
+    setDoneModal(true);
+    setOnProgress(false);
   }
+
    return(
     <View style={{flex:1, marginTop:20}}>
         <View style={{ flex:1 }}>
-          <View style={{padding:15, borderRadius:20, margin:15, backgroundColor:'#3a4447'}}>
+          <View style={{padding:15, borderRadius:20, margin:15, marginBottom:0, backgroundColor:'#3a4447'}}>
             <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
               <Avatar.Image source={{uri:HeaderData.photoUrl}} size={50}/>
               <CustomText title={HeaderData.mech_name} size={20} color="white" style={{marginLeft:15, marginBottom:0}}/>
@@ -295,6 +318,11 @@ export default function GarageTransaction(props : any){
                 <CustomText title="Lokasi" size={15} color="white" style={{flex:2, textAlign:'left', marginLeft:0}}/>
                 <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
                 <CustomText title={HeaderData.location} size={12} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
+              </View>
+              <View style={{flexDirection:'row'}}>
+                <CustomText title="Tanggal Transaksi" size={15} color="white" style={{flex:2, textAlign:'left', marginLeft:0}}/>
+                <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
+                <CustomText title={HeaderData.date} size={15} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
               </View>
             </View>
           </View>
@@ -326,7 +354,7 @@ export default function GarageTransaction(props : any){
                   />
               </View>
               <View style={{flex:1}}>
-                {(isFinished === true || curr_transaction.trans_end_dt != null) ? <DoneTransaction/> : <OnTransaction/>}
+                {(isFinished === true || curr_transaction.service_cost != null) ? <DoneTransaction/> : <OnTransaction/>}
               </View>
             </View>
           </View>
