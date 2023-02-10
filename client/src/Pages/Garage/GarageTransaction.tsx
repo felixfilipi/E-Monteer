@@ -319,11 +319,6 @@ export default function GarageTransaction(props : any){
                 <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
                 <CustomText title={HeaderData.location} size={12} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
               </View>
-              <View style={{flexDirection:'row'}}>
-                <CustomText title="Tanggal Transaksi" size={15} color="white" style={{flex:2, textAlign:'left', marginLeft:0}}/>
-                <CustomText title=":" size={15} color="white" style={{flex:1, textAlign:'center', marginLeft:0}}/>
-                <CustomText title={HeaderData.date} size={15} color="white" style={{flex:2, textAlign:'right', marginLeft:0}}/>
-              </View>
             </View>
           </View>
           <View style={Style.modalLayout}>

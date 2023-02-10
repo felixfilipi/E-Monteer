@@ -8,6 +8,7 @@ import { AbsoluteButton } from '../Component/CustomButton';
 import { CustomText } from "../Component/CustomText";
 import { Rating } from "react-native-ratings";
 import { useAppDispatch, useAppSelector } from '../../redux';
+import { setTransaction } from '../../redux/component/transaction';
 
 export function HistoryDetail(props : any){
 
@@ -25,9 +26,6 @@ export function HistoryDetail(props : any){
   const garage_data = useAppSelector(state => state.garageData);
   const current_garage_data = garage_data.find((item) => item.id === currentTransaction.garageId);
   
-  const [rating, setRating] = React.useState<number>(currentTransaction.rating);
-  const [rateState, setRateState] = React.useState<boolean>(currentTransaction.rating != null ? true : false);
-
   const args = {
     number: mechanicData.phone,
     prompt: false,
@@ -35,21 +33,17 @@ export function HistoryDetail(props : any){
   }
 
   const dispatch = useAppDispatch();
-  
-  const processRate = (rating : number) => {
-    if(rateState == false){
-      setRating(rating);     
-      setRateState(true);
-//      const newTrx = [...raw_transaction];
-//      for(let i = 0 ; i <= newTrx.length - 1; i++){
-//        if(newTrx[i].id == currentTransaction.id){
-//          newTrx[i].rating = rating;
-//          console.log('run');
-//        }
-//      }
-//      dispatch(setTransaction(newTrx));
-    };
-  };
+ 
+
+  const onRating = (rate : number) => {
+    const prevData = raw_transaction.map((item) => {return {...item}});
+    for(let j = 0; j <= prevData.length - 1; j++){
+      if(prevData[j].id == currentTransaction.id){
+        prevData[j].rating = rate;
+      }
+    }
+    dispatch(setTransaction(prevData));
+  }
 
   let Content: any[] = [], repairList: string[], 
   repairPrice: number[], repairTotal: number[],
@@ -134,12 +128,12 @@ export function HistoryDetail(props : any){
             size={20}/> 
           <Rating
             type='custom'
-            startingValue={rating}
+            startingValue={currentTransaction.rating}
             ratingBackgroundColor="#B1B5C1"
             imageSize={30}
             tintColor='white'
-            onFinishRating={(rating : number) => processRate(rating)}
-            readonly={rateState} 
+            onFinishRating={onRating}
+            readonly={currentTransaction.rating == null || undefined ? false : true} 
             />
           <View style={Style.avatarContainer}>
             <View style={{flex:1}}>

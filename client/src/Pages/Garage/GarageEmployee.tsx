@@ -46,7 +46,6 @@ export default function GarageEmployee(){
   const curr_owner = all_user.find((item : any) => {return item.id == activeUser.id});
   
   const DATA = all_user.filter((item) => {return item.role == 'Mechanic' && item.garageId == curr_owner.garageId});
-  console.log(DATA)
   
   return(
     <View style={{flex:1}}>

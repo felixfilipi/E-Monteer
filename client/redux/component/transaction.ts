@@ -41,7 +41,7 @@ const transactionSlice = createSlice({
     },
     {
       id:1,
-      cust_id: 13,
+      cust_id: 1,
       mechanicId:4,
       garageId: 1,
       roomTopic:1,

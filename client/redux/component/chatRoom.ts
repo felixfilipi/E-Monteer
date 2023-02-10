@@ -21,7 +21,7 @@ const chatRoomSlice = createSlice({
     },
     {
       roomTopic: 1,
-      cust_id: 13,
+      cust_id: 1,
       mech_id:4,
       lastMessage: 'Baik, saya menuju kesana sekarang',
       last_date_time: '1/23/2023, 11:31:02 AM',

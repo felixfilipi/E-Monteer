@@ -76,7 +76,7 @@ const chatMessageSlice = createSlice({
       user: {
         _id: 5,
         name: 'Hasan Kusnadi',
-        avatar:'https://www.superprof.co.id/gambar/guru/rumah-guru-saya-orang-indonesia-asli-menawarkan-belajar-bahasa-indonesia-simple-untuk-orang-asing.jpg'
+        avatar:'http://smanegeri1dayeuhluhur.sch.id/media_library/students/fe689269feb2ef5e13533da06f73711a.jpg'
       },
       sent: true,
       received: true,
@@ -102,7 +102,7 @@ const chatMessageSlice = createSlice({
       user: {
         _id: 5,
         name: 'Hasan Kusnadi',
-        avatar:'https://www.superprof.co.id/gambar/guru/rumah-guru-saya-orang-indonesia-asli-menawarkan-belajar-bahasa-indonesia-simple-untuk-orang-asing.jpg'
+        avatar:'http://smanegeri1dayeuhluhur.sch.id/media_library/students/fe689269feb2ef5e13533da06f73711a.jpg'
       },
       sent: true,
       received: true,
@@ -115,7 +115,7 @@ const chatMessageSlice = createSlice({
       user: {
         _id: 5,
         name: 'Hasan Kusnadi',
-        avatar:'https://www.superprof.co.id/gambar/guru/rumah-guru-saya-orang-indonesia-asli-menawarkan-belajar-bahasa-indonesia-simple-untuk-orang-asing.jpg'
+        avatar:'http://smanegeri1dayeuhluhur.sch.id/media_library/students/fe689269feb2ef5e13533da06f73711a.jpg'
       },
       sent: true,
       received: true,
@@ -139,9 +139,9 @@ const chatMessageSlice = createSlice({
       text: 'Saya daerah simpang borobudur ya mas',
       createdAt: '1/23/2023, 11:28 AM',
       user: {
-        _id: 13,
-        name: 'Felix Filipi',
-        avatar:'https://i1.rgstatic.net/ii/profile.image/1070144784711680-1632153807475_Q512/Felix-Filipi.jpg'
+        _id: 1,
+        name: 'Christoper Luis',
+        avatar:'https://media.licdn.com/dms/image/C4E03AQG9wiUg-P_K6Q/profile-displayphoto-shrink_800_800/0/1620477059425?e=2147483647&v=beta&t=45L8LTO0vrK88SMi3OjElujUO3u6T6d5Pmv5AGD6oPY'
       },
       sent: true,
       received: true,

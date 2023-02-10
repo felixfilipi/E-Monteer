@@ -270,7 +270,7 @@ export default function CustomerMain(){
   }
 
   const FailWait = () =>{
-    setTimeout(() => setRetry(true), 3000);
+    setTimeout(() => setRetry(!retry), 3000);
     return null;
   }
 
@@ -342,7 +342,7 @@ export default function CustomerMain(){
 
             <View style={{marginBottom:-50}}>
                 <Text style={Style.historyLabel} 
-                  onPress={() => navigation.navigate('History')}>Pesanan Terakhir</Text>
+                  onPress={() => {navigation.navigate('History'), dispatch(setNavbar(2))}}>Pesanan Terakhir</Text>
                 <View style={{marginBottom:30}}>
                 <ScrollView horizontal={true}>
                   <View style={{flexDirection:'row'}}>

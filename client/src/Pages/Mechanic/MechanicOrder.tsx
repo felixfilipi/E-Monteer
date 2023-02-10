@@ -92,7 +92,6 @@ export default function MechanicOrder(props: any){
   const navigation = useNavigation<MechanicOrderType>();
 
   let distance = Math.round(haversineDistance({latitude: curr_transaction.pickup_latitude, longitude:curr_transaction.pickup_longitude}, mechLocation) / 1000 * 100) / 100;
-  const [Sdistance, setDistance] = React.useState<number>(distance);
   
   const new_costList : any[] = [];
     new_costList.push(
@@ -100,7 +99,7 @@ export default function MechanicOrder(props: any){
         id: 1,
         description: 'Perjalanan',
         price: 8000,
-        quantity: Sdistance,
+        quantity: distance,
       }
   )
 

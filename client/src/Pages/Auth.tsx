@@ -18,6 +18,7 @@ import { Picker } from "@react-native-picker/picker";
 import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AccessPhoto } from "../Component/AccessPhoto";
 import { setActiveStatus } from "../../redux/component/activeStatus";
+import { setNavbar } from "../../redux/component/navbar";
 
 type RegisterType = StackNavigationProp<RootStackParamList, 'Register'>
 type LoginType = StackNavigationProp<RootStackParamList, 'Login'>
@@ -894,14 +895,17 @@ export function Login(){
       const isExist = EXISTING_USER.find((val) => val.email === SEmail && val.password === SPassword);
       if(isExist){
         if(isExist.role === 'Customer'){
+          dispatch(setNavbar(0))
           dispatch(setActiveStatus({role:'Customer', id:isExist.id}));
           setDisplay(false);
           navigation.navigate('CustomerMain');
         }else if(isExist.role === 'Mechanic'){
+          dispatch(setNavbar(0))
           dispatch(setActiveStatus({role:'Mechanic', id:isExist.id}));
           setDisplay(false);
           navigation.navigate('MechanicMain');
         }else if(isExist.role === 'Owner'){
+          dispatch(setNavbar(0))
           dispatch(setActiveStatus({role:'Garage', id:isExist.id}));
           setDisplay(false);
           navigation.navigate('GarageMain');
