@@ -222,6 +222,9 @@ export default function CustomerMain(){
     }, []);
 
     const cancelOrder = () => {
+      let prevData = raw_userData.map((item) => {return {...item}});
+      prevData[0].trans_end_dt = new Date().toLocaleDateString();
+      dispatch(setTransaction(prevData));
       dispatch(setOrderFail(true));
       dispatch(setOrderCreated(false));
     };
@@ -375,4 +378,3 @@ export default function CustomerMain(){
     )
   }
 };
-
