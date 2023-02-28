@@ -75,7 +75,7 @@ export default function OrderGarage(props : any){
       
       const selectedGarageID = props.route.params.id;
       if(selectedGarageID){
-        const garageMech = all_user.find((item : any) => item.garageId == selectedGarageID && item.isAvailable == true)
+        const garageMech = all_user.find((item : any) => item.garageId == selectedGarageID)
         dispatch(setTransaction([
           {
             id:new_transaction[0] + 1,
@@ -95,6 +95,9 @@ export default function OrderGarage(props : any){
             customer_paid: null,
             rating: null,
           }, ...new_transaction]))
+          dispatch(setOrderCreated(true));
+          dispatch(setGarageAvailability(true))
+          navigation.navigate('CustomerMain');
         }else{
 //          const nearestGarage = garage.find((item : any) => item.id == distanceArr[0].id && item.isAvailable == true );
 //          const nearestMechanic = all_user.find((item : any) => item.garageId == nearestGarage.id && item.role == 'Mechanic' && item.isAvailable == true);
