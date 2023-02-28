@@ -58,10 +58,16 @@ export default function GarageMain(){
   const all_user = useAppSelector(state => state.userAuth);
   const curr_owner = all_user.find((item) => item.id == activeUser.id);
   const transaction = useAppSelector(state => state.transaction);
-  const curr_transaction = transaction.filter((item) => item.customer_paid === null && item.garageId == curr_owner.garageId)
+  let curr_transaction; 
+  var joinResult;
+  if(transaction[0].trans_end_dt !== null){
+    joinResult = null;
+  }else{
+    curr_transaction = transaction.filter((item) => item.customer_paid === null && item.garageId == curr_owner.garageId)
+    joinResult = joinTables(all_user, curr_transaction, 'id', 'cust_id');
+  }
+
   const dispatch = useAppDispatch();
-  
-  var joinResult = joinTables(all_user, curr_transaction, 'id', 'cust_id');
 
   if(available === true){
     title = "Tersedia";
